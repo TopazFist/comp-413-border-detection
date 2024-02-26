@@ -6,6 +6,8 @@ from PIL import Image
 import numpy as np
 import os
 
+from point_selector import choose_pixel
+
 def downsample(image):
     width, height = image.shape[1], image.shape[0]
     return cv2.resize(image, (width // 2, height // 2))
@@ -67,20 +69,20 @@ def is_coordinate_in_mask(mask, coord):
 
 
 
-def expand_mask(mask, image, radius, threshold):
-    while True:
-        changed = False
-        visited_pixels = mask.get_edge_pixels()  # Get edge pixels of the current mask
-        for p in visited_pixels:
-            for q in image.get_pixels_within_radius(p, radius):
-                if q not in mask:  # Check if q is not already in the mask
-                    distance = calculate_distance(q, p)
-                    if distance <= threshold:
-                        mask.add_pixel(q)
-                        changed = True
-        if not changed:
-            break  # Mask didn't change, terminate loop
-    return mask
+# def expand_mask(mask, image, radius, threshold):
+#     while True:
+#         changed = False
+#         visited_pixels = mask.get_edge_pixels()  # Get edge pixels of the current mask
+#         for p in visited_pixels:
+#             for q in image.get_pixels_within_radius(p, radius):
+#                 if q not in mask:  # Check if q is not already in the mask
+#                     distance = calculate_distance(q, p)
+#                     if distance <= threshold:
+#                         mask.add_pixel(q)
+#                         changed = True
+#         if not changed:
+#             break  # Mask didn't change, terminate loop
+#     return mask
 
 
 

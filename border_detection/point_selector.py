@@ -16,9 +16,9 @@ def histogram_creater(image):
 def choose_pixel(image):
     # img = cv2.imread(image)
     # bw_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    bw_image = cv2.imread(image, cv2.COLOR_BGR2GRAY)
+    # bw_image = cv2.imread(image, cv2.COLOR_BGR2GRAY)
 
-    histg = cv2.calcHist([bw_image],[0],None,[256],[0,256])
+    histg = cv2.calcHist([image],[0],None,[256],[0,256])
     # res = []
 
     # for i in range(len(histg)):
@@ -42,10 +42,10 @@ def choose_pixel(image):
     img_x, img_y = 0, 0
 
 
-    for i in range(bw_image.shape[0]):
-        for j in range(bw_image.shape[1]):
-            print(bw_image[i,j])
-            if int((bw_image[i,j][0] + bw_image[i,j][1] + bw_image[i,j][2])) == color_val:
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            print(image[i,j])
+            if int((image[i,j][0] + image[i,j][1] + image[i,j][2])) == color_val:
                 img_x, img_y = i, j
                 return img_x, img_y
     return img_x, img_y

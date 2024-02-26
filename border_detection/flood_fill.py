@@ -50,4 +50,41 @@ def main():
 
 
 
+def get_edges(mask):    
+    edges = cv2.Canny(mask, 0, 1)
+
+    # Find coordinates of edge pixels
+    return np.argwhere(edges > 0)
+
+
+def is_coordinate_in_mask(mask, coord):
+    rows, cols = mask.shape
+    row, col = coord
+    if 0 <= row < rows and 0 <= col < cols:
+        return mask[row, col] == 1
+    return False
+    
+
+
+
+def expand_mask(mask, image, radius, threshold):
+    while True:
+        changed = False
+        visited_pixels = mask.get_edge_pixels()  # Get edge pixels of the current mask
+        for p in visited_pixels:
+            for q in image.get_pixels_within_radius(p, radius):
+                if q not in mask:  # Check if q is not already in the mask
+                    distance = calculate_distance(q, p)
+                    if distance <= threshold:
+                        mask.add_pixel(q)
+                        changed = True
+        if not changed:
+            break  # Mask didn't change, terminate loop
+    return mask
+
+
+
+
+
+
 main()

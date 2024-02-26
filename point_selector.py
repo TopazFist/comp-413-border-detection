@@ -5,7 +5,7 @@ import numpy as np
 
 
 def histogram_creater(image):
-    img = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(image, cv2.COLOR_BGR2GRAY)
     assert img is not None, "file could not be read, check with os.path.exists()"
     histg = cv2.calcHist([img],[0],None,[256],[0,256])  
     print(histg)
@@ -14,16 +14,42 @@ def histogram_creater(image):
 
 
 def choose_pixel(image):
-    img = cv2.imread(image)
-    histg = cv2.calcHist([img],[0],None,[256],[0,256])
-    res = []
+    # img = cv2.imread(image)
+    # bw_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    bw_image = cv2.imread(image, cv2.COLOR_BGR2GRAY)
 
+    histg = cv2.calcHist([bw_image],[0],None,[256],[0,256])
+    # res = []
+
+    # for i in range(len(histg)):
+    #     res.append((i, int(histg[i])))
+    # print(histg)
+
+    # print([argrelextrema(histg, np.greater)[0]])
+    # print("Hi")
+    # print(argrelextrema(histg, np.greater))
+
+    max_val = float("-inf")
+    color_val = -1
     for i in range(len(histg)):
-        res.append((i, histg[i]))
+        if histg[i] > max_val:
+            max_val = max(max_val, histg[i])
+            color_val = i
+    # print(color_val, max_val)
+            
+    
 
-    print(argrelextrema(res, np.greater))
-    print(argrelextrema(res, np.greater))
+    img_x, img_y = 0, 0
 
 
+    for i in range(bw_image.shape[0]):
+        for j in range(bw_image.shape[1]):
+            print(bw_image[i,j])
+            if int((bw_image[i,j][0] + bw_image[i,j][1] + bw_image[i,j][2])) == color_val:
+                img_x, img_y = i, j
+                return img_x, img_y
+    return img_x, img_y
 
-choose_pixel("ISIC_5341087.JPG")
+c, d = choose_pixel("ISIC_5341087.JPG")
+print(c,d)
+# histogram_creater("ISIC_5341087.JPG")

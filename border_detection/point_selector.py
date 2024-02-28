@@ -14,18 +14,11 @@ def histogram_creater(image):
 
 
 def choose_pixel(image):
-    img = cv2.imread(image)
+    # img = cv2.imread(image)
     # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     histg = cv2.calcHist([image],[0],None,[256],[0,256])
-
     histg2 = histg[:90]
-
-
-    # plt.plot(histg2)
-    # plt.show()
-    # plt.imshow(image)
-    # plt.show()
 
     max_val = float("-inf")
     color_val = -1
@@ -33,7 +26,6 @@ def choose_pixel(image):
         if histg[i] > max_val:
             max_val = max(max_val, histg[i])
             color_val = i
-    # print(color_val, max_val)
             
 
     img_x, img_y = 0, 0
@@ -41,12 +33,12 @@ def choose_pixel(image):
 
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            print(image[i,j])
+            # print(image[i,j])
             if image[i,j] == color_val:
                 img_x, img_y = i, j
                 return img_x, img_y
     return img_x, img_y
 
-c, d = choose_pixel("ISIC_5341087.JPG")
-print(c,d)
+# c, d = choose_pixel("ISIC_5341087.JPG")
+# print(c,d)
 # histogram_creater("ISIC_5341087.JPG")

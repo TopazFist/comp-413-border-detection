@@ -18,28 +18,28 @@ def image(image_path):
 
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-def choose_pixel(image):
-    pass
-
 def main():
-
-    print("HIIII")
     result = []
+
+
+    print("-----------------------------------")
+
+
+    current_directory = os.getcwd()
 
     image_directory = "ISIC-images/"
 
-    for filename in os.listdir(image_directory):
-        print("HI")
+    for filename in os.listdir("border_detection/" + image_directory):
         if filename.endswith(".JPG"):  # Check if file is an image
-            image_path = os.path.join(image_directory, filename)
+            image_path = os.path.join("border_detection/" + image_directory, filename)
 
+        
             im = image(image_path)
             im = downsample(im)
 
-            x, y = choose_pixel(im)
+            y, x = choose_pixel(im)
 
-            
-
+        
             # y, x = im.shape[0] // 2, im.shape[1] // 2
 
             # mask = flood_fill(im, (y, x), 255, tolerance=35)

@@ -22,20 +22,25 @@ def choose_pixel(image):
     pass
 
 def main():
+
+    print("HIIII")
     result = []
 
     image_directory = "ISIC-images/"
 
     for filename in os.listdir(image_directory):
+        print("HI")
         if filename.endswith(".JPG"):  # Check if file is an image
             image_path = os.path.join(image_directory, filename)
 
             im = image(image_path)
             im = downsample(im)
 
-            # x, y = choose_pixel(im)
+            x, y = choose_pixel(im)
 
-            y, x = im.shape[0] // 2, im.shape[1] // 2
+            
+
+            # y, x = im.shape[0] // 2, im.shape[1] // 2
 
             # mask = flood_fill(im, (y, x), 255, tolerance=35)
             mask = flood(im, (y, x), tolerance=35)
@@ -49,7 +54,6 @@ def main():
         plt.imshow(im, cmap='gray')
         plt.imshow(mask, cmap='gray', alpha=alpha) 
         plt.show()
-
 
 
 def get_edges(mask):    

@@ -22,24 +22,23 @@ def main():
     result = []
 
 
-    print("-----------------------------------")
-
-
     current_directory = os.getcwd()
 
     image_directory = "ISIC-images/"
 
-    for filename in os.listdir("border_detection/" + image_directory):
+    for filename in os.listdir(image_directory):
         if filename.endswith(".JPG"):  # Check if file is an image
-            image_path = os.path.join("border_detection/" + image_directory, filename)
+            image_path = os.path.join(image_directory, filename)
 
         
             im = image(image_path)
             im = downsample(im)
 
+            print(image_path)
+
             y, x = choose_pixel(im)
 
-        
+                        
             # y, x = im.shape[0] // 2, im.shape[1] // 2
 
             # mask = flood_fill(im, (y, x), 255, tolerance=35)

@@ -33,18 +33,23 @@ def choose_pixel(image):
 
     dist = float("inf")
 
-    w1 = 0.85
-    w2 = 0.15
+    w1 = 0.6
+    w2 = 0.4
 
 
+    max_diag = (math.sqrt(((image.shape[0]-(image.shape[0]//2))**2) + ((image.shape[1]-(image.shape[1]//2))**2)))
 
+    hyper_max_val = float("inf")
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
+
+            normalized_color = (np.abs(color_val - image[i,j]))/255
+            normalized_dist = (math.sqrt(((i-(image.shape[0]//2))**2) + ((j-(image.shape[1]//2))**2)))/max_diag
             # print(image[i,j])
-            if int(color_val) <= int(image[i,j]) and math.sqrt(((i-(image.shape[0]//2))**2) + ((j-(image.shape[1]//2))**2)) < dist:
-                dist = math.sqrt(((i-image.shape[0])**2) + ((j-image.shape[1])**2))
+
+            if normalized_color*w1 + normalized_dist*w2 < hyper_max_val:
+                hyper_max_val = normalized_color*w1 + normalized_dist*w2
                 img_x, img_y = i, j
-    print(img_x, img_y)
     return img_x, img_y
 
 # c, d = choose_pixel("ISIC_5341087.JPG")

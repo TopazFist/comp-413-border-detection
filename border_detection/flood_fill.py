@@ -38,10 +38,10 @@ def main():
             original_im = image(image_path)
             im = downsample(original_im)
 
-            # y, x = choose_pixel(im)
+            y, x = choose_pixel(im)
 
         
-            y, x = im.shape[0] // 2, im.shape[1] // 2
+            # y, x = im.shape[0] // 2, im.shape[1] // 2
 
             # mask = flood_fill(im, (y, x), 255, tolerance=35)
             mask = flood(im, (y, x), tolerance=31).astype(int).astype(np.uint8)
@@ -50,13 +50,13 @@ def main():
             upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
 
             result.append((original_im, upsampled_mask))
-        if pictures == 5:
-            break
-        else:
-            pictures += 1
+        # if pictures == 10:
+        #     break
+        # else:
+        #     pictures += 1
 
         
-    alpha = 0.25  # Adjust transparency here
+    alpha = 0.4  # Adjust transparency here
 
     for im, mask in result:
         plt.figure()

@@ -1,113 +1,49 @@
-const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 
-const uri = 'mongodb+srv://comp413:comp413@comp413-border-detectio.pf1mqdq.mongodb.net/?retryWrites=true&w=majority&appName=comp413-border-detection';
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const uri = 'mongodb+srv://comp413:comp413@comp413-border-detectio.pf1mqdq.mongodb.net/medical_records?retryWrites=true&w=majority&appName=comp413-border-detection';
 
-async function connectToDatabase() {
-  try {
-    await client.connect();
-    console.log('Connected to MongoDB Atlas');
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    const database = client.db('medical_records');
+const db = mongoose.connection;
 
-    // Create Collections with Validation Rules
-    await createPhysiciansCollection(database);
-    await createPatientsCollection(database);
-    await createPatientImagesCollection(database);
-    await createImageProcessingCollection(database);
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => console.log('Connected to MongoDB Atlas'));
 
-    return database;
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    throw error;
-  }
-}
+// Define Schemas
+const physicianSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  hospitalId: { type: String, required: true }
+});
 
-async function closeConnection() {
-  await client.close();
-  console.log('Connection closed');
-}
+const patientSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  address: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  gender: { type: String, required: true },
+  age: { type: Number, required: true },
+  allergies: { type: String, required: true }
+});
 
-async function createPhysiciansCollection(database) {
-  const physiciansCollectionOptions = {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['firstName', 'lastName', 'hospitalId'],
-        properties: {
-          firstName: { bsonType: 'string' },
-          lastName: { bsonType: 'string' },
-          hospitalId: { bsonType: 'string' }
-        }
-      }
-    }
-  };
+const patientImageSchema = new mongoose.Schema({
+  patientId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  physicianNotes: { type: String, required: true },
+  isPublic: { type: Boolean, required: true }
+});
 
-  await database.createCollection('physicians', physiciansCollectionOptions);
-  console.log('Collection "physicians" created successfully with validation rules');
-}
+const imageProcessingSchema = new mongoose.Schema({
+  patientImageId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  image: { type: String, required: true },
+  lesionBorder: { type: String, required: true },
+  lesionSize: { type: String, required: true },
+  lesionType: { type: String, required: true }
+});
 
-async function createPatientsCollection(database) {
-  const patientsCollectionOptions = {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['firstName', 'lastName', 'address', 'phoneNumber', 'gender', 'age', 'allergies'],
-        properties: {
-          firstName: { bsonType: 'string' },
-          lastName: { bsonType: 'string' },
-          address: { bsonType: 'string' },
-          phoneNumber: { bsonType: 'string' },
-          gender: { bsonType: 'string' },
-          age: { bsonType: 'int' },
-          allergies: { bsonType: 'string' }
-        }
-      }
-    }
-  };
+// Create Models
+const Physician = mongoose.model('Physician', physicianSchema);
+const Patient = mongoose.model('Patient', patientSchema);
+const PatientImage = mongoose.model('PatientImage', patientImageSchema);
+const ImageProcessing = mongoose.model('ImageProcessing', imageProcessingSchema);
 
-  await database.createCollection('patients', patientsCollectionOptions);
-  console.log('Collection "patients" created successfully with validation rules');
-}
-
-async function createPatientImagesCollection(database) {
-  const patientImagesCollectionOptions = {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['patientId', 'physicianNotes', 'isPublic'],
-        properties: {
-          patientId: { bsonType: 'objectId' },
-          physicianNotes: { bsonType: 'string' },
-          isPublic: { bsonType: 'bool' }
-        }
-      }
-    }
-  };
-
-  await database.createCollection('patientImages', patientImagesCollectionOptions);
-  console.log('Collection "patientImages" created successfully with validation rules');
-}
-
-async function createImageProcessingCollection(database) {
-  const imageProcessingCollectionOptions = {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['patientImageId', 'image', 'lesionBorder', 'lesionSize', 'lesionType'],
-        properties: {
-          patientImageId: { bsonType: 'objectId' },
-          image: { bsonType: 'string' },
-          lesionBorder: { bsonType: 'string' },
-          lesionSize: { bsonType: 'string' },
-          lesionType: { bsonType: 'string' }
-        }
-      }
-    }
-  };
-
-  await database.createCollection('imageProcessing', imageProcessingCollectionOptions);
-  console.log('Collection "imageProcessing" created successfully with validation rules');
-}
-
-module.exports = { connectToDatabase, closeConnection };
+module.exports = { mongoose, Physician, Patient, PatientImage, ImageProcessing };

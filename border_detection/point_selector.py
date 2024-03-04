@@ -3,6 +3,10 @@ import cv2
 from scipy.signal import argrelextrema
 import numpy as np
 import math
+import random
+import os
+from PIL import Image
+
 
 def histogram_creater(image):
     img = cv2.imread(image, cv2.COLOR_BGR2GRAY)
@@ -18,7 +22,11 @@ def choose_pixel(image):
     # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     histg = cv2.calcHist([image],[0],None,[256],[0,256])
-    histg2 = histg[:95]
+
+    # plt.plot(histg)
+    # plt.imshow(histg)
+    CUTOFF = 95
+    histg2 = histg[:CUTOFF]
 
     max_val = float("-inf")
     color_val = -1
@@ -33,8 +41,8 @@ def choose_pixel(image):
 
     dist = float("inf")
 
-    w1 = 0.6
-    w2 = 0.4
+    w1 = 0.8
+    w2 = 0.2
 
 
     max_diag = (math.sqrt(((image.shape[0]-(image.shape[0]//2))**2) + ((image.shape[1]-(image.shape[1]//2))**2)))
@@ -52,6 +60,55 @@ def choose_pixel(image):
                 img_x, img_y = i, j
     return img_x, img_y
 
-# c, d = choose_pixel("ISIC_5341087.JPG")
-# print(c,d)
-# histogram_creater("ISIC_5341087.JPG")
+
+def tolerance_picker(image):
+    # img = cv2.imread(image)
+    # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    histg = cv2.calcHist([image],[0],None,[256],[0,256])
+    CUTOFF = 95
+    histg2 = histg[:CUTOFF]
+    histg3 = histg[CUTOFF:]
+
+
+    max_low_tone = float("-inf")
+    max_background = -1
+    for i in range(len(histg2)):
+        if histg2[i] > max_low_tone:
+            max_low_tone = max(max_low_tone, histg2[i])
+            max_background = i
+
+    max_high_tone = float("-inf")
+    max_foreground = -1
+    for i in range(len(histg3)):
+        if histg3[i] > max_high_tone:
+            max_high_tone = max(max_high_tone, histg3[i])
+            max_foreground = i
+
+    # plt.plot(histg, color='black')
+    # plt.axvline(x=max_background, color='r', linestyle='--', label='Background Peak')
+    # plt.axvline(x=CUTOFF + max_foreground, color='g', linestyle='--', label='Foreground Peak')
+    # plt.legend()
+    # plt.gca().invert_yaxis()
+    # plt.show()
+
+    # print(max_foreground - max_background)
+    return (CUTOFF+max_foreground) - max_background
+
+def test():
+    image_directory = "ISIC-images/"
+    filenames = os.listdir(image_directory)
+    random.shuffle(filenames)  # Shuffle the list of filenames
+    pictures = 0
+    for filename in filenames:
+        if filename.endswith(".JPG"):
+            image_path = os.path.join(image_directory, filename)
+            image = Image.open(image_path)
+            image = np.array(image)
+
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+# c, d = choose_pixel("ISIC-images/ISIC_5648033.JPG")
+# # print(c,d)
+# histogram_creater("ISIC-images/ISIC_5648033.JPG")
+# print(tolerance_picker("ISIC-images/ISIC_5648033.JPG"))
+

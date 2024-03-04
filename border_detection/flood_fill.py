@@ -49,21 +49,24 @@ def main():
             
             temp = np.copy(upsampled_mask)
 
-            upsampled_and_expanded_mask = expand_mask(temp, original_im, 5, 30)
+            upsampled_and_expanded_mask = expand_mask(temp, original_im, 5, 8)
             # expanded_mask = expand_mask(mask, im, 5, 13)
 
             result.append((original_im, upsampled_mask, upsampled_and_expanded_mask))
             # result.append((im, mask , expanded_mask))
 
-        if pictures == 3:
+        if pictures == 0:
             break
         else:
             pictures += 1
 
-        
+    visual_results(result)        
+    
+
+def visual_results(out):
     alpha = 0.2  # Adjust transparency here
 
-    for im, mask, expanded in result:
+    for im, mask, expanded in out:
         print(np.sum(mask), np.sum(expanded))
 
         fig, axes = plt.subplots(1, 2)
@@ -138,8 +141,6 @@ def color_difference(pixel1, pixel2):
     return abs(pixel1 - pixel2)
 
 def expand_mask(mask, input_image, radius, threshold):
-
-
     converged = False
 
     iterations = 0

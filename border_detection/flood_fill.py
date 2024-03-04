@@ -8,7 +8,7 @@ import os
 import scipy
 import random
 
-from point_selector import choose_pixel
+from point_selector import choose_pixel, tolerance_picker
 
 def downsample(image):
     width, height = image.shape[1], image.shape[0]
@@ -42,7 +42,9 @@ def main():
 
             # need to change tolerance based on difference in color, and make it custom
             # for each image
-            mask = flood(im, (y, x), tolerance=30).astype(int).astype(np.uint8)
+            t = tolerance_picker(im) / 3.25
+
+            mask = flood(im, (y, x), tolerance=t).astype(int).astype(np.uint8)
             mask = fill_holes(mask)
 
             upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
@@ -55,7 +57,7 @@ def main():
             result.append((original_im, upsampled_mask, upsampled_and_expanded_mask))
             # result.append((im, mask , expanded_mask))
 
-        if pictures == 0:
+        if pictures == 4:
             break
         else:
             pictures += 1

@@ -42,22 +42,22 @@ def main():
 
             # need to change tolerance based on difference in color, and make it custom
             # for each image
-            t = tolerance_picker(im) / 3.25
+            tol = tolerance_picker(im, y, x) 
 
-            mask = flood(im, (y, x), tolerance=t).astype(int).astype(np.uint8)
+            mask = flood(im, (y, x), tolerance=tol/3.25).astype(int).astype(np.uint8)
             mask = fill_holes(mask)
 
             upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
             
             temp = np.copy(upsampled_mask)
 
-            upsampled_and_expanded_mask = expand_mask(temp, original_im, 5, 8)
+            upsampled_and_expanded_mask = expand_mask(temp, original_im, 5, tol/4)
             # expanded_mask = expand_mask(mask, im, 5, 13)
 
             result.append((original_im, upsampled_mask, upsampled_and_expanded_mask))
             # result.append((im, mask , expanded_mask))
 
-        if pictures == 4:
+        if pictures == 6:
             break
         else:
             pictures += 1

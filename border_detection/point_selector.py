@@ -37,13 +37,9 @@ def choose_pixel(image):
             
 
     img_x, img_y = 0, 0
-
-
     dist = float("inf")
-
-    w1 = 0.8
-    w2 = 0.2
-
+    w1 = 0.6
+    w2 = 0.4
 
     max_diag = (math.sqrt(((image.shape[0]-(image.shape[0]//2))**2) + ((image.shape[1]-(image.shape[1]//2))**2)))
 

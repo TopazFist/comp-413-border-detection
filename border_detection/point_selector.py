@@ -17,11 +17,14 @@ def histogram_creater(image):
     plt.show()
 
 
-def choose_pixel(image):
+def histogram_calculator(image):
+    histg = cv2.calcHist([image],[0],None,[256],[0,256])
+    return histg
+
+
+def choose_pixel(image, histg):
     # img = cv2.imread(image)
     # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    histg = cv2.calcHist([image],[0],None,[256],[0,256])
 
     # plt.plot(histg)
     # plt.imshow(histg)
@@ -57,10 +60,9 @@ def choose_pixel(image):
     return img_x, img_y
 
 
-def tolerance_picker(image, img_y, img_x):
+def tolerance_picker(image, img_y, img_x, histg):
     # img = cv2.imread(image)
     # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    histg = cv2.calcHist([image],[0],None,[256],[0,256])
     CUTOFF = 95
     # histg2 = histg[:CUTOFF]
     histg3 = histg[CUTOFF:]

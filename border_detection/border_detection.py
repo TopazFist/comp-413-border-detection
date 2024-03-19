@@ -6,7 +6,7 @@ import scipy
 import random
 import matplotlib.pyplot as plt
 
-from point_selector import choose_pixel, tolerance_picker
+from point_selector import choose_pixel, tolerance_picker, histogram_calculator
 
 def downsample(image):
     width, height = image.shape[1], image.shape[0]
@@ -21,10 +21,9 @@ def upsample(image, shape):
 def get_border(original_im):
     grey_im = cv2.cvtColor(original_im, cv2.COLOR_BGR2GRAY)
     im = downsample(grey_im)
-
-    y, x = choose_pixel(im)
-
-    tolerance = tolerance_picker(im, y, x)
+    histogram = histogram_calculator(im)
+    y, x = choose_pixel(im, histogram)
+    tolerance = tolerance_picker(im, y, x, histogram)
 
     t_1 = tolerance / 3.25
 
@@ -35,7 +34,9 @@ def get_border(original_im):
     
     temp = np.copy(upsampled_mask)
     
-    t_2 = tolerance / 2.5
+    # t_2 = np.log(1+(np.e**tolerance))
+    # t_2 = np.e**(-(tolerance**2))
+    t_2 = tolerance/2.25
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
     upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
 

@@ -57,21 +57,22 @@ def choose_pixel(image):
     return img_x, img_y
 
 
-def tolerance_picker(image):
+def tolerance_picker(image, img_y, img_x):
     # img = cv2.imread(image)
     # image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     histg = cv2.calcHist([image],[0],None,[256],[0,256])
     CUTOFF = 95
-    histg2 = histg[:CUTOFF]
+    # histg2 = histg[:CUTOFF]
     histg3 = histg[CUTOFF:]
 
+    # max_low_tone = float("-inf")
+    # max_background = -1
+    # for i in range(len(histg2)):
+    #     if histg2[i] > max_low_tone:
+    #         max_low_tone = max(max_low_tone, histg2[i])
+    #         max_background = i
 
-    max_low_tone = float("-inf")
-    max_background = -1
-    for i in range(len(histg2)):
-        if histg2[i] > max_low_tone:
-            max_low_tone = max(max_low_tone, histg2[i])
-            max_background = i
+    max_background = image[img_y,img_x]
 
     max_high_tone = float("-inf")
     max_foreground = -1

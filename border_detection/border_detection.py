@@ -35,7 +35,7 @@ def get_border(original_im):
     
     temp = np.copy(upsampled_mask)
     
-    t_2 = tolerance / 3
+    t_2 = tolerance / 2.5
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
     upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
 

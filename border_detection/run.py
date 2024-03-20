@@ -5,12 +5,19 @@ import numpy as np
 import random
 import os
 from border_detection import get_border
+import concurrent.futures
+import time
 
 def image(image_path):
     image = Image.open(image_path)
     image = np.array(image)
-
     return image
+
+def process_image(file_path):
+    original_im = image(file_path)
+    mask = get_border(original_im)
+    resulting_image = convert_image_mask(original_im, mask)
+    save_image(resulting_image, "ISIC-images/Result_Images", os.path.basename(file_path))
 
 
 def main():
@@ -18,20 +25,36 @@ def main():
 
     image_directory = "ISIC-images/New_Images"
     filenames = os.listdir(image_directory)
+    file_paths = [os.path.join(image_directory, filename) for filename in filenames]
     # random.shuffle(filenames)  # Shuffle the list of filenames
     pictures = 0
-    for filename in filenames:
-        if filename.endswith(".JPG"):  # Check if file is an image
-            image_path = os.path.join(image_directory, filename)
-            original_im = image(image_path)
 
-            mask = get_border(original_im)
+    # start_time = time.time()
 
-            resulting_image = convert_image_mask(original_im, mask)
 
-            save_image(resulting_image, "ISIC-images/Result_Images", filename)
+    max_threads = 8
+    # Adjust max_treads according to the number of cpus
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
+        futures = [executor.submit(process_image, file_path) for file_path in file_paths]
+        concurrent.futures.wait(futures)
 
-            # result.append((original_im, mask))
+
+    # for filename in filenames:
+    #     if filename.endswith(".JPG"):  # Check if file is an image
+    #         image_path = os.path.join(image_directory, filename)
+    #         original_im = image(image_path)
+
+    #         mask = get_border(original_im)
+
+    #         resulting_image = convert_image_mask(original_im, mask)
+
+    #         save_image(resulting_image, "ISIC-images/Result_Images", filename)
+
+    #         # result.append((original_im, mask))
+
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print("Elapsed time:", elapsed_time, "seconds")
 
         # if pictures == 9:
         #     break
@@ -72,4 +95,5 @@ def visual_results(out):
         plt.show()
 
 
-main()
+if __name__ == '__main__':
+    main()

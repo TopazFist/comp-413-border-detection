@@ -36,10 +36,11 @@ def get_border(original_im):
     
     # t_2 = np.log(1+(np.e**tolerance))
     # t_2 = np.e**(-(tolerance**2))
+    print(tolerance)
     t_2 = tolerance/2.25
+
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
     upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
-
 
     return upsampled_and_expanded_mask
 
@@ -84,7 +85,7 @@ def expand_mask(mask, input_image, radius, threshold):
     
     while not converged and iterations < 30:
         iterations += 1
-        print(iterations)
+        # print(iterations)
         mask_pixels = np.where(mask == 1)
         average_color = np.mean(input_image[mask_pixels])
         converged = True  # Assume convergence unless proven otherwise

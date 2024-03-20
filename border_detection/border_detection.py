@@ -36,7 +36,7 @@ def get_border(original_im):
     
     # t_2 = np.log(1+(np.e**tolerance))
     # t_2 = np.e**(-(tolerance**2))
-    print(tolerance)
+    # print(tolerance)
     t_2 = tolerance/2.25
 
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)

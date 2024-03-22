@@ -11,6 +11,13 @@ import {physicianRoutes} from "./routes/physicians.js";
 
 const app = express();
 
+// middleware for parsing request body
+app.use(express.json());
+
+// middleware for handling cors policy
+// it would be better to customize - do this later if necessary
+app.use(cors());
+
 app.get('/', (request, response) => {
         console.log(request);
         return response.status(234).send("hi!");

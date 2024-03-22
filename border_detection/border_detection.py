@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 
 from point_selector import choose_pixel, tolerance_picker, histogram_calculator
 
+import os
+from PIL import Image
+
 def downsample(image):
     width, height = image.shape[1], image.shape[0]
     return cv2.resize(image, (width // 2, height // 2))
@@ -18,7 +21,7 @@ def upsample(image, shape):
     return cv2.resize(image, (width, height))
 
 
-def get_border(original_im):
+def get_border(original_im, llm_mode):
     grey_im = cv2.cvtColor(original_im, cv2.COLOR_BGR2GRAY)
     im = downsample(grey_im)
     histogram = histogram_calculator(im)
@@ -40,9 +43,13 @@ def get_border(original_im):
     t_2 = tolerance/2.25
 
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
-    upsampled_and_expanded_mask = fill_holes_final(upsampled_and_expanded_mask)
-
-    return upsampled_and_expanded_mask
+ 
+    upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
+    if llm_mode:
+        square_result = overlay_mask_on_image(upsampled_and_expanded_mask, original_im)
+        return square_result
+    else:
+        return upsampled_and_expanded_mask
 
 
 def get_edges(mask):
@@ -164,17 +171,32 @@ def fill_holes(mask):
     return mask
 
 
-def fill_holes_final(mask):
+
+def overlay_mask_on_image(mask, original_image):
+    x_range, y_range = crop_to_square(mask)
+    cropped_image = original_image[y_range[0]:y_range[1]+1, x_range[0]:x_range[1]+1]
+    cropped_mask = mask[y_range[0]:y_range[1]+1, x_range[0]:x_range[1]+1]
+
+    # Create a new image initialized with zeros
+    masked_image = np.zeros_like(cropped_image)
+    
+    # Apply the mask to the image
+    masked_image[cropped_mask == 1] = cropped_image[cropped_mask == 1]
+    
+    return masked_image
+
+
+
+def crop_to_square(mask):
     rows = len(mask)
     cols = len(mask[0])
-    
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
     x_range = [cols, 0]
     y_range = [rows, 0]
 
     for y in range(rows):
         for x in range(cols):
-            if mask [y][x] == 1:
+            if mask[y][x] == 1:
                 if x > x_range[1]:
                     x_range[1] = x
                 if x < x_range[0]:
@@ -185,30 +207,6 @@ def fill_holes_final(mask):
                 if y < y_range[0]:
                     y_range[0] = y
 
-    # Find holes and fill them
-    for y in range(y_range[0], y_range[1] + 1):
-        for x in range(x_range[0], x_range[1] + 1):
-            if mask[y][x] == 0:
-
-                fill = True
-                for direction in directions:
-                    j = y
-                    i = x
-
-                    temporary = False
-                    while (j < y_range[1] and i < x_range[1] and j >= y_range[0] and i >= x_range[0]):
-                        if mask[j][i] == 1:
-                            temporary = True
-                            break
-                        
-                        j += direction[0]
-                        i += direction[1]
-
-                    fill = fill and temporary
-
-                if fill:
-                    mask[y][x] = 1
-
     size = max(y_range[1] - y_range[0], x_range[1] - x_range[0]) + 1
     center_x = (x_range[1] + x_range[0]) // 2
     center_y = (y_range[1] + y_range[0]) // 2
@@ -217,4 +215,35 @@ def fill_holes_final(mask):
     new_x_range = [max(center_x - half_size - 5, 0), min(center_x + half_size + 5, cols - 1)]
     new_y_range = [max(center_y - half_size - 5, 0), min(center_y + half_size + 5, rows - 1)]
 
-    return mask[new_y_range[0]:new_y_range[1]+1][new_x_range[0]:new_x_range[1]+1]
+    return new_x_range, new_y_range
+
+
+
+
+# def image(image_path):
+#     image = Image.open(image_path)
+#     image = np.array(image)
+#     return image
+
+# def process_image(file_path):
+#     original_im = image(file_path)
+#     mask = get_border(original_im)
+
+#     resulting_image = convert_image_mask(original_im, mask)
+#     save_image(resulting_image, "ISIC-images/Result_Images_Square", os.path.basename(file_path))
+
+
+# def save_image(image_array, directory, filename):
+#     # Ensure the directory exists
+#     if not os.path.exists(directory):
+#         os.makedirs(directory)
+    
+#     # Convert the image array to PIL image
+#     image = Image.fromarray(image_array.astype('uint8'))
+    
+#     # Save the image as JPG
+#     image.save(os.path.join(directory, "_" + filename))
+#     print("Image saved successfully.")
+
+
+# process_image("ISIC-images/New_Images/ISIC_1144433.JPG")

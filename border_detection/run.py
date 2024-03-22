@@ -15,8 +15,7 @@ def image(image_path):
 
 def process_image(file_path):
     original_im = image(file_path)
-    mask = get_border(original_im)
-    resulting_image = convert_image_mask(original_im, mask)
+    resulting_image = get_border(original_im, True)
     save_image(resulting_image, "ISIC-images/Result_Images_Square", os.path.basename(file_path))
 
 
@@ -63,14 +62,7 @@ def main():
 
     # visual_results(result)        
     
-def convert_image_mask(image, mask):
-    # Create a new image initialized with zeros
-    masked_image = np.zeros_like(mask)
-    
-    # Apply the mask to the image
-    masked_image[mask == 1] = image[mask == 1]
-    
-    return masked_image
+
 
 def save_image(image_array, directory, filename):
     # Ensure the directory exists

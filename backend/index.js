@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import { PORT, mongoDBURL } from "./config.js";
 import { Physician } from "./models/physicianModel.js";
 import { Patient } from "./models/patientModel.js";

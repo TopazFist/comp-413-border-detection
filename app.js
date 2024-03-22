@@ -1,6 +1,6 @@
 const express = require("express");
-const patientRoutes = require('./routes/patients.js')
-const physicianRoutes = require('./routes/patients.js')
+const patientRoutes = require('./backend/routes/patients.js')
+const physicianRoutes = require('./backend/routes/patients.js')
 const mongoose = require("mongoose")
 
 const app = express();

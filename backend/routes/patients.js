@@ -1,14 +1,14 @@
-const express = require('express')
+import express from "express";
 
 const router = express.Router()
 
-const{
+import {
     createPatient,
     getPatient,
     getPatients,
     deletePatient,
     updatePatient
-} = require('../controllers/patientController')
+} from '../controllers/patientController.js'
 
 // gets all patients
 router.get('/', getPatients)
@@ -21,4 +21,5 @@ router.delete('/:id', deletePatient)
 
 router.patch('/:id',updatePatient)
 
-module.exports = router
+// module.exports = router
+export const patientRoutes = router

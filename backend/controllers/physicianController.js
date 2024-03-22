@@ -1,5 +1,5 @@
-const Physician = require('../models/physicianModel')
-const mongoose = require('mongoose')
+import {Physician} from '../models/physicianModel.js'
+import mongoose from 'mongoose'
 
 //get new Physician
 const getPhysicians = async (req,res) => {
@@ -71,7 +71,7 @@ const updatePhysician = async (req,res) => {
     res.status(200).json(physician)
 }
 
-module.exports = {
+export {
     createPhysician,
     getPhysician,
     getPhysicians,

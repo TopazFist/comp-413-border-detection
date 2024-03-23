@@ -29,15 +29,28 @@ def main():
     file_paths = [os.path.join(testing_inputs, filename) for filename in filenames]
     file_paths = file_paths[:40]
 
-    max_threads = 8
-    with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
-        futures = [executor.submit(process_image, file_path, algorithm_output, False) for file_path in file_paths]
-        concurrent.futures.wait(futures)
+    max_threads = 7
+    batch_size = 10
+
+    num_full_batches = len(file_paths) // batch_size
+    last_batch_size = len(file_paths) % batch_size
+
+    file_path_batches = [file_paths[i*batch_size:(i+1)*batch_size] for i in range(num_full_batches)]
+    if last_batch_size > 0:
+        file_path_batches.append(file_paths[num_full_batches*batch_size:])
+
     
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
+        futures = []
+        for file_paths_batch in file_path_batches:
+            for file_path in file_paths_batch:
+                future = executor.submit(process_image, file_path, algorithm_output, False)
+                futures.append(future)
+        concurrent.futures.wait(futures)
+        
 
     filenames_testing_output_files = os.listdir(algorithm_output)
     output_filepaths = [os.path.join(algorithm_output, filename) for filename in filenames_testing_output_files]
-    print(output_filepaths)
 
     for output_file_path in output_filepaths:
 

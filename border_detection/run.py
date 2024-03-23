@@ -35,6 +35,7 @@ def process_image(file_path, destination_path, llm_mode):
     save_image(resulting_image, destination_path, os.path.basename(file_path), llm_mode=llm_mode)
 
 def main():
+    
     """
     Main function to process images in parallel.
     """

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from point_selector import choose_pixel, tolerance_picker, histogram_calculator
 import os
 from PIL import Image
+import time
 
 def downsample(image):
     """
@@ -36,6 +37,7 @@ def upsample(image, shape):
     return cv2.resize(image, (width, height))
 
 def get_border(original_im, llm_mode):
+    start_time = time.time()
     """
     Retrieves the border of the input image.
 
@@ -47,18 +49,26 @@ def get_border(original_im, llm_mode):
         numpy.ndarray: Image with the border.
     """
     grey_im = cv2.cvtColor(original_im, cv2.COLOR_BGR2GRAY)
-    im = downsample(grey_im)
+    im_1 = downsample(grey_im)
+    im_2 = downsample(im_1)
+    im = downsample(im_2)
+
     histogram = histogram_calculator(im)
     y, x = choose_pixel(im, histogram)
     tolerance = tolerance_picker(im, y, x, histogram)
     t_1 = tolerance / 3.25
     mask = flood(im, (y, x), tolerance=t_1).astype(int).astype(np.uint8)
     mask = fill_holes(mask)
-    upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
+    upsampled_mask = upsample(mask, (im_2.shape[0], im_2.shape[1]))
+
+    # upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
     temp = np.copy(upsampled_mask)
     t_2 = tolerance / 2.25
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
     upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
+    upsampled_and_expanded_mask = upsample(upsampled_and_expanded_mask, (original_im.shape[0], original_im.shape[1]))
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
     if llm_mode:
         square_result = overlay_mask_on_image(upsampled_and_expanded_mask, original_im)
         return square_result
@@ -143,7 +153,7 @@ def expand_mask(mask, input_image, radius, threshold):
     """
     converged = False
     iterations = 0
-    while not converged and iterations < 30:
+    while not converged and iterations < 15:
         iterations += 1
         mask_pixels = np.where(mask == 1)
         average_color = np.mean(input_image[mask_pixels])
@@ -261,3 +271,5 @@ def crop_to_square(mask):
     new_x_range = [max(center_x - half_size - 5, 0), min(center_x + half_size + 5, cols - 1)]
     new_y_range = [max(center_y - half_size - 5, 0), min(center_y + half_size + 5, rows - 1)]
     return new_x_range, new_y_range
+
+

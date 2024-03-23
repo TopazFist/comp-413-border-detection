@@ -5,7 +5,7 @@ import concurrent.futures
 import numpy as np
 import cv2
 
-
+import time
 
 def jaccard(image1, image2):
     intersection = np.logical_and(image1, image2)
@@ -21,6 +21,8 @@ def dice(image1, image2):
     return dice_coefficient
 
 def main():
+    start_time = time.time()
+
     ground_truth_folder = "ISIC-images/ISBI2016_ISIC_Part1_Test_GroundTruth"
     testing_inputs = "ISIC-images/ISBI2016_ISIC_Part1_Test_Data"
     algorithm_output = "ISIC-testing-output"
@@ -81,9 +83,11 @@ def main():
 
         else:
             print(f"No corresponding segmentation file found for {output_file_path}")
+    elapsed_time = time.time() - start_time
 
     print("Dice Score: ", total_dice/total_items)
     print("Jaccard Score: ", total_jaccard/total_items)
+    print("Total: ", elapsed_time)
     
 if __name__ == '__main__':
     main()

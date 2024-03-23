@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const physicianSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -7,6 +7,6 @@ const physicianSchema = new mongoose.Schema({
   assignedPatientIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Patient' }] // Array of patient IDs assigned to the physician
 });
 
-const Physician = mongoose.model('Physician', physicianSchema);
+export const Physician = mongoose.model('Physician', physicianSchema);
 
-module.exports = Physician;
+// module.exports = Physician;

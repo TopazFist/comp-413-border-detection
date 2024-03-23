@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const patientImageSchema = new mongoose.Schema({
   patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
@@ -7,6 +7,6 @@ const patientImageSchema = new mongoose.Schema({
   isPublic: { type: Boolean, required: true }
 });
 
-const PatientImage = mongoose.model('PatientImage', patientImageSchema);
+export const PatientImage = mongoose.model('PatientImage', patientImageSchema);
 
-module.exports = PatientImage;
+// module.exports = PatientImage;

@@ -49,8 +49,11 @@ def get_border(original_im, llm_mode):
         numpy.ndarray: Image with the border.
     """
     grey_im = cv2.cvtColor(original_im, cv2.COLOR_BGR2GRAY)
+    # downsample /2
     im_1 = downsample(grey_im)
+    # downsample /4
     im_2 = downsample(im_1)
+    # downsample /8
     im = downsample(im_2)
 
     histogram = histogram_calculator(im)
@@ -59,13 +62,18 @@ def get_border(original_im, llm_mode):
     t_1 = tolerance / 3.25
     mask = flood(im, (y, x), tolerance=t_1).astype(int).astype(np.uint8)
     mask = fill_holes(mask)
+    # upsample /4
     upsampled_mask = upsample(mask, (im_2.shape[0], im_2.shape[1]))
 
     # upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
     temp = np.copy(upsampled_mask)
     t_2 = tolerance / 2.25
+
+    # expand mask on mid sampled image
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
     upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
+
+    # upsample 1
     upsampled_and_expanded_mask = upsample(upsampled_and_expanded_mask, (original_im.shape[0], original_im.shape[1]))
     elapsed_time = time.time() - start_time
     print(elapsed_time)

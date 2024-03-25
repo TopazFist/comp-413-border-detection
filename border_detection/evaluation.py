@@ -4,6 +4,7 @@ from run import process_image
 import concurrent.futures
 import numpy as np
 import cv2
+import random
 
 import time
 
@@ -29,7 +30,8 @@ def main():
 
     filenames = os.listdir(testing_inputs)
     file_paths = [os.path.join(testing_inputs, filename) for filename in filenames]
-    file_paths = file_paths[:40]
+    file_paths = random.sample(file_paths, 40)
+
 
     max_threads = 7
     batch_size = 10

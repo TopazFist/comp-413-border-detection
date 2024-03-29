@@ -29,6 +29,9 @@ app.use('/patients',patientRoutes)
 
 app.use('/physicians',physicianRoutes)
 
+app.use('/sign-up',signupRoute)
+
+
 // Connecting the database
 mongoose.connect(mongoDBURL)
         .then(()=> {

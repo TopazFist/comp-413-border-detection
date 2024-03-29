@@ -36,7 +36,7 @@ app.use('/patients',patientRoutes)
 app.use('/physicians',physicianRoutes)
 
 app.use('/auth', authRoutes)
-app.use('/sign-up',signupRoute)
+// app.use('/sign-up',signupRoute)
 
 
 // Connecting the database

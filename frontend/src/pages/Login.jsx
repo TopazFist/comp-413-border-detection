@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom'; // Import Link component for navigation
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -12,11 +15,21 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can perform login logic, such as sending a request to your backend
-    // with the username and password.
-    console.log('Logging in with:', username, password);
+    try {
+      console.log(username, password)
+      const response = await axios.post(`http://localhost:3001/auth/${username}`, {
+        password: password
+      });
+  
+
+      // Handle successful login, you can redirect user to another page
+      console.log('Login successful:', response.data);
+    } catch (error) {
+      setError('Invalid username or password');
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -32,7 +45,11 @@ const Login = () => {
           <input type="password" value={password} onChange={handlePasswordChange} />
         </div>
         <button type="submit">Login</button>
+        {error && <div>{error}</div>}
       </form>
+
+      {/* Register button using Link component */}
+      <Link to="/register">Register</Link>
     </div>
   );
 };

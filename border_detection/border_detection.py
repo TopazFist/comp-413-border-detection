@@ -8,6 +8,35 @@ from point_selector import choose_pixel, tolerance_picker, histogram_calculator
 import os
 from PIL import Image
 import time
+# Jaccard Score for images:  0.6924498996771449
+# Dice Score for images:  0.8075157317449335
+# Dice Score:  0.8075157317449335
+# Jaccard Score:  0.6924498996771449
+# Total:  2078.881084918976
+# 3.25, 2.25
+# iterations = 15
+
+# changed radius to 3 from 1
+
+# Jaccard Score for images:  0.6513251161289532
+# Dice Score for images:  0.7779810714595543
+# Dice Score:  0.7779810714595543
+# Jaccard Score:  0.6513251161289532
+# Total:  774.1369850635529
+
+
+# change to 3.1, 2.4
+
+# Jaccard Score for images:  0.6513251161289532
+# Dice Score for images:  0.7779810714595543
+# Dice Score:  0.7779810714595543
+# Jaccard Score:  0.6513251161289532
+# Total:  1053.4851129055023
+
+# change to 3, 2.7
+# iterations = 10
+
+
 
 def downsample(image):
     """
@@ -59,7 +88,7 @@ def get_border(original_im, llm_mode):
     histogram = histogram_calculator(im)
     y, x = choose_pixel(im, histogram)
     tolerance = tolerance_picker(im, y, x, histogram)
-    t_1 = tolerance / 3.25
+    t_1 = tolerance / 3
     mask = flood(im, (y, x), tolerance=t_1).astype(int).astype(np.uint8)
     mask = fill_holes(mask)
     # upsample /4
@@ -67,7 +96,7 @@ def get_border(original_im, llm_mode):
 
     # upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
     temp = np.copy(upsampled_mask)
-    t_2 = tolerance / 2.25
+    t_2 = tolerance / 2.7
 
     # expand mask on mid sampled image
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
@@ -161,7 +190,7 @@ def expand_mask(mask, input_image, radius, threshold):
     """
     converged = False
     iterations = 0
-    while not converged and iterations < 15:
+    while not converged and iterations < 10:
         iterations += 1
         mask_pixels = np.where(mask == 1)
         average_color = np.mean(input_image[mask_pixels])

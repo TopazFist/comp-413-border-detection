@@ -24,8 +24,8 @@ def dice(image1, image2):
 def main():
     start_time = time.time()
 
-    ground_truth_folder = "ISIC-images/ISBI2016_ISIC_Part1_Test_GroundTruth"
-    testing_inputs = "ISIC-images/ISBI2016_ISIC_Part1_Test_Data"
+    ground_truth_folder = "ISIC-images/ISBI2016_ISIC_Part2_Test_GroundTruth"
+    testing_inputs = "ISIC-images/ISBI2016_ISIC_Part2_Test_Data"
     algorithm_output = "ISIC-testing-output"
 
     filenames = os.listdir(testing_inputs)

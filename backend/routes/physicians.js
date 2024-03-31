@@ -13,7 +13,7 @@ import {
 // gets all Physicians
 router.get('/', getPhysicians)
 
-router.get('/:id',getPhysician)
+router.get('/:id', getPhysician)
 
 router.post('/', createPhysician)
 

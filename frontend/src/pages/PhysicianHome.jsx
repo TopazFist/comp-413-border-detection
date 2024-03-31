@@ -12,14 +12,29 @@ const PhysicianHome = () => {
         setLoading(true);
         axios
             .get(`http://localhost:3001/physicians/${id}`)
-            .then((response) => {
+            .then(async (response) => {
+                console.log(response);
                 // Assuming the physician object has a field named 'patients' containing an array of patient objects
-                const physician = response.data.data;
-                const patientList = physician.patients || []; // Extracting patient list from physician object
-                setPatients(patientList);
-                setLoading(false);
-            })
-            .catch((error) => {
+                const physician = response.data;
+                const patientIDList = physician.assignedPatientIds || []; // Extracting patient list from physician object
+                try {
+                        const patientRequests = patientIDList.map(patientID => {
+                            return axios.get(`http://localhost:3001/patients/${patientID}`);
+                            // replace with what ian and jmak make
+                        });
+            
+                        const patientResponses = await Promise.all(patientRequests);
+            
+                        const patientList = patientResponses.map(response => response.data);
+                        console.log("Patients:", patientList);
+                        setPatients(patientList);
+                        setLoading(false);
+                    } catch (error) {
+                        console.log("Error fetching patients:", error);
+                        setLoading(false);
+                    }
+                })
+        .catch((error) => {
                 console.log(error);
                 setLoading(false);
             });
@@ -41,7 +56,7 @@ const PhysicianHome = () => {
                 <table className="w-full border-separate border-spacing-2">
                     <thead>
                         <tr>
-                            <th className="border border-gray-600 rounded-md">No</th>
+                            <th className="border border-gray-600 rounded-md">Number</th>
                             <th className="border border-gray-600 rounded-md">Name</th>
                         </tr>
                     </thead>

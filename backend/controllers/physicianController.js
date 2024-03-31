@@ -16,7 +16,7 @@ const getPhysician = async (req,res) => {
         return res.status(404).json({error: "No such physician"})
     }
 
-    const physician = await Physician.findById(id)
+    const physician = await Physician.findOne({ _id: id });
 
     if (!physician){
         return res.status(404).json({error: "No such physician"})

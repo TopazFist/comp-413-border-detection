@@ -5,7 +5,6 @@ import CreatePatient from "./pages/CreatePatient";
 import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
-import PatientList from "./pages/PatientList";
 import Register from "./pages/Register";
 import './styles.css';
 

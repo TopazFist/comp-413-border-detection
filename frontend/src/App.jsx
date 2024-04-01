@@ -6,13 +6,18 @@ import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
 import Register from "./pages/Register";
+import WelcomePage from './pages/Welcome';
+
 import './styles.css';
 
 const App = () => {
         return(
                 <Routes>
                         {/* <Route path='/' element={<Login />} /> */}
-                        <Route path="/" element={<Navigate to="/login" />} /> {/* Redirect to login page */}
+                        <Route path="/" element={<Navigate to="/welcome" />} /> {/* Redirect to welcome page */}
+
+                        <Route path="/welcome" element={<WelcomePage />} />
+                        {/* <Route path="/" element={<Navigate to="/login" />} /> Redirect to login page */}
                         <Route path="/login" element={<Login />} />
                         <Route path='/register' element={<Register />} />
                         <Route path='/registerpatient' element={<CreatePatient />} />

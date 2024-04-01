@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link component for navigation
+import { Link } from 'react-router-dom';
+import './Login.css'; // Import the CSS file
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -18,38 +19,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(username, password)
-      const response = await axios.post(`http://localhost:3001/auth/${username}`, {
-        password: password
+      // Send login data to the backend server
+      const response = await axios.post('http://localhost:3001/login', {
+        username,
+        password,
       });
-  
 
-      // Handle successful login, you can redirect user to another page
+      // Handle login success
       console.log('Login successful:', response.data);
     } catch (error) {
-      setError('Invalid username or password');
+      setError('Login failed. Please try again.');
       console.error('Login error:', error);
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="input-container">
           <label>Username:</label>
           <input type="text" value={username} onChange={handleUsernameChange} />
         </div>
-        <div>
+        <div className="input-container">
           <label>Password:</label>
           <input type="password" value={password} onChange={handlePasswordChange} />
         </div>
-        <button type="submit">Login</button>
-        {error && <div>{error}</div>}
+        <button className="custom-button" type="submit">Login</button>
+        {error && <div className="error-message">{error}</div>}
       </form>
-
-      {/* Register button using Link component */}
-      <Link to="/register">Register</Link>
+      <p>Don't have an account? <Link to="/register" className="register-link">Register</Link></p>
+      <p><Link to="/welcome" className="welcome-link">Go Back</Link></p>
     </div>
   );
 };

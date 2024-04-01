@@ -1,58 +1,76 @@
-import React from "react";
-import axios from "axios";
+import React, { useState, useRef } from "react";
+// import axios from "axios";
+import "../styles/imageUpload.css";
 
 const ImageUpload = () => {
-    
+    const [file, setFile] = useState(null);
+    const [isActive, setIsActive] = useState(false);
+    const inputRef = useRef(null);
+
+    const handleButtonClick = () => {
+        inputRef.current.click();
+    };
+
+    const handleChange = (event) => {
+        const uploadedFile = event.target.files[0];
+        if (uploadedFile) {
+            setFile(uploadedFile);
+            setIsActive(true);
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        setIsActive(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsActive(false);
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const uploadedFile = event.dataTransfer.files[0];
+        if (uploadedFile) {
+            setFile(uploadedFile);
+            setIsActive(true);
+        }
+    };
+
+    const showFile = () => {
+        if (!file) {
+            return null;
+        }
+
+        const fileType = file.type;
+        const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+        if (validExtensions.includes(fileType)) {
+            const fileURL = URL.createObjectURL(file);
+            return <img src={fileURL} alt="Uploaded" />;
+        } else {
+            alert("This is not a valid image!");
+            setIsActive(false);
+            return null;
+        }
+    };
+
+    return (
+        <section className={`drag-area ${isActive ? "active" : ""}`}
+                 onDragOver={handleDragOver}
+                 onDragLeave={handleDragLeave}
+                 onDrop={handleDrop}>
+            <section className="icon">
+                {/* <i className="cloud-upload"></i> */}
+            </section>
+            <header>
+                {isActive ? "Release to Upload Image" : "Drag & Drop Image"}
+            </header>
+            <span>or</span>
+            <button onClick={handleButtonClick}>Browse Image</button>
+            <input ref={inputRef} type="file" hidden onChange={handleChange}></input>
+            {file && showFile()}
+        </section>
+    );
 }
 
-const dropArea = document.querySelector(".drag-area");
-const dragText = dropArea.querySelector("header");
-const button = dropArea.querySelector("button");
-const input = dropArea.querySelector("input");
-let file;
-
-button.onclick = () => {
-  input.click();
-}
-
-input.addEventListener("change", function() {
-  file = this.files[0];
-  dropArea.classList.add("active");
-  showFile();
-});
-
-dropArea.addEventListener("dragover", (event) => {
-  event.preventDefault();
-  dropArea.classList.add("active");
-  dragText.textContent = "Release to Upload File";
-});
-
-dropArea.addEventListener("dragleave", () => {
-  dropArea.classList.remove("active");
-  dragText.textContent = "Drag & Drop to Upload File";
-});
-
-dropArea.addEventListener("drop", (event) => {
-  event.preventDefault();
-  file = event.dataTransfer.files[0];
-  showFile();
-});
-
-function showFile() {
-  const fileType = file.type;
-  const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-
-  if (validExtensions.includes(fileType)) {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      const fileURL = fileReader.result;
-      const imgTag = `<img src="${fileURL}" alt="image">`;
-      dropArea.innerHTML = imgTag;
-    }
-    fileReader.readAsDataURL(file);
-  } else {
-    alert("This is not a valid image file!");
-    dropArea.classList.remove("active");
-    dragText.textContent = "Drag & Drop to Upload File";
-  }
-}
+export default ImageUpload;

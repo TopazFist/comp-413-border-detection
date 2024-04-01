@@ -1,12 +1,13 @@
 import React from "react";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import CreatePatient from "./pages/CreatePatient";
 import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
-import Register from "./pages/Register";
-import './styles.css';
+import ImageUpload from "./pages/ImageUpload";
+import './styles/styles.css';
 
 const App = () => {
         return(

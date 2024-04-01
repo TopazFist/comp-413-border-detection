@@ -74,8 +74,6 @@ const createPatientUser = async (req, res, next) => {
     };
     await getPhysician(mockGetRequest, mockGetResponse);
     const getData = mockGetResponse.send();
-    console.log("HI");
-    console.log(getData);
 
     const mockRequest = {
       body: {
@@ -96,7 +94,7 @@ const createPatientUser = async (req, res, next) => {
 
     await createPatient(mockRequest, mockResponse);
     const patientData = mockResponse.send();
-    const patientId = patientData._id;
+    const patientId = patientData._id.toString();
 
     const patient = await PatientAuth.create({ username, password });
     const mockUpdateRequest = {

@@ -57,22 +57,23 @@ const deletePhysician = async (req,res) => {
 //update physician data
 const updatePhysician = async (req,res) => {
     const {id} = req.params
-    console.log(id);
+
+    console.log(req.body);
+    const patientId = req.body.assignedPatientIds;
+    
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: "No such physician"})
     }
 
     const physician = await Physician.findOneAndUpdate(
         { _id: id },
-        { $push: { assignedPatientIds: id } }, 
+        { $push: { assignedPatientIds: patientId } }, 
         { new: true }
     );
-
 
     if (!physician){
         return res.status(400).json({error: "No such physician"})
     }
-
     console.log('Updated Physician:', physician);
     res.status(200).json(physician)
 }

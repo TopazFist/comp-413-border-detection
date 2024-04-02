@@ -1,11 +1,13 @@
 import { PhysicianAuth } from "../models/physicianAuthModel.js";
+import { Physician } from '../models/physicianModel.js';
+
 
 const getPhysicianUser = async (req, res, next) => {
   const { username } = req.params;
   const { password } = req.body;
 
   try {
-    console.log("Received POST request at /auth/", username);
+    console.log("Received POST request at /auth/physician", username);
     console.log("Username:", username);
     console.log("Password:", password);
 
@@ -34,32 +36,29 @@ const getPhysicianUser = async (req, res, next) => {
   }
 };
 
-const isExists = async (username) => {
-  try {
-    const existingPhysician = await PhysicianAuth.findOne({ username });
-    return existingPhysician ? true : false;
-  } catch (error) {
-    console.error("Error checking if user exists:", error);
-    throw error; // Rethrow the error for handling in calling function
-  }
-};
-
 const createPhysicianUser = async (req, res, next) => {
   console.log(req.body);
-  const { username, password, physicianId } = req.body;
+  const { firstName, lastName, hospitalId, assignedPatientIds, username, password } = req.body;
 
   try {
-    console.log("Creating physician user...");
 
-    // Check if a user with the same username already exists
     const existingPhysician = await PhysicianAuth.findOne({ username });
-
     if (existingPhysician) {
       // User with the same username already exists
       console.log("User already exists");
       return res.status(409).json({ message: "User already exists" });
     }
 
+    // Create a new physician entry in the main table
+    const newPhysician = await Physician.create({
+      firstName,
+      lastName,
+      hospitalId,
+      assignedPatientIds
+    });
+
+    // Create a new physician user in the PhysicianAuth model
+    const physicianId = newPhysician._id.toString();
     const physician = await PhysicianAuth.create({
       username,
       password,
@@ -68,8 +67,7 @@ const createPhysicianUser = async (req, res, next) => {
 
     res.status(200).json(physician);
   } catch (error) {
-    console.error("Error creating physician user:", error);
-    next(error);
+    res.status(400).json({ error: error.message });
   }
 };
 

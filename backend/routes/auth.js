@@ -4,11 +4,13 @@ import {
   getPatientUser,
 } from "../controllers/authPatientController.js";
 
-import { createPhysicianUser } from "../controllers/authPhysicianController.js";
+import { createPhysicianUser, getPhysicianUser } from "../controllers/authPhysicianController.js";
 
 const router = express.Router();
 
-router.post('/physician',createPhysicianUser);
+router.post('/physician/',createPhysicianUser);
+
+router.post('/physician/:username',getPhysicianUser);
 
 router.post('/patient/:username',getPatientUser);
 

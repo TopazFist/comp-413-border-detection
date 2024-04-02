@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import WelcomePage from './pages/Welcome';
 
 import './styles.css';
+import PhysicianLogin from "./pages/loginPhysician";
 
 const App = () => {
         return(
@@ -22,6 +23,7 @@ const App = () => {
                         <Route path='/register' element={<Register />} />
                         <Route path='/registerpatient' element={<CreatePatient />} />
                         <Route path='/registerphysician' element={<CreatePhysician />} />
+                        <Route path='/loginphysician' element={<PhysicianLogin />} />
                         <Route path='/patients/:id' element={<PatientHome />} />
                         <Route path='/physicians/:id' element={<PhysicianHome />} />
                 </Routes>

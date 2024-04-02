@@ -129,7 +129,7 @@ const Register = () => {
         <button type="submit">Register</button>
         {error && <div className="error-message">{error}</div>}
       </form>
-      <p>Already have an account? <Link to="/login" className="login-link">Login</Link></p>
+      <p>Already have an account? <Link to="/patients/login" className="login-link">Login</Link></p>
     </div>
   );
 };

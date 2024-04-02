@@ -82,7 +82,7 @@ const PhysicianRegister = () => {
         {error && <div className="error-message">{error}</div>}
       </form>
       <p>
-        Already have an account? <Link to="/login" className="login-link">Login</Link>
+        Already have an account? <Link to="/physicians/login" className="login-link">Login</Link>
       </p>
     </div>
   );

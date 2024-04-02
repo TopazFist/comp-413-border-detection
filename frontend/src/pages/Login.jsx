@@ -47,7 +47,7 @@ const Login = () => {
         <button className="custom-button" type="submit">Login</button>
         {error && <div className="error-message">{error}</div>}
       </form>
-      <p>Don't have an account? <Link to="/register" className="register-link">Register</Link></p>
+      <p>Don't have an account? <Link to="/patients/register" className="register-link">Register</Link></p>
       <p><Link to="/welcome" className="welcome-link">Go Back</Link></p>
     </div>
   );

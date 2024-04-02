@@ -8,8 +8,8 @@ const WelcomePage = () => {
       <h2>Welcome</h2>
       <p>Choose your role:</p>
       <div className="button-container">
-        <Link to="/login" className="blue-button">Patient</Link>
-        <Link to="/login" className="blue-button">Physician</Link>
+        <Link to="/patients/login" className="blue-button">Patient</Link>
+        <Link to="/physicians/login" className="blue-button">Physician</Link>
       </div>
     </div>
   );

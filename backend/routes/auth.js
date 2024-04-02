@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/physician',createPhysicianUser);
 
-router.post('/:username',getPatientUser);
+router.post('/patient/:username',getPatientUser);
 
 router.post("/", createPatientUser);
 

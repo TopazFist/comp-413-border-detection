@@ -30,7 +30,7 @@ const PhysicianRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/physicians', {
+      const response = await axios.post('http://localhost:3001/auth/physician', {
         firstName,
         lastName,
         hospitalId,

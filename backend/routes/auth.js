@@ -6,7 +6,9 @@ import {
 
 const router = express.Router();
 
-router.post('/:username',getPatientUser)
+router.post('/:username',getPatientUser);
+
+router.post('/physician',getPatientUser);
 
 router.post("/", createPatientUser);
 

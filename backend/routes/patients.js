@@ -6,6 +6,7 @@ import {
     createPatient,
     getPatient,
     getPatients,
+    getPatientImages,
     deletePatient,
     updatePatient
 } from '../controllers/patientController.js'

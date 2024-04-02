@@ -1,9 +1,13 @@
 import express from "express";
-const router = express.Router();
-const PatientImage = require('../models/PatientImage');
-const ImageProcessing = require('../models/ImageProcessing');
 
-// IMAGE UPLOAD PIPELINE GOES HERE ?? idk for sure lol
+const router = express.Router()
 
-// module.exports = router;
+import {
+        getPatientImages
+} from '../controllers/imageController.js'
+
+// gets all patients images
+router.get('/:id', getPatientImages)
+
+// module.exports = router
 export const imageRoutes = router

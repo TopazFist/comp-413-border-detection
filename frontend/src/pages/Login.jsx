@@ -26,6 +26,7 @@ const Login = () => {
 
       // Handle login success
       console.log('Login successful:', response.data);
+      
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login error:', error);

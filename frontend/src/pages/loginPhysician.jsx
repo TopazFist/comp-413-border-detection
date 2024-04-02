@@ -23,9 +23,12 @@ const PhysicianLogin = () => {
       const response = await axios.post(`http://localhost:3001/auth/physician/${username}`, {
         password,
       });
-
       // Handle login success
       console.log('Login successful:', response.data);
+      console.log(response.data);
+      const physicianID = response.data.physicianId;
+      console.log(physicianID);
+      window.location.href = `/physicians/${physicianID}`;
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login error:', error);

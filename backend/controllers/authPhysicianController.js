@@ -14,7 +14,8 @@ const getPhysicianUser = async (req, res, next) => {
 
     // Retrieve the physician from the database using the username
     const physician = await PhysicianAuth.findOne({ username });
-
+    console.log("GETTING LOGIN PHYSICIAN");
+    console.log(physician);
     if (!physician) {
       console.log("Physician not found");
       return res.status(404).json({ message: "Physician not found" });
@@ -30,7 +31,7 @@ const getPhysicianUser = async (req, res, next) => {
 
     // If everything is correct, you can send a success response
     console.log("Login successful");
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful", physicianId: physician.physicianId});
   } catch (error) {
     console.error("Error during login:", error);
     next(error);

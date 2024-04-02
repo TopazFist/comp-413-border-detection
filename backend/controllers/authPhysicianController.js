@@ -1,5 +1,6 @@
 import { PhysicianAuth } from "../models/physicianAuthModel.js";
 import { Physician } from '../models/physicianModel.js';
+import mongoose from 'mongoose';
 
 
 const getPhysicianUser = async (req, res, next) => {
@@ -39,7 +40,6 @@ const getPhysicianUser = async (req, res, next) => {
 const createPhysicianUser = async (req, res, next) => {
   console.log(req.body);
   const { firstName, lastName, hospitalId, assignedPatientIds, username, password } = req.body;
-
   try {
 
     const existingPhysician = await PhysicianAuth.findOne({ username });
@@ -48,27 +48,26 @@ const createPhysicianUser = async (req, res, next) => {
       console.log("User already exists");
       return res.status(409).json({ message: "User already exists" });
     }
-
     // Create a new physician entry in the main table
     const newPhysician = await Physician.create({
       firstName,
       lastName,
       hospitalId,
-      assignedPatientIds
     });
-
     // Create a new physician user in the PhysicianAuth model
     const physicianId = newPhysician._id.toString();
+
+    console.log(physicianId);
     const physician = await PhysicianAuth.create({
       username,
       password,
       physicianId
     });
-
     res.status(200).json(physician);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
 
-export { getPhysicianUser, createPhysicianUser, isExists };
+export { getPhysicianUser, createPhysicianUser };

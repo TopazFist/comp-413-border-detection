@@ -3,11 +3,14 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Register.css';
 
+
 const PhysicianRegister = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [hospitalId, setHospitalId] = useState('');
   const [assignedPatientIds, setAssignedPatientIds] = useState([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleFirstNameChange = (e) => {
@@ -22,21 +25,28 @@ const PhysicianRegister = () => {
     setHospitalId(e.target.value);
   };
 
-  const handleAssignedPatientIdsChange = (e) => {
-    const patientIds = e.target.value.split(',').map((id) => id.trim());
-    setAssignedPatientIds(patientIds);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      console.log("patient ids in html");
+      console.log(assignedPatientIds);
       const response = await axios.post('http://localhost:3001/auth/physician', {
         firstName,
         lastName,
         hospitalId,
-        assignedPatientIds,
+        assignedPatientIds: [],
+        username,
+        password,
       });
-
       console.log('Physician registration successful:', response.data);
       // Redirect or perform additional actions
     } catch (error) {
@@ -62,13 +72,19 @@ const PhysicianRegister = () => {
           <input type="text" value={hospitalId} onChange={handleHospitalIdChange} />
         </div>
         <div className="input-container">
-          <label>Assigned Patient IDs (comma-separated):</label>
-          <input type="text" value={assignedPatientIds.join(', ')} onChange={handleAssignedPatientIdsChange} />
+          <label>Username:</label>
+          <input type="text" value={username} onChange={handleUsernameChange} />
+        </div>
+        <div className="input-container">
+          <label>Password:</label>
+          <input type="password" value={password} onChange={handlePasswordChange} />
         </div>
         <button type="submit">Register</button>
         {error && <div className="error-message">{error}</div>}
       </form>
-      <p>Already have an account? <Link to="/login" className="login-link">Login</Link></p>
+      <p>
+        Already have an account? <Link to="/login" className="login-link">Login</Link>
+      </p>
     </div>
   );
 };

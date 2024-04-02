@@ -27,14 +27,15 @@ const getPhysician = async (req,res) => {
 
 //create new physician
 const createPhysician = async (req,res) =>{
-    const{firstName,lastName,hospitalId,assignedPatientIds} = req.body
+    const{firstName,lastName,hospitalId} = req.body
+    console.log(assignedPatientIds);
     //add to db
     try {
-        const physician = await Physician.create({firstName,lastName,hospitalId,assignedPatientIds})
-        res.status(200).json(physician)
+        const physician = await Physician.create({firstName,lastName,hospitalId});
+        res.status(200).json(physician);
     }
     catch(error ){
-        res.status(400).json({error: error.message})
+        res.status(400).json({error: error.message});
     }
 }
 

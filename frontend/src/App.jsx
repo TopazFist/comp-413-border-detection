@@ -19,11 +19,11 @@ const App = () => {
 
                         <Route path="/welcome" element={<WelcomePage />} />
                         {/* <Route path="/" element={<Navigate to="/login" />} /> Redirect to login page */}
-                        <Route path="/login" element={<Login />} />
-                        <Route path='/register' element={<Register />} />
+                        <Route path="/patients/login" element={<Login />} />
+                        <Route path='/patients/register' element={<Register />} />
                         <Route path='/registerpatient' element={<CreatePatient />} />
-                        <Route path='/registerphysician' element={<CreatePhysician />} />
-                        <Route path='/loginphysician' element={<PhysicianLogin />} />
+                        <Route path='/physicians/register' element={<CreatePhysician />} />
+                        <Route path='/physicians/login' element={<PhysicianLogin />} />
                         <Route path='/patients/:id' element={<PatientHome />} />
                         <Route path='/physicians/:id' element={<PhysicianHome />} />
                 </Routes>

@@ -23,10 +23,8 @@ const Login = () => {
       const response = await axios.post(`http://localhost:3001/auth/patient/${username}`, {
         password,
       });
-
-      // Handle login success
-      console.log('Login successful:', response.data);
-      
+      const patientId = response.data.patientId;
+      window.location.href = `/patients/${patientId}`;
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login error:', error);

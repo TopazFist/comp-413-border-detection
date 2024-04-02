@@ -29,7 +29,7 @@ const getPatientUser = async (req, res, next) => {
 
     // If everything is correct, you can send a success response
     console.log("Login successful");
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful", patientId: patient.patientId});
   } catch (error) {
     console.error("Error during login:", error);
     next(error);
@@ -98,7 +98,7 @@ const createPatientUser = async (req, res, next) => {
     const patientData = mockResponse.send();
     const patientId = patientData._id.toString();
 
-    const patient = await PatientAuth.create({ username, password });
+    const patient = await PatientAuth.create({ username, password, patientId });
     const mockUpdateRequest = {
       params: { id: physicianID.toString() },
       body: { assignedPatientIds: patientId },

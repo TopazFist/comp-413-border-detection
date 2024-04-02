@@ -39,7 +39,7 @@ const getPhysicianUser = async (req, res, next) => {
 
 const createPhysicianUser = async (req, res, next) => {
   console.log(req.body);
-  const { firstName, lastName, hospitalId, assignedPatientIds, username, password } = req.body;
+  const { firstName, lastName, hospitalId, username, password } = req.body;
   try {
 
     const existingPhysician = await PhysicianAuth.findOne({ username });

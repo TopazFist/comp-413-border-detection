@@ -43,7 +43,6 @@ const PhysicianRegister = () => {
         firstName,
         lastName,
         hospitalId,
-        assignedPatientIds: [],
         username,
         password,
       });

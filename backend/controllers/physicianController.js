@@ -27,14 +27,15 @@ const getPhysician = async (req,res) => {
 
 //create new physician
 const createPhysician = async (req,res) =>{
-    const{firstName,lastName,hospitalId,assignedPatientIds} = req.body
+    const{firstName,lastName,hospitalId} = req.body
+    console.log(assignedPatientIds);
     //add to db
     try {
-        const physician = await Physician.create({firstName,lastName,hospitalId,assignedPatientIds})
-        res.status(200).json(physician)
+        const physician = await Physician.create({firstName,lastName,hospitalId});
+        res.status(200).json(physician);
     }
     catch(error ){
-        res.status(400).json({error: error.message})
+        res.status(400).json({error: error.message});
     }
 }
 
@@ -58,16 +59,23 @@ const deletePhysician = async (req,res) => {
 const updatePhysician = async (req,res) => {
     const {id} = req.params
 
+    console.log(req.body);
+    const patientId = req.body.assignedPatientIds;
+    
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: "No such physician"})
     }
 
-    const physician = await Physician.findOneAndUpdate({_id: id}, {...req.body}, { new: true });
-
+    const physician = await Physician.findOneAndUpdate(
+        { _id: id },
+        { $push: { assignedPatientIds: patientId } }, 
+        { new: true }
+    );
 
     if (!physician){
         return res.status(400).json({error: "No such physician"})
     }
+    console.log('Updated Physician:', physician);
     res.status(200).json(physician)
 }
 

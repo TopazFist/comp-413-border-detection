@@ -7,7 +7,8 @@ const patientSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
   gender: { type: String, required: true },
   age: { type: Number, required: true },
-  allergies: { type: String, required: false }
+  allergies: { type: String, required: false },
+  physicianID: {type: String, required: true}
 });
 
 export const Patient = mongoose.model('Patient', patientSchema);

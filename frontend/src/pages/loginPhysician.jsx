@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Login.css'; // Import the CSS file
 
-const Login = () => {
+const PhysicianLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,11 +20,15 @@ const Login = () => {
     e.preventDefault();
     try {
       // Send login data to the backend server
-      const response = await axios.post(`http://localhost:3001/auth/patient/${username}`, {
+      const response = await axios.post(`http://localhost:3001/auth/physician/${username}`, {
         password,
       });
-      const patientId = response.data.patientId;
-      window.location.href = `/patients/${patientId}`;
+      // Handle login success
+      console.log('Login successful:', response.data);
+      console.log(response.data);
+      const physicianID = response.data.physicianId;
+      console.log(physicianID);
+      window.location.href = `/physicians/${physicianID}`;
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login error:', error);
@@ -33,7 +37,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>Physician Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username:</label>
@@ -46,10 +50,10 @@ const Login = () => {
         <button className="custom-button" type="submit">Login</button>
         {error && <div className="error-message">{error}</div>}
       </form>
-      <p>Don't have an account? <Link to="/patients/register" className="register-link">Register</Link></p>
+      <p>Don't have an account? <Link to="/physicians/register" className="register-link">Register</Link></p>
       <p><Link to="/welcome" className="welcome-link">Go Back</Link></p>
     </div>
   );
 };
 
-export default Login;
+export default PhysicianLogin;

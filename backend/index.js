@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import multer from "multer";
 import { PORT, mongoDBURL } from "./config.js";
 import { Physician } from "./models/physicianModel.js";
 import { Patient } from "./models/patientModel.js";
@@ -11,6 +12,7 @@ import {patientRoutes} from "./routes/patients.js";
 import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
+import { uploadRoutes } from "./routes/upload.js"
 
 const app = express();
 
@@ -71,3 +73,12 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Internal server error' });
 });
+
+
+// app.use("/upload", (req, res) => {
+//     if (req.method == "POST") {
+//         console.log(req.files);
+//     }
+//     res.status(200).json({});
+// });
+app.use("/upload", uploadRoutes);

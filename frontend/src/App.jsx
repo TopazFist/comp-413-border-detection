@@ -6,6 +6,7 @@ import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
 import Register from "./pages/Register";
+import ImageUpload from "./pages/ImageUpload";
 import WelcomePage from './pages/Welcome';
 
 import './styles.css';
@@ -25,6 +26,7 @@ const App = () => {
                         <Route path='/physicians/register' element={<CreatePhysician />} />
                         <Route path='/physicians/login' element={<PhysicianLogin />} />
                         <Route path='/patients/:id' element={<PatientHome />} />
+                        <Route path='/patients/:id/upload' element={<ImageUpload />} />
                         <Route path='/physicians/:id' element={<PhysicianHome />} />
                 </Routes>
         )

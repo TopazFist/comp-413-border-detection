@@ -47,6 +47,7 @@ const PhysicianRegister = () => {
         password,
       });
       console.log('Physician registration successful:', response.data);
+      window.location.href = '/physicians/login';
       // Redirect or perform additional actions
     } catch (error) {
       setError('Physician registration failed. Please try again.');

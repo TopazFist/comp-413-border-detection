@@ -1,15 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import multer from "multer";
 import { PORT, mongoDBURL } from "./config.js";
 import { Physician } from "./models/physicianModel.js";
 import { Patient } from "./models/patientModel.js";
-import { PatientImage } from "./models/PatientImage.js";
+// import { PatientImage } from "./models/PatientImageModel.js";
 import { ImageProcessing } from "./models/ImageProcessing.js";
 
 import {patientRoutes} from "./routes/patients.js";
 import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
+import { imageRoutes } from "./routes/images.js";
 
 const app = express();
 
@@ -36,6 +38,8 @@ app.use('/patients',patientRoutes)
 app.use('/physicians',physicianRoutes)
 
 app.use('/auth', authRoutes)
+
+app.use('/images', imageRoutes)
 // app.use('/sign-up',signupRoute)
 
 
@@ -67,4 +71,35 @@ mongoose.connect(mongoDBURL)
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Internal server error' });
+});
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "/Users/amyzuo/Downloads/comp-413-border-detection/image-uploads");
+        // cb(null, "./image-uploads/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage
+});
+
+app.post("/upload", upload.single("file"), (req, res) => {
+    console.log('POST request received');
+
+    if (!req.file) {
+        console.log("No file received");
+        return res.send({
+            success: false
+        });
+    } else {
+        console.log("File received");
+        return res.send({
+            file: req.file,
+            success: true
+        });
+    }
 });

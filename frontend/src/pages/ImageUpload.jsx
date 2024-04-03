@@ -1,31 +1,30 @@
 import React, { useState, useRef } from "react";
-// import axios from "axios";
+import axios from "axios";
+import FormData from "form-data";
+import { PORT } from "/Users/amyzuo/Downloads/comp-413-border-detection/backend/config.js";
 import "../styles/imageUpload.css";
 
 const ImageUpload = () => {
     const [file, setFile] = useState(null);
-    const [isActive, setIsActive] = useState(false);
     const inputRef = useRef(null);
 
     const handleButtonClick = () => {
+        console.log("Button is clicked!");
         inputRef.current.click();
     };
 
-    const handleChange = (event) => {
-        const uploadedFile = event.target.files[0];
-        if (uploadedFile) {
-            setFile(uploadedFile);
-            setIsActive(true);
+    const handleImageUpload = (event) => {
+        const image = event.target.files[0];
+        if (image) {
+            setFile(image);
         }
-    };
+        
+        const formData = new FormData();
+        formData.append("file", image);
 
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        setIsActive(true);
-    };
-
-    const handleDragLeave = () => {
-        setIsActive(false);
+        axios.post(`http://localhost:${PORT}/upload`, formData)
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
     };
 
     const handleDrop = (event) => {
@@ -33,7 +32,6 @@ const ImageUpload = () => {
         const uploadedFile = event.dataTransfer.files[0];
         if (uploadedFile) {
             setFile(uploadedFile);
-            setIsActive(true);
         }
     };
 
@@ -49,25 +47,22 @@ const ImageUpload = () => {
             return <img src={fileURL} alt="Uploaded" />;
         } else {
             alert("This is not a valid image!");
-            setIsActive(false);
             return null;
         }
     };
 
     return (
-        <section className={`drag-area ${isActive ? "active" : ""}`}
-                 onDragOver={handleDragOver}
-                 onDragLeave={handleDragLeave}
+        <section className="drag-area"
                  onDrop={handleDrop}>
             <section className="icon">
                 {/* <i className="cloud-upload"></i> */}
             </section>
             <header>
-                {isActive ? "Release to Upload Image" : "Drag & Drop Image"}
+                {"Drag & Drop Image"}
             </header>
             <span>or</span>
             <button onClick={handleButtonClick}>Browse Image</button>
-            <input ref={inputRef} type="file" hidden onChange={handleChange}></input>
+            <input ref={inputRef} type="file" hidden onChange={handleImageUpload}></input>
             {file && showFile()}
         </section>
     );

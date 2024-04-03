@@ -15,7 +15,7 @@ const ImageUpload = () => {
         inputRef.current.click();
     };
 
-    const handleImageUpload = (event) => {
+    const handleImageUpload = async (event) => {
         const image = event.target.files[0];
         if (image) {
             setFile(image);
@@ -23,10 +23,12 @@ const ImageUpload = () => {
         
         const formData = new FormData();
         formData.append("file", image);
+        console.log(image);
 
-        axios.post(`http://localhost:3001/upload/` + id , formData)
-        .then(response => console.log(response))
-        .catch(error => console.log(error));
+        const response = await axios.post(`http://localhost:3001/upload/` + id , formData);
+        console.log(response);
+        // .then(response => console.log(response))
+        // .catch(error => console.log(error));
     };
 
     const handleDrop = (event) => {

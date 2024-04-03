@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -6,9 +6,8 @@ import CreatePatient from "./pages/CreatePatient";
 import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
-import Register from "./pages/Register";
 import ImageUpload from "./pages/ImageUpload";
-import './styles.css';
+import './styles/styles.css';
 
 const App = () => {
         return(
@@ -22,7 +21,6 @@ const App = () => {
                         <Route path='/patients/:id' element={<PatientHome />} />
                         <Route path='/patients/:id/upload' element={<ImageUpload />} />
                         <Route path='/physicians/:id' element={<PhysicianHome />} />
-                        <Route path='/patients/:id/upload' element={<ImageUpload />} />
                 </Routes>
         )
 }

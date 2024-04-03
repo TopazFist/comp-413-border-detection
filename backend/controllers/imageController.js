@@ -1,4 +1,4 @@
-import {PatientImage} from '../models/PatientImageModel.js';
+import {PatientImage, upload} from '../models/PatientImageModel.js';
 import mongoose from 'mongoose';
 
 //get new patient
@@ -21,14 +21,31 @@ const getPatientImages = async (req,res) => {
     }
 }
 
-const createImage = async (req,res) =>{
+const uploadImage = (req, res) => {
+    console.log('creating image...');
+    if (!req.file) {
+        console.log("No file received");
+        return res.send({
+            success: false
+        });
+    } else {
+        console.log("File received");
+        return res.send({
+            file: req.file,
+            success: true
+        });
+    }
+}
+
+const uploadMiddleware = upload.single("file");
+const createImage = async (req, res) => {
         const{patientId, physicianNotes, isPublic, s3image, isBenign, benignProbability} = req.body
         //add to db
         try {
             const image = await PatientImage.create({patientId, physicianNotes, isPublic, s3image, isBenign, benignProbability})
             res.status(200).json(image)
         }
-        catch(error ){
+        catch(error){
             res.status(400).json({error: error.message})
         }
     }
@@ -36,5 +53,7 @@ const createImage = async (req,res) =>{
 
 export {
         getPatientImages,
-        createImage
+        createImage,
+        uploadImage,
+        uploadMiddleware
 }

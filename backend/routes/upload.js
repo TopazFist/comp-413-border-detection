@@ -2,9 +2,9 @@ import express from "express";
 
 const router = express.Router()
 
-import { uploadImage } from '../controllers/uploadImageController.js'
+import { uploadImage, uploadMiddleware } from '../controllers/imageController.js'
 
 // gets all patients
-router.get('/:id', uploadImage)
+router.post('/:id', uploadMiddleware, uploadImage)
 
 export const uploadRoutes = router;

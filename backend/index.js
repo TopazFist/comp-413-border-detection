@@ -13,7 +13,6 @@ import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
 import { uploadRoutes } from "./routes/upload.js"
-import { imageRoutes } from "./routes/images.js";
 
 const app = express();
 
@@ -75,35 +74,11 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        // cb(null, "/Users/amyzuo/Downloads/comp-413-border-detection/image-uploads");
-        cb(null, "./image-uploads/");
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
 
-const upload = multer({
-    storage: storage
-});
-
-
+// app.use("/upload", (req, res) => {
+//     if (req.method == "POST") {
+//         console.log(req.files);
+//     }
+//     res.status(200).json({});
+// });
 app.use("/upload", uploadRoutes);
-app.post("/upload", upload.single("file"), (req, res) => {
-    console.log('POST request received');
-
-    if (!req.file) {
-        console.log("No file received");
-        return res.send({
-            success: false
-        });
-    } else {
-        console.log("File received");
-        return res.send({
-            file: req.file,
-            success: true
-        });
-    }
-});

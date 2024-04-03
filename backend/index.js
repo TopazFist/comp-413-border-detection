@@ -12,6 +12,7 @@ import {patientRoutes} from "./routes/patients.js";
 import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
+import { uploadRoutes } from "./routes/upload.js"
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/physicians',physicianRoutes)
 app.use('/auth', authRoutes)
 
 app.use('/images', imageRoutes)
+
 // app.use('/sign-up',signupRoute)
 
 
@@ -75,8 +77,8 @@ app.use((err, req, res, next) => {
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "/Users/amyzuo/Downloads/comp-413-border-detection/image-uploads");
-        // cb(null, "./image-uploads/");
+        // cb(null, "/Users/amyzuo/Downloads/comp-413-border-detection/image-uploads");
+        cb(null, "./image-uploads/");
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -87,6 +89,8 @@ const upload = multer({
     storage: storage
 });
 
+
+app.use("/upload", uploadRoutes);
 app.post("/upload", upload.single("file"), (req, res) => {
     console.log('POST request received');
 

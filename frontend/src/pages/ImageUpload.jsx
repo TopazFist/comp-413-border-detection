@@ -1,12 +1,14 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
+import { useParams } from 'react-router-dom'
 import axios from "axios";
 import FormData from "form-data";
-import { PORT } from "/Users/amyzuo/Downloads/comp-413-border-detection/backend/config.js";
+// import { PORT } from "/Users/amyzuo/Downloads/comp-413-border-detection/backend/config.js";
 import "../styles/imageUpload.css";
 
 const ImageUpload = () => {
     const [file, setFile] = useState(null);
     const inputRef = useRef(null);
+    const { id } = useParams();
 
     const handleButtonClick = () => {
         console.log("Button is clicked!");
@@ -22,7 +24,7 @@ const ImageUpload = () => {
         const formData = new FormData();
         formData.append("file", image);
 
-        axios.post(`http://localhost:${PORT}/upload`, formData)
+        axios.post(`http://localhost:3001/upload/` + id , formData)
         .then(response => console.log(response))
         .catch(error => console.log(error));
     };

@@ -6,9 +6,9 @@ import multer from 'multer';
 const UPLOAD_DIR = "image-uploads/"
 
 const patientImageSchema = new mongoose.Schema({
-  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
+  patientId: { type: String, ref: 'Patient', required: true },
   physicianNotes: { type: String, required: false, default:"N/A" },
-  isPublic: { type: Boolean, required: true },
+  isPublic: { type: Boolean, required: false, default: false },
   s3image: { type: String, required: true },
   isBenign: { type: Boolean, required: false },
   benignProbability: { type: String, required: false }

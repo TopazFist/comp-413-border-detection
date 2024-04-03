@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ const PatientHome = () => {
               <input type="checkbox" className="mr-1" checked={patientImage.isPublic} />
               Public
             </label>
-            <img src={patientImage.s3image} alt={patientImage.imageId} className="w-full h-full object-cover" style={{ maxHeight: '200px' }} />
+            <img src={"http://localhost:3001/" + patientImage.s3image} alt={patientImage.s3image} className="w-full h-full object-cover" style={{ maxHeight: '200px' }} />
           </div>
         ))}
         <div className="relative flex justify-center items-center">

@@ -27,10 +27,10 @@ const getPatient = async (req,res) => {
 
 //create new patient
 const createPatient = async (req,res) =>{
-    const{firstName,lastName,address,phoneNumber,gender,age,allergies} = req.body
+    const{firstName,lastName,address,phoneNumber,gender,age,allergies, physicianID} = req.body
     //add to db
     try {
-        const patient = await Patient.create({firstName,lastName,address,phoneNumber,gender,age,allergies})
+        const patient = await Patient.create({firstName,lastName,address,phoneNumber,gender,age,allergies, physicianID})
         res.status(200).json(patient)
     }
     catch(error ){

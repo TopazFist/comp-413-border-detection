@@ -10,7 +10,7 @@ import ImageUpload from "./pages/ImageUpload";
 
 import WelcomePage from './pages/Welcome';
 
-import './styles.css';
+import './styles/styles.css';
 import PhysicianLogin from "./pages/loginPhysician";
 
 const App = () => {

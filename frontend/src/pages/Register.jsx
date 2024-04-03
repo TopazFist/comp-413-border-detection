@@ -75,7 +75,7 @@ const Register = () => {
 
       // Redirect to the login page after successful registration
       console.log('Registration successful:', response.data);
-      window.location.href = '/login'; // Redirect to the login page
+      window.location.href = '/patients/login'; // Redirect to the login page
     } catch (error) {
       setError('Registration failed. Please try again.');
       console.error('Registration error:', error);

@@ -1,15 +1,16 @@
-import React from "react";
+// import React from "react";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import CreatePatient from "./pages/CreatePatient";
 import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
-import Register from "./pages/Register";
 import ImageUpload from "./pages/ImageUpload";
+
 import WelcomePage from './pages/Welcome';
 
-import './styles.css';
+import './styles/styles.css';
 import PhysicianLogin from "./pages/loginPhysician";
 
 const App = () => {

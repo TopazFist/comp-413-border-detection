@@ -5,7 +5,7 @@ import multer from "multer";
 import { PORT, mongoDBURL } from "./config.js";
 import { Physician } from "./models/physicianModel.js";
 import { Patient } from "./models/patientModel.js";
-// import { PatientImage } from "./models/PatientImageModel.js";
+import { PatientImage } from "./models/PatientImageModel.js";
 import { ImageProcessing } from "./models/ImageProcessing.js";
 
 import {patientRoutes} from "./routes/patients.js";
@@ -13,6 +13,7 @@ import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
 import { uploadRoutes } from "./routes/upload.js"
+import { imageRoutes } from "./routes/images.js";
 
 const app = express();
 
@@ -41,7 +42,6 @@ app.use('/physicians',physicianRoutes)
 app.use('/auth', authRoutes)
 
 app.use('/images', imageRoutes)
-
 // app.use('/sign-up',signupRoute)
 
 

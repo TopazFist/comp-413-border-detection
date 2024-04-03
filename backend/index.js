@@ -23,6 +23,8 @@ app.use(express.json());
 // it would be better to customize - do this later if necessary
 app.use(cors());
 
+app.use("/image-uploads", express.static("image-uploads"));
+
 app.get('/', (request, response) => {
         console.log(request);
         return response.status(234).send("hi!");

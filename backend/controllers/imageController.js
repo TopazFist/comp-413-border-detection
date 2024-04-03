@@ -23,6 +23,7 @@ const getPatientImages = async (req,res) => {
 
 const uploadImage = (req, res) => {
     console.log('creating image...');
+    const { id } = req.params;
     if (!req.file) {
         console.log("No file received");
         return res.send({
@@ -30,6 +31,10 @@ const uploadImage = (req, res) => {
         });
     } else {
         console.log("File received");
+        PatientImage.create({
+            patientId: id,
+            s3image: "image-uploads/" + id + "/" + req.file.originalname
+        });
         return res.send({
             file: req.file,
             success: true

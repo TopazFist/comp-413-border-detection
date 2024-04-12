@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import Spinner from '../components/Spinner';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,10 +13,8 @@ import Box from '@mui/material/Box';
 const PhysicianHome = () => {
     const { id } = useParams(); // Extracting physician ID from route parameters
     const [patients, setPatients] = useState([]);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
         axios
             .get(`http://localhost:3001/physicians/${id}`)
             .then(async (response) => {
@@ -36,15 +33,12 @@ const PhysicianHome = () => {
                         const patientList = patientResponses.map(response => response.data);
                         console.log("Patients:", patientList);
                         setPatients(patientList);
-                        setLoading(false);
                     } catch (error) {
                         console.log("Error fetching patients:", error);
-                        setLoading(false);
                     }
                 })
         .catch((error) => {
                 console.log(error);
-                setLoading(false);
             });
     }, [id]);
 

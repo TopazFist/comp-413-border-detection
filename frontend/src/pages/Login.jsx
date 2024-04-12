@@ -43,7 +43,7 @@ const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log In
+            Patient Login
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -78,9 +78,8 @@ const Login = () => {
             >
               Log In
             </Button>
-            <Link href="/register">Register</Link>
+            <Link href="/patients/register">Register</Link>
           </Box>
-          <p>Passwords dont matter at the moment</p>
         </Box>
       </Container>
     </ThemeProvider>

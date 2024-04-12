@@ -9,6 +9,7 @@ import PhysicianHome from "./pages/PhysicianHome";
 import ImageUpload from "./pages/ImageUpload";
 import Navbar from "./components/navbar";
 import Box from "@mui/material/Box"
+// import PhysicianLogin from "./pages/newLoginPhysician";
 
 import WelcomePage from './pages/Welcome';
 

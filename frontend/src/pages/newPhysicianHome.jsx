@@ -44,45 +44,46 @@ const PhysicianHome = () => {
                 })
         .catch((error) => {
                 console.log(error);
-                setPatients([{_id: "id", firstName: "first", lastName: "last"}]);
                 setLoading(false);
             });
     }, [id]);
 
     return (
-        <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 className="text-3xl my-8 text-center">My Patients</h1>
-            <Link to={`/physicians/${id}/patients/create`}>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Add Patient
-                </button>
-            </Link>
-            <TableContainer component={Paper} sx={{ width: '100%', maxWidth: 800, marginTop: 4 }}>
+        <Box sx={{p:4}}>
+            <Box>
+                <h1 className="text-3xl my-8">My Patients</h1>
+                <Link to={`/physicians/${id}/patients/create`}>
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Add Patient
+                    </button>
+                </Link>
+            </Box>
+            <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                     <TableRow>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>#</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;(g)</TableCell>
+                        <TableCell>#</TableCell>
+                        <TableCell align="right">First Name&nbsp;(g)</TableCell>
+                        <TableCell align="right">Last Name&nbsp;(g)</TableCell>
+                        <TableCell align="right">ID&nbsp;(g)</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                        {patients.map((patient, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                onClick={() => (window.location.href = `/patients/${patient._id}`)}
-                                className="cursor-pointer hover:bg-zinc-200"
-                            >
-                                <TableCell component="th" scope="row" align="center">
-                                    {index + 1}
-                                </TableCell>
-                                <TableCell align="center">{patient.firstName}</TableCell>
-                                <TableCell align="center">{patient.lastName}</TableCell>
-                                <TableCell align="center">{patient._id}</TableCell>
-                            </TableRow>
-                        ))}
+                    {patients.map((patient, index) => (
+                        <TableRow
+                        key={index}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        component="a"
+                        href={`/patients/${patient._id}`}
+                        >
+                        <TableCell component="th" scope="row">
+                            {index + 1}
+                        </TableCell>
+                        <TableCell align="right">{patient.firstName}</TableCell>
+                        <TableCell align="right">{patient.lastName}</TableCell>
+                        <TableCell align="right">{patient._id}</TableCell>
+                        </TableRow>
+                    ))}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -90,4 +91,4 @@ const PhysicianHome = () => {
     );
 };
 
-export default PhysicianHome
+export default PhysicianHome;

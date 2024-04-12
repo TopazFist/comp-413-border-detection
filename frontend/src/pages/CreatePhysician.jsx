@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 // import { Link } from 'react-router-dom';
 import './Register.css'; // Import the CSS file
@@ -6,7 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -16,7 +15,7 @@ import { createTheme, ThemeProvider} from '@mui/material/styles';
 
 const defaultTheme = createTheme();
 const PhysicianRegister = () => {
-
+  const [err, setError] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -35,6 +34,7 @@ const PhysicianRegister = () => {
       window.location.href = `/physicians/${data.get('username')}`;
     } catch (error) {
       console.error('Registration error:', error);
+      setError("Failed to register. Please try again.");
     }
   };
 
@@ -66,6 +66,7 @@ const PhysicianRegister = () => {
                   fullWidth
                   id="username"
                   label="Username"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -77,6 +78,7 @@ const PhysicianRegister = () => {
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -88,6 +90,7 @@ const PhysicianRegister = () => {
                   fullWidth
                   id="lastName"
                   label="Last Name"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -97,6 +100,7 @@ const PhysicianRegister = () => {
                   fullWidth
                   name="hospitalID"
                   label="Hospital ID"
+                  onClick={() => setError("")}
                   id="hospitalID"
                 />
               </Grid>
@@ -108,17 +112,19 @@ const PhysicianRegister = () => {
                   label="Password"
                   type="password"
                   id="password"
+                  onClick={() => setError("")}
                   autoComplete="new-password"
                 />
               </Grid>
             </Grid>
+            <Typography color="error">{err}</Typography>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Register Patient
+              Register Physician
             </Button>
           </Box>
         </Box>

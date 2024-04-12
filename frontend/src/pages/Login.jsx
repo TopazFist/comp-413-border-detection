@@ -10,9 +10,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
 import axios from 'axios';
+import { useState } from 'react';
 
 const defaultTheme = createTheme();
 const Login = () => {
+  const [err, setError] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ const Login = () => {
       window.location.href = `/patients/${data.get('username')}`;
     } catch (error) {
       console.error('Login error:', error);
+      setError("Failed to log in. Please try again.");
     }
   };
 
@@ -54,6 +57,7 @@ const Login = () => {
                   required
                   fullWidth
                   id="username"
+                  onClick={() => setError("")}
                   label="Username"
                   autoFocus
                 />
@@ -66,6 +70,7 @@ const Login = () => {
                   label="Password"
                   type="password"
                   id="password"
+                  onClick={() => setError("")}
                   autoComplete="new-password"
                 />
               </Grid>
@@ -81,6 +86,7 @@ const Login = () => {
             <Link href="/patients/register">Register</Link>
           </Box>
         </Box>
+        <Typography color="error">{err}</Typography>
       </Container>
     </ThemeProvider>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 // import { Link } from 'react-router-dom';
 import './Register.css'; // Import the CSS file
@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider} from '@mui/material/styles';
 
 const defaultTheme = createTheme();
 const Register = () => {
-
+  const [err, setError] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -40,6 +40,7 @@ const Register = () => {
       window.location.href = `/patients/${data.get('username')}`;
     } catch (error) {
       console.error('Registration error:', error);
+      setError("Failed to register. Please try again.");
     }
   };
 
@@ -71,6 +72,7 @@ const Register = () => {
                   fullWidth
                   id="username"
                   label="Username"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -82,6 +84,7 @@ const Register = () => {
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -93,6 +96,7 @@ const Register = () => {
                   fullWidth
                   id="lastName"
                   label="Last Name"
+                  onClick={() => setError("")}
                   autoFocus
                 />
               </Grid>
@@ -104,6 +108,7 @@ const Register = () => {
                   label="Password"
                   type="password"
                   id="password"
+                  onClick={() => setError("")}
                   autoComplete="new-password"
                 />
               </Grid>
@@ -114,6 +119,7 @@ const Register = () => {
                   name="address"
                   label="Address"
                   id="address"
+                  onClick={() => setError("")}
                   autoComplete="address"
                 />
               </Grid>
@@ -124,6 +130,7 @@ const Register = () => {
                   name="phoneNumber"
                   label="Phone Number"
                   id="phoneNumber"
+                  onClick={() => setError("")}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -133,6 +140,7 @@ const Register = () => {
                   name="age"
                   label="Age"
                   id="age"
+                  onClick={() => setError("")}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -141,6 +149,7 @@ const Register = () => {
                   fullWidth
                   name="gender"
                   label="Gender"
+                  onClick={() => setError("")}
                   id="gender"
                 />
               </Grid>
@@ -150,6 +159,7 @@ const Register = () => {
                   fullWidth
                   name="allergies"
                   label="Allergies"
+                  onClick={() => setError("")}
                   id="allergies"
                 />
               </Grid>
@@ -159,10 +169,12 @@ const Register = () => {
                   fullWidth
                   name="physicianID"
                   label="Physician ID"
+                  onClick={() => setError("")}
                   id="physicianID"
                 />
               </Grid>
             </Grid>
+            <Typography color="error">{err}</Typography>
             <Button
               type="submit"
               fullWidth

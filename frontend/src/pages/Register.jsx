@@ -1,136 +1,180 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import './Register.css'; // Import the CSS file
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider} from '@mui/material/styles';
 
+const defaultTheme = createTheme();
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [gender, setGender] = useState('');
-  const [age, setAge] = useState('');
-  const [allergies, setAllergies] = useState('');
-  const [physicianID, setPhysicianID] = useState('');
-  const [error, setError] = useState('');
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-  };
-
-  const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-  };
-
-  const handleAddressChange = (e) => {
-    setAddress(e.target.value);
-  };
-
-  const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
-  };
-
-  const handleGenderChange = (e) => {
-    setGender(e.target.value);
-  };
-
-  const handleAgeChange = (e) => {
-    setAge(e.target.value);
-  };
-
-  const handleAllergiesChange = (e) => {
-    setAllergies(e.target.value);
-  };
-
-  const handlePhysicianChange = (e) => {
-    setPhysicianID(e.target.value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const data = new FormData(e.currentTarget);
     try {
       // Send registration data to the backend server
       const response = await axios.post('http://localhost:3001/auth', {
-        username,
-        password,
-        firstName,
-        lastName,
-        address,
-        phoneNumber,
-        gender,
-        age,
-        allergies,
-        physicianID
-      });
+        username: data.get("username"),
+        password: data.get("password"),
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        address: data.get("address"),
+        phoneNumber: data.get("phoneNumber"),
+        gender: data.get("gender"),
+        age: data.get("age"),
+        allergies: data.get("allergies"),
+        physicianID: data.get("physicianID")
+    });
 
       // Redirect to the login page after successful registration
       console.log('Registration successful:', response.data);
-      window.location.href = '/patients/login'; // Redirect to the login page
+      window.location.href = `/patients/${data.get('username')}`;
     } catch (error) {
-      setError('Registration failed. Please try again.');
       console.error('Registration error:', error);
     }
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>Username:</label>
-          <input type="text" value={username} onChange={handleUsernameChange} />
-        </div>
-        <div className="input-container">
-          <label>Password:</label>
-          <input type="password" value={password} onChange={handlePasswordChange} />
-        </div>
-        <div className="input-container">
-          <label>First Name:</label>
-          <input type="text" value={firstName} onChange={handleFirstNameChange} />
-        </div>
-        <div className="input-container">
-          <label>Last Name:</label>
-          <input type="text" value={lastName} onChange={handleLastNameChange} />
-        </div>
-        <div className="input-container">
-          <label>Address:</label>
-          <input type="text" value={address} onChange={handleAddressChange} />
-        </div>
-        <div className="input-container">
-          <label>Phone Number:</label>
-          <input type="text" value={phoneNumber} onChange={handlePhoneNumberChange} />
-        </div>
-        <div className="input-container">
-          <label>Gender:</label>
-          <input type="text" value={gender} onChange={handleGenderChange} />
-        </div>
-        <div className="input-container">
-          <label>Age:</label>
-          <input type="number" value={age} onChange={handleAgeChange} />
-        </div>
-        <div className="input-container">
-          <label>Allergies:</label>
-          <input type="text" value={allergies} onChange={handleAllergiesChange} />
-        </div>
-        <div className="input-container">
-          <label>Physician ID:</label>
-          <input type="text" value={physicianID} onChange={handlePhysicianChange} />
-        </div>
-        <button type="submit">Register</button>
-        {error && <div className="error-message">{error}</div>}
-      </form>
-      <p>Already have an account? <Link to="/patients/login" className="login-link">Login</Link></p>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Register Patient
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-name"
+                  name="username"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-first-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-last-name"
+                  name="lastName"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="address"
+                  label="Address"
+                  id="address"
+                  autoComplete="address"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="phoneNumber"
+                  label="Phone Number"
+                  id="phoneNumber"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="age"
+                  label="Age"
+                  id="age"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="gender"
+                  label="Gender"
+                  id="gender"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="allergies"
+                  label="Allergies"
+                  id="allergies"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="physicianID"
+                  label="Physician ID"
+                  id="physicianID"
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Register Patient
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 };
 

@@ -1,91 +1,129 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import './Register.css';
+// import { Link } from 'react-router-dom';
+import './Register.css'; // Import the CSS file
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider} from '@mui/material/styles';
 
-
+const defaultTheme = createTheme();
 const PhysicianRegister = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [hospitalId, setHospitalId] = useState('');
-  const [assignedPatientIds, setAssignedPatientIds] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-  };
-
-  const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-  };
-
-  const handleHospitalIdChange = (e) => {
-    setHospitalId(e.target.value);
-  };
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const data = new FormData(e.currentTarget);
     try {
-      console.log("patient ids in html");
-      console.log(assignedPatientIds);
+      // Send registration data to the backend server
       const response = await axios.post('http://localhost:3001/auth/physician', {
-        firstName,
-        lastName,
-        hospitalId,
-        username,
-        password,
-      });
-      console.log('Physician registration successful:', response.data);
-      window.location.href = '/physicians/login';
-      // Redirect or perform additional actions
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        hospitalId: data.get("hospitalID"),
+        username: data.get("username"),
+        password: data.get("password")
+    });
+
+      // Redirect to the login page after successful registration
+      console.log('Registration successful:', response.data);
+      window.location.href = `/physicians/${data.get('username')}`;
     } catch (error) {
-      setError('Physician registration failed. Please try again.');
       console.error('Registration error:', error);
     }
   };
 
   return (
-    <div className="register-container">
-      <h2>Physician Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>First Name:</label>
-          <input type="text" value={firstName} onChange={handleFirstNameChange} />
-        </div>
-        <div className="input-container">
-          <label>Last Name:</label>
-          <input type="text" value={lastName} onChange={handleLastNameChange} />
-        </div>
-        <div className="input-container">
-          <label>Hospital ID:</label>
-          <input type="text" value={hospitalId} onChange={handleHospitalIdChange} />
-        </div>
-        <div className="input-container">
-          <label>Username:</label>
-          <input type="text" value={username} onChange={handleUsernameChange} />
-        </div>
-        <div className="input-container">
-          <label>Password:</label>
-          <input type="password" value={password} onChange={handlePasswordChange} />
-        </div>
-        <button type="submit">Register</button>
-        {error && <div className="error-message">{error}</div>}
-      </form>
-      <p>
-        Already have an account? <Link to="/physicians/login" className="login-link">Login</Link>
-      </p>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Register Physician
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-name"
+                  name="username"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-first-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-last-name"
+                  name="lastName"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="hospitalID"
+                  label="Hospital ID"
+                  id="hospitalID"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Register Patient
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 };
 

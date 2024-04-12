@@ -5,6 +5,8 @@ import concurrent.futures
 import numpy as np
 import cv2
 import random
+import statistics
+
 
 import time
 
@@ -42,7 +44,6 @@ def main():
     file_path_batches = [file_paths[i*batch_size:(i+1)*batch_size] for i in range(num_full_batches)]
     if last_batch_size > 0:
         file_path_batches.append(file_paths[num_full_batches*batch_size:])
-
     
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
         futures = []
@@ -56,6 +57,12 @@ def main():
     filenames_testing_output_files = os.listdir(algorithm_output)
     output_filepaths = [os.path.join(algorithm_output, filename) for filename in filenames_testing_output_files]
 
+    total_jaccard = 0
+    total_items = 0
+    total_dice = 0
+    dice_scores = []
+    jaccard_scores = []
+
     for output_file_path in output_filepaths:
 
         image_name = output_file_path.split("/")[-1][1:]
@@ -64,10 +71,6 @@ def main():
         image_with_extension[0] += "_Segmentation"
         ground_truth_image_name = ".".join(image_with_extension)
         ground_truth_path = ground_truth_folder + "/" + ground_truth_image_name
-
-        total_jaccard = 0
-        total_items = 0
-        total_dice = 0
 
         if os.path.exists(ground_truth_path):
             testing_image = cv2.imread(output_file_path, cv2.IMREAD_GRAYSCALE)
@@ -78,6 +81,8 @@ def main():
             dice_score = dice(testing_image, segmentation_image)
             total_jaccard += jaccard_score
             total_dice += dice_score
+            dice_scores.append(dice_score)
+            jaccard_scores.append(jaccard_score)
             total_items += 1
             print(f"Found corresponding segmentation file for {output_file_path}: {ground_truth_path}")
             print("Jaccard Score for images: ", jaccard_score)
@@ -89,6 +94,10 @@ def main():
 
     print("Dice Score: ", total_dice/total_items)
     print("Jaccard Score: ", total_jaccard/total_items)
+    print("Dice Mean from List: ,", statistics.mean(dice_scores))
+    print("Jaccard Mean from List: ,", statistics.mean(jaccard_scores))
+    print("Dice Median from List: ,", statistics.median(dice_scores))
+    print("Jaccard Median from List: ,", statistics.median(jaccard_scores))
     print("Total: ", elapsed_time)
     
 if __name__ == '__main__':

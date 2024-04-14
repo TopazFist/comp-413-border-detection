@@ -22,8 +22,8 @@ const Login = () => {
     try {
       // Send login data to the backend server
       console.log(data);
-      await axios.post(`http://localhost:3001/auth/patient/${data.get('username')}`, {password: data.get("password")});
-      window.location.href = `/patients/${data.get('username')}`;
+      const response = await axios.post(`http://localhost:3001/auth/patient/${data.get('username')}`, {password: data.get("password")});
+      window.location.href = `/patients/${response.data.patientId}`;
     } catch (error) {
       console.error('Login error:', error);
       setError("Failed to log in. Please try again.");

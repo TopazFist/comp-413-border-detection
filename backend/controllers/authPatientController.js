@@ -18,6 +18,7 @@ const getPatientUser = async (req, res, next) => {
       return res.status(404).json({ message: "Patient not found" });
     }
 
+    console.log("From Patient Auth")
     console.log(patient);
 
     // Validate the password

@@ -34,13 +34,23 @@ const PatientHome = () => {
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
         image.isPublic = e.target.checked;
-        // Assuming you have an API endpoint to update the isPublic field
         axios.put(`http://localhost:3001/images/${imageId}/public`, { isPublic: e.target.checked });
       }
       return image;
     });
     setPatientImages(updatedImages);
   };
+
+  const handlePhysicianNotesChange = async (e, imageId) => {
+        const updatedImages = patientImages.map((image) => {
+          if (image._id === imageId) {
+            image.physicianNotes = e.target.value;
+            axios.put(`http://localhost:3001/images/${imageId}/notes`, { physicianNotes: e.target.value });
+          }
+          return image;
+        });
+        setPatientImages(updatedImages);
+      };
 
   return (
     <Box sx={{ my: 10, mx: 10 }}>
@@ -69,35 +79,31 @@ const PatientHome = () => {
         )}
         {patientImages.map((patientImage) => (
           <ImageListItem key={patientImage._id} sx={{ m: 1, p: 1 }} className="border border-gray-300 rounded-lg cursor-pointer">
-            {fromPhysicianHome ? (
-              <>
-                <input type="text" value={patientImage.physicianNotes} onChange={(e) => console.log(e.target.value)} />
-                <label className="absolute border border-gray-300 top-0 left-0 mt-2 ml-2 bg-white p-2 rounded-lg">
-                  <input type="checkbox" className="mr-1" checked={patientImage.isBenign} />
-                  Benign
-                </label>
-              </>
-            ) : (
-              <>
-                <label className="absolute border border-gray-300 top-0 left-0 mt-2 ml-2 bg-white p-2 rounded-lg">
-                  <input type="checkbox" className="mr-1" checked={patientImage.isPublic} onChange={(e) => handleCheckboxChange(e, patientImage._id)} />
-                  Public
-                </label>
-                <label style={{ width: "40%" }} className="absolute border border-gray-300 top-0 right-0 mt-2 ml-2 bg-white p-2 rounded-lg">
-                  Physician Notes: {patientImage.physicianNotes}
-                </label>
-              </>
-            )}
             <img className="rounded-lg"
               src={"http://localhost:3001/" + patientImage.s3image}
               alt={patientImage.s3image}
               style={{ maxHeight: '400px', minHeight: '100px' }}
             />
             {!fromPhysicianHome && (
-              <label className="absolute border border-gray-300 bottom-0 left-0 mt-2 ml-2 bg-white p-2 rounded-lg">
-                <DeleteIcon color="error" className="cursor-pointer" />
+              <label className="absolute border border-gray-300 top-0 left-0 mt-2 ml-2 bg-white p-2 rounded-lg">
+                <input type="checkbox" className="mr-1" checked={patientImage.isPublic} onChange={(e) => handleCheckboxChange(e, patientImage._id)} />
+                Public
               </label>
             )}
+            <label style={{ width: "100%", marginTop: "10px" }} className="text-center">
+              {fromPhysicianHome && (
+                <input 
+                  type="text" 
+                  className="border border-gray-300 rounded-md p-1"
+                  value={patientImage.physicianNotes} 
+                  onChange={(e) => handlePhysicianNotesChange(e, patientImage._id)} 
+                />
+              )}
+              {!fromPhysicianHome && (
+                <p className="font-semibold">Physician Notes: {patientImage.physicianNotes}</p>
+              )}
+              <p className="font-semibold">Benign</p>
+            </label>
           </ImageListItem>
         ))}
       </ImageList>

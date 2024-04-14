@@ -1,5 +1,30 @@
 import {PatientImage, upload} from '../models/PatientImageModel.js';
+import { spawn } from "node:child_process";
 import mongoose from 'mongoose';
+
+const pythonProcess = spawn('python3', ['./classification/model.py']);
+pythonProcess.stdout.on('data', (data) => {
+    console.log(data.toString().trim());
+    data = JSON.parse(data.toString().trim());
+    if (data.hasOwnProperty('path') && data.hasOwnProperty('malignant_prob') && data.hasOwnProperty('id')) {
+        PatientImage.create({
+            patientId: data.id,
+            s3image: data.path,
+            benignProbability: data.malignant_prob
+        });
+    } else {
+        console.error(data);
+    }
+});
+pythonProcess.stderr.on('data', (data) => {
+    console.log(data.toString());
+});
+pythonProcess.on('exit', (code, signal) => {
+    console.log("CLOSED!!")
+})
+pythonProcess.on('close', (code, signal) => {
+    console.log("CLOSED!!")
+})
 
 //get new patient
 const getPatientImages = async (req,res) => {
@@ -31,10 +56,7 @@ const uploadImage = (req, res) => {
         });
     } else {
         console.log("File received");
-        PatientImage.create({
-            patientId: id,
-            s3image: "image-uploads/" + id + "/" + req.file.originalname
-        });
+        pythonProcess.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
         return res.send({
             file: req.file,
             success: true

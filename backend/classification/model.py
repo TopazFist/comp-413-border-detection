@@ -12,10 +12,12 @@ import torch.nn.functional as F
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import skimage
+import time
+import json
 
 transform = transforms.Compose([transforms.Resize((224, 224)),
                                 transforms.ToTensor()])
-model_path = "model.pth"
+model_path = "classification/model.pth"
 model_state_dict = torch.load(model_path, map_location=torch.device('cpu'))
 model = models.resnet18()
 model.fc = torch.nn.Linear(model.fc.in_features, 1)
@@ -57,21 +59,20 @@ def generate_heatmap(imgpath: os.PathLike):
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)  # Remove white space around the image
 
     filename = imgpath.split("/")[-1]
-    fig.savefig("../image-uploads/" + filename, bbox_inches='tight', pad_inches=0)
+    fig.savefig("image-uploads/" + filename, bbox_inches='tight', pad_inches=0)
 
 def malignant_prob(imgpath: os.PathLike):
     image = _load_image(imgpath)
     pred = model(image.unsqueeze(0))
     return pred.item()
 
-if __name__ == "__main__":
-    print(json.dumps({"status": "Model loaded successfully"}))
-    sys.stdout.flush()
-    path = "../image-uploads/ianrundle/skull.png"
-    print(path, malignant_prob(path))
-    generate_heatmap(path)
-    while True:
-        path = input()
-        print(path, malignant_prob(path))
+# print("Model loaded successfully")
+# path = "image-uploads/ianrundle/skull.png"
+while True:
+    path = input()
+    if os.path.exists(path):
+        print(json.dumps({"id": path.split("/")[1], "path": path, "malignant_prob": malignant_prob(path)}))
         generate_heatmap(path)
+    else:
+        print("Path does not exist.")
     

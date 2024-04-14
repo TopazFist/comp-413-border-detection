@@ -35,6 +35,7 @@ const upload = multer({ storage: storage });
 
 const PatientImage = mongoose.model('PatientImage', patientImageSchema);
 
+
 export { PatientImage, upload }
 
 // module.exports = PatientImage;

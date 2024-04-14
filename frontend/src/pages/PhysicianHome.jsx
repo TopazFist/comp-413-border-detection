@@ -66,7 +66,7 @@ const PhysicianHome = () => {
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                onClick={() => (window.location.href = `/patients/${patient._id}`)}
+                                onClick={() => (window.location.href = `/patients/${patient._id}/view`)}
                                 className="cursor-pointer hover:bg-zinc-200"
                             >
                                 <TableCell component="th" scope="row" align="center">

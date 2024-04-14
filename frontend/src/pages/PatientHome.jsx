@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
@@ -12,7 +12,6 @@ const PatientHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const fromPhysicianHome = location.pathname.includes("view");
-  console.log("loc ", location)
 
   useEffect(() => {
     const fetchPatientImages = async () => {
@@ -29,6 +28,18 @@ const PatientHome = () => {
 
   const handleUploadClick = () => {
     navigate(`/patients/${id}/upload`);
+  };
+
+  const handleCheckboxChange = async (e, imageId) => {
+    const updatedImages = patientImages.map((image) => {
+      if (image._id === imageId) {
+        image.isPublic = e.target.checked;
+        // Assuming you have an API endpoint to update the isPublic field
+        axios.put(`http://localhost:3001/images/${imageId}/public`, { isPublic: e.target.checked });
+      }
+      return image;
+    });
+    setPatientImages(updatedImages);
   };
 
   return (
@@ -69,7 +80,7 @@ const PatientHome = () => {
             ) : (
               <>
                 <label className="absolute border border-gray-300 top-0 left-0 mt-2 ml-2 bg-white p-2 rounded-lg">
-                  <input type="checkbox" className="mr-1" checked={patientImage.isPublic} />
+                  <input type="checkbox" className="mr-1" checked={patientImage.isPublic} onChange={(e) => handleCheckboxChange(e, patientImage._id)} />
                   Public
                 </label>
                 <label style={{ width: "40%" }} className="absolute border border-gray-300 top-0 right-0 mt-2 ml-2 bg-white p-2 rounded-lg">

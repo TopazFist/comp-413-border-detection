@@ -78,9 +78,36 @@ const createImage = async (req, res) => {
     }
     
 
+const togglePublic = async (req, res) => {
+        const { id } = req.params;
+        const { isPublic } = req.body;
+      
+        try {
+          // Find the patient image by ID
+          const patientImage = await PatientImage.findById(id);
+      
+          if (!patientImage) {
+            return res.status(404).json({ error: 'Patient image not found' });
+          }
+      
+          // Update the isPublic field
+          patientImage.isPublic = isPublic;
+      
+          // Save the updated patient image
+          await patientImage.save();
+      
+          res.json({ success: true, message: 'Public field toggled successfully' });
+        } catch (error) {
+          console.error('Error toggling public field:', error);
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      };
+      
+
 export {
         getPatientImages,
         createImage,
         uploadImage,
-        uploadMiddleware
+        uploadMiddleware,
+        togglePublic
 }

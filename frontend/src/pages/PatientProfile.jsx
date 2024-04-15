@@ -109,7 +109,7 @@ const PatientProfile = () => {
                     <label>
                         Age:
                         <input
-                            type="text"
+                            type="number"
                             name="age"
                             value={editedPatient.age || ''}
                             onChange={handleInputChange}

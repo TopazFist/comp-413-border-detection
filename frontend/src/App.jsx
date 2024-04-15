@@ -7,6 +7,7 @@ import CreatePatient from "./pages/CreatePatient";
 import CreatePhysician from "./pages/CreatePhysician";
 import PatientHome from "./pages/PatientHome";
 import PhysicianHome from "./pages/PhysicianHome";
+import ViewPatient from "./pages/ViewPatient";
 import ImageUpload from "./pages/ImageUpload";
 import Navbar from "./components/navbar";
 import Box from "@mui/material/Box"
@@ -33,7 +34,7 @@ const App = () => {
                                 <Route path='/patients/:id' element={<PatientHome />} />
                                 <Route path='/patients/:id/upload' element={<ImageUpload />} />
                                 <Route path='/physicians/:id' element={<PhysicianHome />} />
-                                <Route path='/patients/:id/view' element={<PatientHome />} />
+                                <Route path='/patients/:id/view' element={<ViewPatient />} />
                                 <Route path='/nurses/:id' element={<NurseHome />} />
                         </Routes>
                 </Box>

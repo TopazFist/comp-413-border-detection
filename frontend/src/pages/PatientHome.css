@@ -56,8 +56,23 @@
 
 .physician-notes {
   font-weight: bold;
+  text-align: center;
 }
 
 .benign-text {
   font-weight: bold;
+  text-align: center;
+}
+
+.benign-true {
+  color: rgb(173, 224, 173);
+}
+
+.benign-false {
+  color: rgb(226, 170, 170);
+}
+
+.notes-text {
+  font-weight: bold;
+  text-align: center;
 }

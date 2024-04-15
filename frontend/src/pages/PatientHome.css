@@ -64,15 +64,28 @@
   text-align: center;
 }
 
+.benign-true,
+.benign-false {
+  color: #000;
+  padding: 2px 5px;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
 .benign-true {
-  color: rgb(173, 224, 173);
+  background-color: rgb(173, 224, 173); /* Light green */
 }
 
 .benign-false {
-  color: rgb(226, 170, 170);
+  background-color: rgb(226, 170, 170); /* Light red */
 }
 
 .notes-text {
   font-weight: bold;
+  text-align: center;
+}
+
+.probability-text {
   text-align: center;
 }

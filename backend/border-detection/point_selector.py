@@ -17,7 +17,6 @@ def histogram_creater(image):
     img = cv2.imread(image, cv2.COLOR_BGR2GRAY)
     assert img is not None, "file could not be read, check with os.path.exists()"
     histg = cv2.calcHist([img],[0],None,[256],[0,256])  
-    print(histg)
     plt.plot(histg)
     plt.show()
 

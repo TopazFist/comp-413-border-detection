@@ -42,8 +42,6 @@ def main(filepath, id):
     Main function to process images in parallel.
     """
 
-    print("HI from main in run.py")
-
     result = []
 
     # image_directory = "ISIC-images/New_Images"
@@ -58,6 +56,7 @@ def main(filepath, id):
 
     filename = filepath.split("/")[-1]
     result_directory = "image-uploads/" + id + "/borderDetection/" 
+    # print(result_directory)
 
     # Adjust max_treads according to the number of cpus
     # with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
@@ -87,7 +86,7 @@ def save_image(image_array, directory, filename, llm_mode):
     # Convert the image array to PIL image
     # Save the image as JPG
     this_thing.save(os.path.join(directory, "_" + filename))
-    print("Image saved successfully.")
+    # print("Image saved successfully.")
 
 def visual_results(out):
     """
@@ -106,9 +105,12 @@ def visual_results(out):
         plt.show()
 
 while True:
-    path = input()
-    if os.path.exists(path):
-        print(json.dumps({"id": path.split("/")[1]}))
-        main(path, path.split("/")[1])
+    input_path = input()
+    if os.path.exists(input_path):
+        # print(json.dumps({"id": path.split("/")[1]}))
+        filename = input_path.split("/")[-1]
+        path = "image-uploads/" + input_path.split("/")[1] + "/borderDetection/" + filename
+        main(input_path, path.split("/")[1])
+        print(json.dumps({"patientID":input_path.split("/")[1],"existingPath": "image-uploads/" + input_path.split("/")[1] + "/" + filename, "borderDetectionPath": path}))
     else:
         print("Path does not exist.")

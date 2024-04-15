@@ -29,9 +29,30 @@ pythonProcess.on('close', (code, signal) => {
 const pythonProcess2 = spawn('python3', ['./border-detection/run.py']);
 
 // Handle output data from the Python script
-pythonProcess2.stdout.on('data', (data) => {
+pythonProcess2.stdout.on('data', async (data) => {
     console.log(data.toString().trim()); // Log output from the Python script
-    // Handle further processing as needed
+    const jsonData = JSON.parse(data.toString().trim());
+
+    const { patientID, existingPath, borderDetectionPath } = jsonData;
+
+    if (patientID && existingPath && borderDetectionPath) {
+        try {
+            // Perform MongoDB update
+            const updatedImage = await PatientImage.findOneAndUpdate(
+                { patientId: patientID, s3image: existingPath }, // Filter criteria
+                { borderDetectionPath: borderDetectionPath }, // Update to be applied
+                { new: true } // Options: return the modified document
+            ).exec();
+
+            console.log('Updated patient image:', updatedImage);
+            // Handle updated image
+        } catch (err) {
+            console.error(err);
+            // Handle error
+        }
+    } else {
+        console.error(data);
+    }
 });
 
 pythonProcess2.stderr.on('data', (data) => {
@@ -75,7 +96,12 @@ const uploadImage = (req, res) => {
         });
     } else {
         console.log("File received");
+        
         console.log(req.file.originalname);
+        // PatientImage.create({
+        //     patientId: id,
+        //     s3image: "image-uploads/" + id + "/" + req.file.originalname
+        // });
         pythonProcess.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
         pythonProcess2.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
 

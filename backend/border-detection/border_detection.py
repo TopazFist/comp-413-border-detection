@@ -116,7 +116,6 @@ def get_border(original_im, llm_mode):
     # upsample 1
     # upsampled_and_expanded_mask = upsample(upsampled_and_expanded_mask, (original_im.shape[0], original_im.shape[1]))
     elapsed_time = time.time() - start_time
-    print(elapsed_time)
     if llm_mode:
         square_result = overlay_mask_on_image(upsampled_and_expanded_mask, original_im)
         return square_result

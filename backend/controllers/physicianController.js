@@ -56,28 +56,31 @@ const deletePhysician = async (req,res) => {
 }
 
 //update physician data
-const updatePhysician = async (req,res) => {
-    const {id} = req.params
+const updatePhysician = async (req, res) => {
+    const { id } = req.params;
 
-    console.log(req.body);
-    const patientId = req.body.assignedPatientIds;
-    
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such physician"})
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "No such physician" });
     }
 
-    const physician = await Physician.findOneAndUpdate(
-        { _id: id },
-        { $push: { assignedPatientIds: patientId } }, 
-        { new: true }
-    );
+    try {
+        const updatedPhysician = await Physician.findOneAndUpdate(
+            { _id: id },
+            { $set: req.body }, // Use $set to update the fields provided in req.body
+            { new: true }
+        );
 
-    if (!physician){
-        return res.status(400).json({error: "No such physician"})
+        if (!updatedPhysician) {
+            return res.status(404).json({ error: "No such physician" });
+        }
+
+        console.log('Updated Physician:', updatedPhysician);
+        res.status(200).json(updatedPhysician);
+    } catch (error) {
+        console.error('Error updating physician:', error);
+        res.status(500).json({ error: "Internal server error" });
     }
-    console.log('Updated Physician:', physician);
-    res.status(200).json(physician)
-}
+};
 
 export {
     createPhysician,

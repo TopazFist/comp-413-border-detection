@@ -26,6 +26,25 @@ pythonProcess.on('close', (code, signal) => {
     console.log("CLOSED!!")
 })
 
+const pythonProcess2 = spawn('python3', ['./border-detection/run.py']);
+
+// Handle output data from the Python script
+pythonProcess2.stdout.on('data', (data) => {
+    console.log(data.toString().trim()); // Log output from the Python script
+    // Handle further processing as needed
+});
+
+pythonProcess2.stderr.on('data', (data) => {
+    console.error(data.toString()); // Log errors from the Python script
+});
+
+pythonProcess2.on('exit', (code, signal) => {
+    console.log("Image processing script process CLOSED!!")
+});
+pythonProcess2.on('close', (code, signal) => {
+    console.log("Image processing script process CLOSED!!")
+});
+
 //get new patient
 const getPatientImages = async (req,res) => {
     console.log("i'm reaching this function");
@@ -57,6 +76,8 @@ const uploadImage = (req, res) => {
     } else {
         console.log("File received");
         pythonProcess.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
+        pythonProcess2.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
+
         return res.send({
             file: req.file,
             success: true

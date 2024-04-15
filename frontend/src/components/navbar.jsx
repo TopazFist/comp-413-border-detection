@@ -14,8 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 // import dermascope_logo from './dermascope_logo.svg';
 import full_logo from './full_logo.svg';
 
-const pages = ['Profile', 'Logout'];
-const settings = ['Setting1', 'Setting2', 'Logout'];
+const pages = ['Patient Login', "Physician Login", "Logout"];
+const links = ['/patients/login', '/physicians/login', '/']
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -72,18 +72,18 @@ function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {pages.map((page, i) => (
+                <MenuItem key={page} onClick = {() => {window.location.href = links[i]}}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages.map((page, i) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick = {() => {window.location.href = links[i]}}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}

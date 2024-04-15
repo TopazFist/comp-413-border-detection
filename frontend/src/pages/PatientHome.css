@@ -1,0 +1,63 @@
+/* PatientHome.css */
+
+.upload-item {
+  margin: 1px;
+}
+
+.upload-icon {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.upload-icon svg {
+  max-height: 200px;
+  width: auto;
+}
+
+.image-item {
+  margin: 1px;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.image {
+  border-radius: 8px;
+  max-height: 400px;
+  min-height: 100px;
+  width: 100%;
+}
+
+.public-label {
+  position: absolute;
+  border: 1px solid #ccc;
+  top: 0;
+  left: 0;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.notes-label {
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.notes-label input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.physician-notes {
+  font-weight: bold;
+}
+
+.benign-text {
+  font-weight: bold;
+}

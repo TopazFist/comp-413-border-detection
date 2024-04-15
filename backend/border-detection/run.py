@@ -108,7 +108,6 @@ def visual_results(out):
 while True:
     path = input()
     if os.path.exists(path):
-        print("HI THIS WOKRS!")
         print(json.dumps({"id": path.split("/")[1]}))
         main(path, path.split("/")[1])
     else:

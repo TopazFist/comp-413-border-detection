@@ -36,7 +36,7 @@ def process_image(file_path, destination_path, llm_mode):
     resulting_image = get_border(original_im, llm_mode)
     save_image(resulting_image, destination_path, os.path.basename(file_path), llm_mode=llm_mode)
 
-def main(filepath):
+def main(filepath, id):
     
     """
     Main function to process images in parallel.
@@ -57,7 +57,7 @@ def main(filepath):
     # result_directory = "ISIC-images/Result_Images_Square"
 
     filename = filepath.split("/")[-1]
-    result_directory = "image-uploads/" + filename + "-borderDetection"
+    result_directory = "image-uploads/" + id + "/borderDetection/" 
 
     # Adjust max_treads according to the number of cpus
     # with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
@@ -110,6 +110,6 @@ while True:
     if os.path.exists(path):
         print("HI THIS WOKRS!")
         print(json.dumps({"id": path.split("/")[1]}))
-        main(path)
+        main(path, path.split("/")[1])
     else:
         print("Path does not exist.")

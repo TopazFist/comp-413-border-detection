@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import FormData from "form-data";
 import "../styles/imageUpload.css";
@@ -50,6 +50,7 @@ const ImageUpload = () => {
             </div>
             <input ref={inputRef} type="file" hidden onChange={handleImageSelect} />
             <button onClick={handleImageUpload}>Upload Image</button>
+            <p><Link to={`/patients/${id}/view`}>Go Back</Link></p>
         </section>
     );
 }

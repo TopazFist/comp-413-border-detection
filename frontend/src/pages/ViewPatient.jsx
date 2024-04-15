@@ -1,4 +1,5 @@
-// PatientHomePhysician.jsx
+/* PatientHomePhysician.jsx */
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
@@ -69,6 +70,14 @@ const ViewPatient = () => {
               src={"http://localhost:3001/" + patientImage.s3image}
               alt={patientImage.s3image}
             />
+            <div className="benign-status">
+              <p className={`benign-text ${patientImage.isBenign ? 'benign-true' : 'benign-false'}`}>
+                Benign: {patientImage.isBenign ? 'True' : 'False'}
+              </p>
+              <p className="probability-text">
+                Probability: {Math.round(patientImage.benignProbability * 100)}%
+              </p>
+            </div>
             <label className="notes-label">
               <input 
                 type="text" 
@@ -76,7 +85,6 @@ const ViewPatient = () => {
                 onChange={(e) => handlePhysicianNotesChange(e, patientImage._id)} 
               />
             </label>
-            <p className="benign-text">Benign</p>
           </ImageListItem>
         ))}
       </ImageList>

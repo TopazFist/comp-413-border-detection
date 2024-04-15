@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const CreatePatientFromPhysician = () => {
-    const { id: physicianID } = useParams(); // Extracting physician ID from route parameters
+const CreatePatientFromPhysican = () => {
+    const { id: personalPhysicianID } = useParams(); // Extracting physician ID from route parameters
 
     const [newPatient, setNewPatient] = useState({
         firstName: '',
@@ -13,7 +13,7 @@ const CreatePatientFromPhysician = () => {
         gender: '',
         age: '',
         allergies: '',
-        physicianID: physicianID // Assigning the extracted physician ID
+        physicianID: personalPhysicianID // Assigning the extracted physician ID
     });
 
     const handleInputChange = (e) => {
@@ -23,20 +23,24 @@ const CreatePatientFromPhysician = () => {
             [name]: value
         }));
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Create the new patient
-            const response = await axios.post('http://localhost:3001/patients', newPatient);
-            const createdPatient = response.data;
-    
-            // Update the physician's assignedPatientIds to include the newly created patient
-            await axios.patch(`http://localhost:3001/physicians/${physicianID}`, {
-                $push: { assignedPatientIds: createdPatient._id } // Push the _id of the newly created patient
+            // Include physician ID in the request body
+            const response = await axios.post('http://localhost:3001/patients', {
+                ...newPatient,
+                physicianID: personalPhysicianID
             });
-    
+            const createdPatient = response.data;
+
+            await axios.patch(`http://localhost:3001/physicians/${personalPhysicianID}`, {
+            $push: { assignedPatientIds: createdPatient._id } // Push the _id of the newly created patient
+            });
+
             console.log('New patient created:', createdPatient);
-            window.location.href = `/physicians/${physicianID}`;
+            window.location.href = `/physicians/${personalPhysicianID}`;
+
             // Reset form fields or provide feedback to the user
         } catch (error) {
             console.error('Error creating new patient:', error);
@@ -125,4 +129,4 @@ const CreatePatientFromPhysician = () => {
     );
 };
 
-export default CreatePatientFromPhysician;
+export default CreatePatientFromPhysican;

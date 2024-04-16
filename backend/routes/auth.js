@@ -14,6 +14,8 @@ router.post('/physician/:username',getPhysicianUser);
 
 router.post('/patient/:username',getPatientUser);
 
+router.post('/nurse/',createNurseUser);
+
 router.post("/", createPatientUser);
 
 export const authRoutes = router

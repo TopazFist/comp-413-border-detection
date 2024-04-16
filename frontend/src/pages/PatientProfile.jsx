@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { api } from "../components/api"
 
 const PatientProfile = () => {
     const { id } = useParams();
@@ -10,7 +10,7 @@ const PatientProfile = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/patients/${id}`);
+                const response = await api.get(`/patients/${id}`);
                 setPatient(response.data);
                 setEditedPatient(response.data);
             } catch (error) {
@@ -39,8 +39,8 @@ const PatientProfile = () => {
     
     const handleSubmit = async () => {
         try {
-            await axios.patch(`http://localhost:3001/patients/${id}`, editedPatient);
-            const response = await axios.get(`http://localhost:3001/patients/${id}`);
+            await api.patch(`/patients/${id}`, editedPatient);
+            const response = await api.get(`/patients/${id}`);
             setPatient(response.data);
             alert('Patient information updated successfully!');
         } catch (error) {

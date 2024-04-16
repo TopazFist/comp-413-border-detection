@@ -5,7 +5,7 @@ import './Welcome.css'; // Import CSS file for styling
 const WelcomePage = () => {
   return (
     <div className="welcome-container">
-      <h2>Welcome</h2>
+      <h1>Welcome</h1>
       <p>Choose your role:</p>
       <div className="button-container">
         <Link to="/patients/login" className="blue-button">Patient</Link>

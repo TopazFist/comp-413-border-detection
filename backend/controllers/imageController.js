@@ -71,6 +71,11 @@ const getPatientImages = async (req,res) => {
     console.log("i'm reaching this function");
     const {id} = req.params
 
+    if (req.session.uid != id) {
+        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        return res.status(401).json({ message: 'Not Authorized'});
+    }
+
     try {
         // Find patient images where patientId matches the id parameter
         const patientImages = await PatientImage.find({ patientId: id });
@@ -89,6 +94,10 @@ const getPatientImages = async (req,res) => {
 const uploadImage = (req, res) => {
     console.log('creating image...');
     const { id } = req.params;
+    if (req.session.uid != id) {
+        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        return res.status(401).json({ message: 'Not Authorized'});
+    }
     if (!req.file) {
         console.log("No file received");
         return res.send({
@@ -98,10 +107,10 @@ const uploadImage = (req, res) => {
         console.log("File received");
         
         console.log(req.file.originalname);
-        // PatientImage.create({
-        //     patientId: id,
-        //     s3image: "image-uploads/" + id + "/" + req.file.originalname
-        // });
+        PatientImage.create({
+            patientId: id,
+            s3image: "image-uploads/" + id + "/" + req.file.originalname
+        });
         pythonProcess.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
         pythonProcess2.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
 
@@ -113,22 +122,15 @@ const uploadImage = (req, res) => {
 }
 
 const uploadMiddleware = upload.single("file");
-const createImage = async (req, res) => {
-        const{patientId, physicianNotes, isPublic, s3image, isBenign, benignProbability} = req.body
-        //add to db
-        try {
-            const image = await PatientImage.create({patientId, physicianNotes, isPublic, s3image, isBenign, benignProbability})
-            res.status(200).json(image)
-        }
-        catch(error){
-            res.status(400).json({error: error.message})
-        }
-    }
-    
 
 const togglePublic = async (req, res) => {
         const { id } = req.params;
         const { isPublic } = req.body;
+
+        if (req.session.uid != id) {
+            console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+            return res.status(401).json({ message: 'Not Authorized'});
+        }
       
         try {
           // Find the patient image by ID
@@ -155,6 +157,11 @@ const togglePublic = async (req, res) => {
 const modifyNotes = async (req, res) => {
         const { id } = req.params;
         const { physicianNotes } = req.body;
+
+        if (req.session.uid != id) {
+            console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+            return res.status(401).json({ message: 'Not Authorized'});
+        }
     
         try {
             // Find the patient image by ID
@@ -181,7 +188,6 @@ const modifyNotes = async (req, res) => {
 
 export {
         getPatientImages,
-        createImage,
         uploadImage,
         uploadMiddleware,
         togglePublic,

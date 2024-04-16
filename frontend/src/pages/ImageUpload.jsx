@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
 import FormData from "form-data";
 import "../styles/imageUpload.css";
+import { api } from "../components/api"
 
 const ImageUpload = () => {
     const [file, setFile] = useState(null);
@@ -29,7 +29,7 @@ const ImageUpload = () => {
             console.log(file);
 
             try {
-                const response = await axios.post(`http://localhost:3001/upload/${id}`, formData);
+                const response = await api.post(`/upload/${id}`, formData);
                 console.log("Upload successful: ", response);
 
                 setFile(null);

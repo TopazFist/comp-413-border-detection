@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../components/api"
 import { Link, useParams } from "react-router-dom";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,8 +18,8 @@ const NurseHome = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios
-            .get(`http://localhost:3001/nurses/${id}`)
+        api
+            .get(`/nurses/${id}`)
             .then(async (response) => {
                 // Assumes the nurse object has a field called "patients" that contains an array of patient objects
                 const nurse = response.data;
@@ -28,7 +28,7 @@ const NurseHome = () => {
                 const patientIDList = nurse.assignedPatientIds || [];
                 try {
                     const patientRequests = patientIDList.map(patientID => {
-                        return axios.get(`http://localhost:3001/patients/${patientID}`);
+                        return api.get(`/patients/${patientID}`);
                     });
         
                     const patientResponses = await Promise.all(patientRequests);

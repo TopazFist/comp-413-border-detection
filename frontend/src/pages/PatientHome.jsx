@@ -1,6 +1,6 @@
 // PatientHomeNonPhysician.jsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from "../components/api"
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -18,7 +18,11 @@ const PatientHome = () => {
   useEffect(() => {
     const fetchPatientImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/images/${id}`);
+        const response = await api.get(`/images/${id}`).catch((error) => {
+          if (error.response && error.response.status == 401) { // Unauthorized
+            window.location.href = "/unauthorized";
+          }
+        });
         setPatientImages(response.data);
       } catch (error) {
         console.error('Error fetching patient images:', error);
@@ -36,7 +40,7 @@ const PatientHome = () => {
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
         image.isPublic = e.target.checked;
-        axios.put(`http://localhost:3001/images/${imageId}/public`, { isPublic: e.target.checked });
+        api.put(`/images/${imageId}/public`, { isPublic: e.target.checked });
       }
       return image;
     });

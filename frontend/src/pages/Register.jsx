@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { api } from "../components/api"
 // import { Link } from 'react-router-dom';
 import './Register.css'; // Import the CSS file
 import Avatar from '@mui/material/Avatar';
@@ -22,7 +22,7 @@ const Register = () => {
     const data = new FormData(e.currentTarget);
     try {
       // Send registration data to the backend server
-      const response = await axios.post('http://localhost:3001/auth', {
+      const response = await api.post('/auth', {
         username: data.get("username"),
         password: data.get("password"),
         firstName: data.get("firstName"),

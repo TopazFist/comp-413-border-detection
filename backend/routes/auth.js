@@ -16,4 +16,9 @@ router.post('/patient/:username',getPatientUser);
 
 router.post("/", createPatientUser);
 
+router.post('/logout', (req) => {
+  delete req.session["username"];
+  delete req.session["uid"];
+});
+
 export const authRoutes = router

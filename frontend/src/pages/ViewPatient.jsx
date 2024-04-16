@@ -1,7 +1,7 @@
 /* PatientHomePhysician.jsx */
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from "../components/api"
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -19,7 +19,7 @@ const ViewPatient = () => {
   useEffect(() => {
     const fetchPatientImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/images/${id}`);
+        const response = await api.get(`/images/${id}`);
         setPatientImages(response.data);
       } catch (error) {
         console.error('Error fetching patient images:', error);
@@ -37,7 +37,7 @@ const ViewPatient = () => {
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
         image.physicianNotes = e.target.value;
-        axios.put(`http://localhost:3001/images/${imageId}/notes`, { physicianNotes: e.target.value });
+        api.put(`/images/${imageId}/notes`, { physicianNotes: e.target.value });
       }
       return image;
     });

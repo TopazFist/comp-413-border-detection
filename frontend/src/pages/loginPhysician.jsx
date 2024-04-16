@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
-import axios from 'axios';
+import { api } from "../components/api"
 import { useState } from 'react';
 
 const defaultTheme = createTheme();
@@ -22,7 +22,7 @@ const PhysicianLogin = () => {
     try {
       // Send login data to the backend server
       console.log(data);
-      const response = await axios.post(`http://localhost:3001/auth/physician/${data.get('username')}`, {password: data.get("password")});
+      const response = await api.post(`/auth/physician/${data.get('username')}`, {password: data.get("password")});
       window.location.href = `/physicians/${response.data.physicianId}`;
     } catch (error) {
       console.error('Login error:', error);

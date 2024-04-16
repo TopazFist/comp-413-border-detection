@@ -5,6 +5,7 @@ import './Register.css'; // Import the CSS file
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -126,6 +127,7 @@ const PhysicianRegister = () => {
             >
               Register Physician
             </Button>
+            <Link href="/physicians/login">Back to login</Link>
           </Box>
         </Box>
       </Container>

@@ -49,8 +49,8 @@ function Navbar() {
         setIconLink('/nurses/' + uid + "/");
       }
       else {
-        setPages([]);
-        setLinks([]);
+        setPages(["Login"]);
+        setLinks(["/"]);
         setIconLink("/");
       }
     });

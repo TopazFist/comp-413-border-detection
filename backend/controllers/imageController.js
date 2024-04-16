@@ -185,11 +185,33 @@ const modifyNotes = async (req, res) => {
         }
     };
     
-
-export {
+    const deleteImage = async (req, res) => {
+        const { id } = req.params;
+    
+        try {
+            // Find the patient image by ID
+            const patientImage = await PatientImage.findById(id);
+    
+            if (!patientImage) {
+                return res.status(404).json({ error: 'Patient image not found' });
+            }
+    
+            // Delete the patient image
+            await patientImage.remove();
+    
+            res.json({ success: true, message: 'Image deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting patient image:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    };
+    
+    export {
         getPatientImages,
         uploadImage,
         uploadMiddleware,
         togglePublic,
-        modifyNotes
-}
+        modifyNotes,
+        deleteImage
+    };
+    

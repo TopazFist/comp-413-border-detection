@@ -15,6 +15,11 @@ const getNurses = async (req, res) => {
 const getNurse = async (req, res) => {
   const { id } = req.params;
 
+  if (req.session.uid != id) {
+    console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    return res.status(401).json({ message: 'Not Authorized'});
+  }
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such nurse' });
   }
@@ -48,6 +53,11 @@ const createNurse = async (req, res) => {
 const deleteNurse = async (req, res) => {
   const { id } = req.params;
 
+  if (req.session.uid != id) {
+    console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    return res.status(401).json({ message: 'Not Authorized'});
+  }
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such nurse' });
   }
@@ -68,6 +78,11 @@ const deleteNurse = async (req, res) => {
 // Update a nurse
 const updateNurse = async (req, res) => {
   const { id } = req.params;
+
+  if (req.session.uid != id) {
+    console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    return res.status(401).json({ message: 'Not Authorized'});
+  }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such nurse' });

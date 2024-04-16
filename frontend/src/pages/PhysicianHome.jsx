@@ -16,7 +16,11 @@ const PhysicianHome = () => {
 
     useEffect(() => {
         api
-            .get(`/physicians/${id}`)
+            .get(`/physicians/${id}`).catch((error) => {
+                if (error.response && error.response.status == 401) { // Unauthorized
+                  window.location.href = "/unauthorized";
+                }
+            })
             .then(async (response) => {
                 console.log(response);
                 // Assuming the physician object has a field named 'patients' containing an array of patient objects

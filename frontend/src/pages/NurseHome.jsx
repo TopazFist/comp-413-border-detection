@@ -14,12 +14,14 @@ const NurseHome = () => {
     // Extract nurse ID from route parameters
     const { id } = useParams();
     const [patients, setPatients] = useState([]);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
         api
-            .get(`/nurses/${id}`)
+            .get(`/nurses/${id}`).catch((error) => {
+                if (error.response && error.response.status == 401) { // Unauthorized
+                  window.location.href = "/unauthorized";
+                }
+            })
             .then(async (response) => {
                 // Assumes the nurse object has a field called "patients" that contains an array of patient objects
                 const nurse = response.data;
@@ -35,15 +37,12 @@ const NurseHome = () => {
         
                     const patientList = patientResponses.map(response => response.data);
                     setPatients(patientList);
-                    setLoading(false);
                 } catch (error) {
                     console.log("Error fetching patients:", error);
-                    setLoading(false);
                 }
             })
             .catch((error) => {
                 console.log(error);
-                setLoading(false);
             });
     }, [id]);
 

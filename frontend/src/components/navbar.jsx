@@ -43,6 +43,11 @@ function Navbar() {
         setLinks(['/physicians/' + uid + "/", '/patients/login', '/logout']);
         setIconLink('/physicians/' + uid + "/");
       }
+      else if ( loginState == "nurse") {
+        setPages(["Nurse Home", "Patient Login", "Logout"]);
+        setLinks(["/nurses/" + uid + "/", '/patients/login', '/logout']);
+        setIconLink('/nurses/' + uid + "/");
+      }
       else {
         setPages([]);
         setLinks([]);
@@ -74,7 +79,7 @@ function Navbar() {
     <AppBar>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box component="a" href="/">
+          <Box component="a" href={iconLink}>
             <Box
               component="img"
               sx={{ display: { height: 50, xs: 'none', md: 'flex' }, mr: 1 }}

@@ -21,6 +21,9 @@ const getNurseUser = async (req, res, next) => {
     }
 
     // If everything is correct, you can send a success response
+    req.session.username = username;
+    req.session.uid = nurse.nurseId;
+    req.session.state = "nurse";
     res.status(200).json({ message: "Login successful", nurseId: nurse.nurseId });
   } catch (error) {
     next(error);

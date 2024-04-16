@@ -13,8 +13,12 @@ const WelcomePage = () => {
       }
       if (response.data.state == "physician") {
         console.log("redirected due to physician already logged in");
-        window.location.href = "/physicians" + response.data.uid + "/";
-       }
+        window.location.href = "/physicians/" + response.data.uid + "/";
+      }
+      if (response.data.state == "nurse") {
+        console.log("redirected due to nurse already logged in");
+        window.location.href = "/nurse/" + response.data.uid + "/";
+      }
     });
   }, []);
 

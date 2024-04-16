@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
+import { api } from "../components/api";
 import { useState } from 'react';
 
 const defaultTheme = createTheme();
@@ -23,7 +23,7 @@ const NurseLogin = () => {
 
     try {
       // Send login data to the backend server
-      const response = await axios.post(`http://localhost:3001/auth/nurse/${data.get('username')}`, {
+      const response = await api.post(`/auth/nurse/${data.get('username')}`, {
         password: data.get('password'),
       });
 

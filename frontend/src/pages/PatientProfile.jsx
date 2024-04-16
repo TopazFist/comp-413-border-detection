@@ -61,11 +61,11 @@ const PatientProfile = () => {
       const response = await axios.get(`http://localhost:3001/patients/${id}`);
             setPatient(response.data); // Update the physician state with the updated information
       // Redirect to the login page after successful registration
-      console.log('Registration successful:', response.data);
+      console.log('Update successful:', response.data);
       window.location.href = `/patients/${id}`;
     } catch (error) {
-      console.error('Registration error:', error);
-      setError("Failed to register. Please try again.");
+      console.error('Update error:', error);
+      setError("Failed to Update. Please try again.");
     }
   };
 
@@ -85,7 +85,7 @@ const PatientProfile = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Register Patient
+            Update Patient
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -183,7 +183,7 @@ const PatientProfile = () => {
               onChange={handleInputChange}
               sx={{ mt: 3, mb: 2 }}
             >
-              Register Patient
+              Update Patient Information
             </Button>
           </Box>
         </Box>

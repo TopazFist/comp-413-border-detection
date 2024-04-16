@@ -25,6 +25,7 @@ const WelcomePage = () => {
       <div className="button-container">
         <Link to="/patients/login" className="blue-button">Patient</Link>
         <Link to="/physicians/login" className="blue-button">Physician</Link>
+        <Link to="/nurses/login" className="blue-button">Nurse</Link>
       </div>
     </div>
   );

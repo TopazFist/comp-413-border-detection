@@ -12,7 +12,10 @@ import PhysicianHome from "./pages/PhysicianHome";
 import ViewPatient from "./pages/ViewPatient";
 import ImageUpload from "./pages/ImageUpload";
 import Navbar from "./components/navbar";
-import Box from "@mui/material/Box"
+import Box from "@mui/material/Box";
+import NurseRegister from './pages/CreateNurse'; 
+import NurseLogin from './pages/loginNurse';
+
 import Unauthorized from "./pages/Unauthorized";
 import Logout from "./pages/Logout";
 
@@ -36,6 +39,8 @@ const App = () => {
                                 <Route path='/registerpatient' element={<CreatePatient />} />
                                 <Route path='/physicians/login' element={<PhysicianLogin />} />
                                 <Route path='/physicians/register' element={<CreatePhysician />} />
+                                <Route path='/nurses/register' element={<NurseRegister />} />
+                                <Route path='/nurses/login' element={<NurseLogin />} />
                                 <Route path='/physicians/:id/profile' element={<PhysicianProfile />} />
                                 <Route path='/patients/:id' element={<PatientHome />} />
                                 <Route path='/patients/:id/upload' element={<ImageUpload />} />

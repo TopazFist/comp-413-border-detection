@@ -7,11 +7,8 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-// import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-// import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-// import dermascope_logo from './dermascope_logo.svg';
 import full_logo from './full_logo.svg';
 import {api} from '../components/api';
 
@@ -78,7 +75,12 @@ function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box component="a" href="/">
-            <Box component="img" sx={{ display: { height: 50, xs: 'none', md: 'flex'}, mr: 1 }} src={full_logo} alt="logo"/>
+            <Box
+              component="img"
+              sx={{ display: { height: 50, xs: 'none', md: 'flex' }, mr: 1 }}
+              src={full_logo}
+              alt="logo"
+            />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -110,7 +112,7 @@ function Navbar() {
               }}
             >
               {pages.map((page, i) => (
-                <MenuItem key={page} onClick = {() => {window.location.href = links[i]}}>
+                <MenuItem key={page} onClick={() => { window.location.href = links[i] }}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -120,7 +122,7 @@ function Navbar() {
             {pages.map((page, i) => (
               <Button
                 key={page}
-                onClick = {() => {window.location.href = links[i]}}
+                onClick={() => { window.location.href = links[i] }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}

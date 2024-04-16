@@ -9,6 +9,7 @@ import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
 import { uploadRoutes } from "./routes/upload.js"
+import { nurseRoutes } from "./routes/nurses.js";
 
 const PRODUCTION = false;
 
@@ -53,6 +54,8 @@ app.use('/patients',patientRoutes)
 app.use('/physicians',physicianRoutes)
 
 app.use('/auth', authRoutes)
+
+app.use('/nurses', nurseRoutes)
 
 app.use('/images', imageRoutes)
 

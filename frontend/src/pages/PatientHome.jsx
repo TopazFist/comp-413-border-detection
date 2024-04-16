@@ -11,9 +11,15 @@ import './PatientHome.css'; // Import CSS file for styling
 const PatientHome = () => {
   const { id } = useParams(); // Extracting patient ID from route parameters
   const [patientImages, setPatientImages] = useState([]);
+  const [test, setTest] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const fromPhysicianHome = location.pathname.includes("view");
+
+  useEffect(() => {
+    const response = await api.get("/auth");
+    // TODO: aaaahhh
+  })
 
   useEffect(() => {
     const fetchPatientImages = async () => {
@@ -50,6 +56,7 @@ const PatientHome = () => {
   return (
     <Box sx={{ my: 10, mx: 10 }}>
       <h1 className="text-3xl font-bold mb-6">Patient images: {id}</h1>
+      <h2>{test}</h2>
       <ImageList cols={3} sx={{ width: 1 }}>
         {fromPhysicianHome && (
           <ImageListItem key="upload" className="upload-item" onClick={handleUploadClick}>

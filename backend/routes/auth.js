@@ -16,6 +16,8 @@ router.post('/patient/:username',getPatientUser);
 
 router.post("/", createPatientUser);
 
+router.get("/", (req, res) => res.status(200).json(req.session));
+
 router.post('/logout', (req) => {
   delete req.session["username"];
   delete req.session["uid"];

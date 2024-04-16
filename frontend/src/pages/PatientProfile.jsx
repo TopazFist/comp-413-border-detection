@@ -65,7 +65,7 @@ const PatientProfile = () => {
       window.location.href = `/patients/${id}`;
     } catch (error) {
       console.error('Update error:', error);
-      setError("Failed to Update. Please try again.");
+      setError("Failed to update. Please try again.");
     }
   };
 

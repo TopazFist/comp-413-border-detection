@@ -32,8 +32,7 @@ const getPatientUser = async (req, res, next) => {
     console.log("Login successful");
     req.session["username"] = username;
     req.session.uid = patient.patientId;
-    console.log(JSON.stringify(req.session));
-    console.log(req.session.uid);
+    req.session.state = "patient";
     res.status(200).json({ message: "Login successful", patientId: patient.patientId});
   } catch (error) {
     console.error("Error during login:", error);

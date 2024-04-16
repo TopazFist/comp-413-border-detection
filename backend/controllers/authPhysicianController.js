@@ -33,6 +33,7 @@ const getPhysicianUser = async (req, res, next) => {
     console.log("Login successful");
     req.session.username = username;
     req.session.uid = physician.physicianId;
+    req.session.state = "physician";
     res.status(200).json({ message: "Login successful", physicianId: physician.physicianId});
   } catch (error) {
     console.error("Error during login:", error);

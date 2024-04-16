@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,28 +13,65 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 // import dermascope_logo from './dermascope_logo.svg';
 import full_logo from './full_logo.svg';
-
-const pages = ['Patient Login', "Physician Login", "Logout"];
-const links = ['/patients/login', '/physicians/login', '/']
+import {api} from '../components/api';
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [username, setUsername] = useState("");
+  const [loginState, setLoginState] = useState("");
+  const [uid, setUid] = useState("");
+  const [pages, setPages] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [iconLink, setIconLink] = useState("/");
+
+  useEffect(() => {
+    api.get("/auth").then((response) => {
+      if(response.data.username){
+        setUsername(response.data.username);
+      }
+      if(response.data.state){
+        setLoginState(response.data.state);
+      }
+      if(response.data.uid){
+        setUid(response.data.uid);
+      }
+    }).then(() => {
+      if ( loginState == "patient") {
+        setPages(['Patient Home', "Physician Login", "Logout"]);
+        setLinks(['/patients/' + uid + "/", '/physicians/login', '/logout']);
+        setIconLink('/patients/' + uid + "/");
+      }
+      else if ( loginState == "physician") {
+        setPages(['Physician Home', "Patient Login", "Logout"]);
+        setLinks(['/physicians/' + uid + "/", '/patients/login', '/logout']);
+        setIconLink('/physicians/' + uid + "/");
+      }
+      else {
+        setPages([]);
+        setLinks([]);
+        setIconLink("/");
+      }
+    });
+  }, [loginState, username, uid])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  let login_status = ""
+  if (loginState) {
+    login_status += loginState + ": ";
+  }
+  if (username) {
+    login_status += username
+  }
+  else {
+    login_status = (<a href="/"> Welcome! Please log in. </a>)
+  }
 
   return (
     <AppBar>
@@ -92,7 +129,7 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            
+            <p>{login_status}</p>
           </Box>
         </Toolbar>
       </Container>

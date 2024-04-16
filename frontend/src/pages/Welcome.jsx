@@ -1,8 +1,23 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Welcome.css'; // Import CSS file for styling
+import { api } from "../components/api";
 
 const WelcomePage = () => {
+  useEffect(() => {
+    api.get("/auth").then((response) => {
+      if (response.data.state == "patient") {
+        console.log("redirected due to patient already logged in");
+        window.location.href = "/patients/" + response.data.uid + "/";
+      }
+      if (response.data.state == "physician") {
+        console.log("redirected due to physician already logged in");
+        window.location.href = "/physicians" + response.data.uid + "/";
+       }
+    });
+  }, []);
+
   return (
     <div className="welcome-container">
       <h1>Welcome</h1>

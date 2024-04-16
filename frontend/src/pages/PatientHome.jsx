@@ -1,25 +1,19 @@
 // PatientHomeNonPhysician.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from "../components/api"
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import './PatientHome.css'; // Import CSS file for styling
 
 const PatientHome = () => {
   const { id } = useParams(); // Extracting patient ID from route parameters
   const [patientImages, setPatientImages] = useState([]);
-  const [test, setTest] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const fromPhysicianHome = location.pathname.includes("view");
-
-  useEffect(() => {
-    const response = await api.get("/auth");
-    // TODO: aaaahhh
-  })
 
   useEffect(() => {
     const fetchPatientImages = async () => {
@@ -55,8 +49,7 @@ const PatientHome = () => {
 
   return (
     <Box sx={{ my: 10, mx: 10 }}>
-      <h1 className="text-3xl font-bold mb-6">Patient images: {id}</h1>
-      <h2>{test}</h2>
+      <h1 className="text-3xl font-bold mb-6">Patient images: {id} </h1>
       <ImageList cols={3} sx={{ width: 1 }}>
         {fromPhysicianHome && (
           <ImageListItem key="upload" className="upload-item" onClick={handleUploadClick}>

@@ -14,7 +14,7 @@ router.post('/physician/:username',getPhysicianUser);
 
 router.post('/patient/:username',getPatientUser);
 
-router.post('/nurse/',createNurseUser);
+// router.post('/nurse/',createNurseUser);
 
 router.post("/", createPatientUser);
 

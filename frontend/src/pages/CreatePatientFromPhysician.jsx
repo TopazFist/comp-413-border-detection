@@ -33,21 +33,27 @@ const CreatePatientFromPhysican = () => {
                 physicianID: personalPhysicianID
             });
             const createdPatient = response.data;
-
+    
+            // Fetch current physician's data
+            const physicianResponse = await axios.get(`http://localhost:3001/physicians/${personalPhysicianID}`);
+            const physician = physicianResponse.data;
+    
+            // Update assignedPatientIds for the physician
+            const updatedAssignedPatientIds = [...physician.assignedPatientIds, createdPatient._id];
             await axios.patch(`http://localhost:3001/physicians/${personalPhysicianID}`, {
-            $push: { assignedPatientIds: createdPatient._id } // Push the _id of the newly created patient
+                assignedPatientIds: updatedAssignedPatientIds
             });
-
+    
             console.log('New patient created:', createdPatient);
             window.location.href = `/physicians/${personalPhysicianID}`;
-
+    
             // Reset form fields or provide feedback to the user
         } catch (error) {
             console.error('Error creating new patient:', error);
             // Handle errors
         }
     };
-
+    
     return (
         <div>
             <h1>Create New Patient</h1>

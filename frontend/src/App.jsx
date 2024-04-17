@@ -39,7 +39,7 @@ const App = () => {
                                 <Route path='/patients/:id/upload' element={<ImageUpload />} />
                                 <Route path='/patients/:id/profile' element={<PatientProfile />} />
                                 <Route path='/physicians/:id' element={<PhysicianHome />} />
-                                <Route path='/patients/:id/view' element={<ViewPatient />} />
+                                <Route path='/physicians/patients/:id/view' element={<ViewPatient />} />
                                 <Route path='/nurses/:id' element={<NurseHome />} />
                         </Routes>
                 </Box>

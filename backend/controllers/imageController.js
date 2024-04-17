@@ -74,10 +74,10 @@ const getPatientImages = async (req,res) => {
 
     const patient = await Patient.findById(id)
 
-    if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
-        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
-        return res.status(401).json({ message: 'Not Authorized'});
-    }
+    // if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
+    //     console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    //     return res.status(401).json({ message: 'Not Authorized'});
+    // }
 
     try {
         // Find patient images where patientId matches the id parameter
@@ -99,10 +99,10 @@ const uploadImage = (req, res) => {
     const { id } = req.params;
     const patient = Patient.findById(id)
 
-    if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
-        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
-        return res.status(401).json({ message: 'Not Authorized'});
-    }
+    // if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
+    //     console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    //     return res.status(401).json({ message: 'Not Authorized'});
+    // }
     if (!req.file) {
         console.log("No file received");
         return res.send({
@@ -112,10 +112,10 @@ const uploadImage = (req, res) => {
         console.log("File received");
         
         console.log(req.file.originalname);
-        PatientImage.create({
-            patientId: id,
-            s3image: "image-uploads/" + id + "/" + req.file.originalname
-        });
+        // PatientImage.create({
+        //     patientId: id,
+        //     s3image: "image-uploads/" + id + "/" + req.file.originalname
+        // });
         pythonProcess.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
         pythonProcess2.stdin.write("image-uploads/" + id + "/" + req.file.originalname + "\n"); // Sends to model process
 
@@ -167,10 +167,10 @@ const modifyNotes = async (req, res) => {
 
         const patient = await Patient.findById(id)
 
-        if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
-                console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
-            return res.status(401).json({ message: 'Not Authorized'});
-        }
+        // if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
+        //         console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        //     return res.status(401).json({ message: 'Not Authorized'});
+        // }
     
         try {
             // Find the patient image by ID

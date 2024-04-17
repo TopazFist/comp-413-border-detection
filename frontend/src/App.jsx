@@ -14,7 +14,7 @@ import Navbar from "./components/navbar";
 import Box from "@mui/material/Box";
 import NurseRegister from './pages/CreateNurse'; 
 import NurseLogin from './pages/loginNurse';
-
+import NurseViewPatient from "./pages/NurseViewPatient";
 import Unauthorized from "./pages/Unauthorized";
 import Logout from "./pages/Logout";
 
@@ -46,6 +46,7 @@ const App = () => {
                                 <Route path='/physicians/:id' element={<PhysicianHome />} />
                                 <Route path='/patients/:id/view' element={<ViewPatient />} />
                                 <Route path='/nurses/:id' element={<NurseHome />} />
+                                <Route path="/nurses/patients/:id/view" element={<NurseViewPatient />} />
                                 <Route path='/unauthorized' element={<Unauthorized />} />
                                 <Route path="/logout" element={<Logout />} />
                         </Routes>

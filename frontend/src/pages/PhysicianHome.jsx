@@ -27,25 +27,44 @@ const PhysicianHome = () => {
                 const physician = response.data;
                 const patientIDList = physician.assignedPatientIds || []; // Extracting patient list from physician object
                 try {
-                        const patientRequests = patientIDList.map(patientID => {
-                            return api.get(`/patients/${patientID}`);
-                            // replace with what ian and jmak make
-                        });
-            
-                        const patientResponses = await Promise.all(patientRequests);
-            
-                        const patientList = patientResponses.map(response => response.data);
-                        console.log("Patients:", patientList);
-                        setPatients(patientList);
-                    } catch (error) {
-                        console.log("Error fetching patients:", error);
-                    }
-                })
-        .catch((error) => {
+                    const patientRequests = patientIDList.map(patientID => {
+                        return api.get(`/patients/${patientID}`);
+                        // replace with what ian and jmak make
+                    });
+        
+                    const patientResponses = await Promise.all(patientRequests);
+        
+                    const patientList = patientResponses.map(response => response.data);
+                    console.log("Patients:", patientList);
+                    setPatients(patientList);
+                } catch (error) {
+                    console.log("Error fetching patients:", error);
+                }
+            })
+            .catch((error) => {
                 console.log(error);
                 setPatients([{_id: "id", firstName: "first", lastName: "last"}]);
             });
     }, [id]);
+
+    // Function to handle deletion of a patient
+    const handleDelete = async (patientId) => {
+        try {
+            // Remove patient from the physician's assignedPatientIds
+            await axios.patch(`http://localhost:3001/physicians/${id}`, {
+                assignedPatientIds: patients.filter(patient => patient._id !== patientId).map(patient => patient._id)
+            });
+    
+            // Delete the patient
+            await axios.delete(`http://localhost:3001/patients/${patientId}`);
+    
+            // Update the patient list by removing the deleted patient
+            setPatients(prevPatients => prevPatients.filter(patient => patient._id !== patientId));
+        } catch (error) {
+            console.error('Error deleting patient:', error);
+            // Handle deletion error
+        }
+    };
 
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -63,6 +82,7 @@ const PhysicianHome = () => {
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;(g)</TableCell>
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;(g)</TableCell>
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;(g)</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Actions</TableCell> {/* New TableCell for actions */}
                     </TableRow>
                     </TableHead>
                     <TableBody>
@@ -70,8 +90,7 @@ const PhysicianHome = () => {
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                onClick={() => (window.location.href = `/physicians/patients/${patient._id}`)}
-                                className="cursor-pointer hover:bg-zinc-200"
+                                className="hover:bg-zinc-200"
                             >
                                 <TableCell component="th" scope="row" align="center">
                                     {index + 1}
@@ -79,6 +98,9 @@ const PhysicianHome = () => {
                                 <TableCell align="center">{patient.firstName}</TableCell>
                                 <TableCell align="center">{patient.lastName}</TableCell>
                                 <TableCell align="center">{patient._id}</TableCell>
+                                <TableCell align="center">
+                                    <button onClick={() => handleDelete(patient._id)}>Delete</button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -88,4 +110,4 @@ const PhysicianHome = () => {
     );
 };
 
-export default PhysicianHome
+export default PhysicianHome;

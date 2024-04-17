@@ -34,13 +34,13 @@ function Navbar() {
       }
     }).then(() => {
       if ( loginState == "patient") {
-        setPages(['Patient Home', "Physician Login", "Logout"]);
-        setLinks(['/patients/' + uid + "/", '/physicians/login', '/logout']);
+        setPages(['Patient Home', "Physician Login", "Profile","Logout"]);
+        setLinks(['/patients/' + uid + "/", '/physicians/login','/patients/' + uid + "/profile/", '/logout']);
         setIconLink('/patients/' + uid + "/");
       }
       else if ( loginState == "physician") {
-        setPages(['Physician Home', "Patient Login", "Logout"]);
-        setLinks(['/physicians/' + uid + "/", '/patients/login', '/logout']);
+        setPages(['Physician Home', "Patient Login", "Profile", "Logout"]);
+        setLinks(['/physicians/' + uid + "/", '/patients/login','/physicians/' + uid + "/profile/", '/logout']);
         setIconLink('/physicians/' + uid + "/");
       }
       else if ( loginState == "nurse") {
@@ -90,7 +90,7 @@ function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -130,7 +130,7 @@ function Navbar() {
                 onClick={() => { window.location.href = links[i] }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page === 'Profile' ? 'Profile' : page }
               </Button>
             ))}
           </Box>

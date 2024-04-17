@@ -4,6 +4,7 @@ import WelcomePage from './pages/Welcome';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreatePhysician from "./pages/CreatePhysician";
+import CreatePatientFromPhysician from "./pages/CreatePatientFromPhysician";
 import PatientHome from "./pages/PatientHome";
 import PatientProfile from "./pages/PatientProfile";
 import PhysicianProfile from "./pages/PhysicianProfile";
@@ -37,6 +38,7 @@ const App = () => {
                                 <Route path='/patients/register' element={<Register />} />
                                 <Route path='/physicians/login' element={<PhysicianLogin />} />
                                 <Route path='/physicians/register' element={<CreatePhysician />} />
+                                <Route path='/physicians/:id/patients/create' element={<CreatePatientFromPhysician />} />
                                 <Route path='/nurses/register' element={<NurseRegister />} />
                                 <Route path='/nurses/login' element={<NurseLogin />} />
                                 <Route path='/physicians/:id/profile' element={<PhysicianProfile />} />

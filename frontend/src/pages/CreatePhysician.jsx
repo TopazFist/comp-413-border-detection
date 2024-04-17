@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { api } from "../components/api"
 // import { Link } from 'react-router-dom';
 import './Register.css'; // Import the CSS file
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -21,7 +22,7 @@ const PhysicianRegister = () => {
     const data = new FormData(e.currentTarget);
     try {
       // Send registration data to the backend server
-      const response = await axios.post('http://localhost:3001/auth/physician', {
+      const response = await api.post('/auth/physician', {
         firstName: data.get("firstName"),
         lastName: data.get("lastName"),
         hospitalId: data.get("hospitalID"),
@@ -126,6 +127,7 @@ const PhysicianRegister = () => {
             >
               Register Physician
             </Button>
+            <Link href="/physicians/login">Back to login</Link>
           </Box>
         </Box>
       </Container>

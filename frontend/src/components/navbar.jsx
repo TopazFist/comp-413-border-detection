@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,14 +10,51 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import full_logo from './full_logo.svg';
-
-const pages = ['Patient Login', 'Physician Login', 'Profile'];
-const links = ['/patients/login', '/physicians/login'];
+import {api} from '../components/api';
 
 function Navbar() {
-  // const { id } = useParams();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [username, setUsername] = useState("");
+  const [loginState, setLoginState] = useState("");
+  const [uid, setUid] = useState("");
+  const [pages, setPages] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [iconLink, setIconLink] = useState("/");
+
+  useEffect(() => {
+    api.get("/auth").then((response) => {
+      if(response.data.username){
+        setUsername(response.data.username);
+      }
+      if(response.data.state){
+        setLoginState(response.data.state);
+      }
+      if(response.data.uid){
+        setUid(response.data.uid);
+      }
+    }).then(() => {
+      if ( loginState == "patient") {
+        setPages(['Patient Home', "Physician Login", "Profile","Logout"]);
+        setLinks(['/patients/' + uid + "/", '/physicians/login','/patients/' + uid + "/profile/", '/logout']);
+        setIconLink('/patients/' + uid + "/");
+      }
+      else if ( loginState == "physician") {
+        setPages(['Physician Home', "Patient Login", "Profile", "Logout"]);
+        setLinks(['/physicians/' + uid + "/", '/patients/login','/physicians/' + uid + "/profile/", '/logout']);
+        setIconLink('/physicians/' + uid + "/");
+      }
+      else if ( loginState == "nurse") {
+        setPages(["Nurse Home", "Patient Login", "Logout"]);
+        setLinks(["/nurses/" + uid + "/", '/patients/login', '/logout']);
+        setIconLink('/nurses/' + uid + "/");
+      }
+      else {
+        setPages(["Login"]);
+        setLinks(["/"]);
+        setIconLink("/");
+      }
+    });
+  }, [loginState, username, uid])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -27,30 +64,28 @@ function Navbar() {
     setAnchorElNav(null);
   };
 
-  const handleProfileClick = () => {
-    // try{
-    const path = window.location.pathname.split('/');
-    
-    // The ID segment should be at index 2 (assuming the URL format is '/patients/{id}/profile' or '/physicians/{id}/profile')
-    const id = path[2];
-    // if (id == 'undefined'||id == 'login'){
-    //   window.location.href = `/welcome`;
-    // }
-    // else{
-      const userType = path[1] === 'patients' ? 'patient' : 'physician';
-    
-    // Construct the profile URL based on the extracted ID and user type
-      const profileURL = `/${userType}s/${id}/profile`;
-      window.location.href = profileURL;
-    // }
-  };
+  let login_status = ""
+  if (loginState) {
+    login_status += loginState + ": ";
+  }
+  if (username) {
+    login_status += username
+  }
+  else {
+    login_status = (<a href="/"> Welcome! Please log in. </a>)
+  }
 
   return (
     <AppBar>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box component="a" href="/">
-            <Box component="img" sx={{ display: { height: 50, xs: 'none', md: 'flex' }, mr: 1 }} src={full_logo} alt="logo" />
+          <Box component="a" href={iconLink}>
+            <Box
+              component="img"
+              sx={{ display: { height: 50, xs: 'none', md: 'flex' }, mr: 1 }}
+              src={full_logo}
+              alt="logo"
+            />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -92,18 +127,16 @@ function Navbar() {
             {pages.map((page, i) => (
               <Button
                 key={page}
-                onClick={() => {
-                  if (page === 'Profile') {
-                    handleProfileClick();
-                  } else {
-                    window.location.href = links[i];
-                  }
-                }}
+                onClick={() => { window.location.href = links[i] }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page === 'Profile' ? 'Profile' : page }
               </Button>
             ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <p>{login_status}</p>
           </Box>
         </Toolbar>
       </Container>

@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
 const defaultTheme = createTheme();
-
+import { api } from "../components/api"
 
 const PatientProfile = () => {
   const { id } = useParams();
@@ -24,7 +24,7 @@ const PatientProfile = () => {
   useEffect(() => {
     const fetchPatient = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/patients/${id}`);
+          const response = await api.get(`/patients/${id}`);
             setPatient(response.data);
             setEditedPatient(response.data);
         } catch (error) {
@@ -57,8 +57,8 @@ const PatientProfile = () => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     try {
-      await axios.patch(`http://localhost:3001/patients/${id}`, editedPatient);
-      const response = await axios.get(`http://localhost:3001/patients/${id}`);
+      await api.patch(`/patients/${id}`, editedPatient);
+      const response = await api.get(`/patients/${id}`);
             setPatient(response.data); // Update the physician state with the updated information
       // Redirect to the login page after successful registration
       console.log('Update successful:', response.data);

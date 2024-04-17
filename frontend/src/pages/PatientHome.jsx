@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// PatientHomeNonPhysician.jsx
+import { useEffect, useState } from 'react';
+import { api } from "../components/api"
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import './PatientHome.css'; // Import CSS file for styling
 
 const PatientHome = () => {
@@ -17,7 +18,11 @@ const PatientHome = () => {
   useEffect(() => {
     const fetchPatientImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/images/${id}`);
+        const response = await api.get(`/images/${id}`).catch((error) => {
+          if (error.response && error.response.status == 401) { // Unauthorized
+            window.location.href = "/unauthorized";
+          }
+        });
         setPatientImages(response.data);
       } catch (error) {
         console.error('Error fetching patient images:', error);
@@ -35,27 +40,16 @@ const PatientHome = () => {
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
         image.isPublic = e.target.checked;
-        axios.put(`http://localhost:3001/images/${imageId}/public`, { isPublic: e.target.checked });
+        api.put(`/images/${imageId}/public`, { isPublic: e.target.checked });
       }
       return image;
     });
     setPatientImages(updatedImages);
   };
 
-  const handlePhysicianNotesChange = async (e, imageId) => {
-        const updatedImages = patientImages.map((image) => {
-          if (image._id === imageId) {
-            image.physicianNotes = e.target.value;
-            axios.put(`http://localhost:3001/images/${imageId}/notes`, { physicianNotes: e.target.value });
-          }
-          return image;
-        });
-        setPatientImages(updatedImages);
-      };
-
   return (
     <Box sx={{ my: 10, mx: 10 }}>
-      <h1 className="text-3xl font-bold mb-6">Patient images: {id}</h1>
+      <h1 className="text-3xl font-bold mb-6">Patient images: {id} </h1>
       <ImageList cols={3} sx={{ width: 1 }}>
         {fromPhysicianHome && (
           <ImageListItem key="upload" className="upload-item" onClick={handleUploadClick}>
@@ -81,25 +75,11 @@ const PatientHome = () => {
               src={"http://localhost:3001/" + patientImage.s3image}
               alt={patientImage.s3image}
             />
-            {!fromPhysicianHome && (
-              <label className="public-label">
-                <input type="checkbox" checked={patientImage.isPublic} onChange={(e) => handleCheckboxChange(e, patientImage._id)} />
-                Public
-              </label>
-            )}
-            <label className="notes-label">
-              {fromPhysicianHome && (
-                <input 
-                  type="text" 
-                  value={patientImage.physicianNotes} 
-                  onChange={(e) => handlePhysicianNotesChange(e, patientImage._id)} 
-                />
-              )}
-              {!fromPhysicianHome && (
-                <p className="physician-notes">Physician Notes: {patientImage.physicianNotes}</p>
-              )}
-              <p className="benign-text">Benign</p>
+            <label className="public-label">
+              <input type="checkbox" checked={patientImage.isPublic} onChange={(e) => handleCheckboxChange(e, patientImage._id)} />
+              Public
             </label>
+            <p className="notes-text">Physician Notes: {patientImage.physicianNotes}</p>
           </ImageListItem>
         ))}
       </ImageList>

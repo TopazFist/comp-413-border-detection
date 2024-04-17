@@ -1,18 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import multer from "multer";
+import session from "express-session";
 import { PORT, mongoDBURL } from "./config.js";
-import { Physician } from "./models/physicianModel.js";
-import { Patient } from "./models/patientModel.js";
-import { PatientImage } from "./models/PatientImageModel.js";
-import { ImageProcessing } from "./models/ImageProcessing.js";
 
 import {patientRoutes} from "./routes/patients.js";
 import {physicianRoutes} from "./routes/physicians.js";
 import {authRoutes} from "./routes/auth.js";
 import { imageRoutes } from "./routes/images.js";
 import { uploadRoutes } from "./routes/upload.js"
+import { nurseRoutes } from "./routes/nurses.js";
+
+const PRODUCTION = false;
 
 const app = express();
 
@@ -21,8 +20,22 @@ app.use(express.json());
 
 // middleware for handling cors policy
 // it would be better to customize - do this later if necessary
-app.use(cors());
+const corsOptions = {
+    credentials: true, // Allow credentials (cookies)
+    origin: 'http://localhost:5173',
+};
+app.use(cors(corsOptions));
 
+const secret = "comp413";
+if (PRODUCTION) {
+    secret = process.env.SECRET // Gets the SECRET environment variable
+}
+app.use(session({
+    secret: secret, // for encryption
+    resave: false, // only saves when modified
+    saveUninitialized: false, // avoid saving empty sessions
+    cookie: { maxAge: 1_800_000 } // session lasts 30 mins from inactivity (1.8M milliseconds)
+}))
 app.use("/image-uploads", express.static("image-uploads"));
 
 app.get('/', (request, response) => {
@@ -42,8 +55,9 @@ app.use('/physicians',physicianRoutes)
 
 app.use('/auth', authRoutes)
 
+app.use('/nurses', nurseRoutes)
+
 app.use('/images', imageRoutes)
-// app.use('/sign-up',signupRoute)
 
 
 // Connecting the database
@@ -76,11 +90,4 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-
-// app.use("/upload", (req, res) => {
-//     if (req.method == "POST") {
-//         console.log(req.files);
-//     }
-//     res.status(200).json({});
-// });
 app.use("/upload", uploadRoutes);

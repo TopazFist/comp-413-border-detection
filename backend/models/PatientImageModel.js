@@ -11,7 +11,8 @@ const patientImageSchema = new mongoose.Schema({
   isPublic: { type: Boolean, required: false, default: false },
   s3image: { type: String, required: true },
   isBenign: { type: Boolean, required: false },
-  benignProbability: { type: String, required: false }
+  benignProbability: { type: String, required: false },
+  borderDetectionPath: { type: String, required: false }
 });
 
 // Multer configuration

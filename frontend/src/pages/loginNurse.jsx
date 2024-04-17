@@ -8,25 +8,29 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider} from '@mui/material/styles';
-import { api } from "../components/api"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { api } from "../components/api";
 import { useState } from 'react';
 
 const defaultTheme = createTheme();
-const PhysicianLogin = () => {
+
+const NurseLogin = () => {
   const [error, setError] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+
     try {
       // Send login data to the backend server
-      console.log(data);
-      const response = await api.post(`/auth/physician/${data.get('username')}`, {password: data.get("password")});
-      window.location.href = `/physicians/${response.data.physicianId}`;
+      const response = await api.post(`/auth/nurse/${data.get('username')}`, {
+        password: data.get('password'),
+      });
+
+      window.location.href = `/nurses/${response.data.nurseId}`;
     } catch (error) {
       console.error('Login error:', error);
-      setError("Failed to login. Please try again");
+      setError('Failed to login. Please try again');
     }
   };
 
@@ -46,7 +50,7 @@ const PhysicianLogin = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Physician Login
+            Nurse Login
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -58,7 +62,7 @@ const PhysicianLogin = () => {
                   fullWidth
                   id="username"
                   label="Username"
-                  onClick={() => setError("")}
+                  onClick={() => setError('')}
                   autoFocus
                 />
               </Grid>
@@ -70,7 +74,7 @@ const PhysicianLogin = () => {
                   label="Password"
                   type="password"
                   id="password"
-                  onClick={() => setError("")}
+                  onClick={() => setError('')}
                   autoComplete="new-password"
                 />
               </Grid>
@@ -83,7 +87,7 @@ const PhysicianLogin = () => {
             >
               Log In
             </Button>
-            <Link href="/physicians/register">Register</Link>
+            <Link href="/nurses/register">Register</Link>
           </Box>
         </Box>
         <Typography color="error">{error}</Typography>
@@ -92,4 +96,4 @@ const PhysicianLogin = () => {
   );
 };
 
-export default PhysicianLogin;
+export default NurseLogin;

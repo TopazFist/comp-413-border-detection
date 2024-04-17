@@ -18,6 +18,11 @@ const getPatient = async (req,res) => {
 
     const patient = await Patient.findById(id)
 
+    if (req.session.uid != patient.physicianID && req.session.uid != id) {
+        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        return res.status(401).json({ message: 'Not Authorized'});
+    }
+
     if (!patient){
         return res.status(404).json({error: "No such patient"})
     }
@@ -41,6 +46,10 @@ const createPatient = async (req,res) =>{
 //delete Patient
 const deletePatient = async (req,res) => {
     const {id} = req.params
+    if (req.session.uid != id) {
+        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        return res.status(401).json({ message: 'Not Authorized'});
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: "No such patient"})
@@ -57,6 +66,10 @@ const deletePatient = async (req,res) => {
 //update patient data
 const updatePatient = async (req,res) => {
     const {id} = req.params
+    if (req.session.uid != id) {
+        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        return res.status(401).json({ message: 'Not Authorized'});
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: "No such patient"})

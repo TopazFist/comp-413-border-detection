@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from "../components/api"
 import { Link, useParams } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,8 +15,12 @@ const PhysicianHome = () => {
     const [patients, setPatients] = useState([]);
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3001/physicians/${id}`)
+        api
+            .get(`/physicians/${id}`).catch((error) => {
+                if (error.response && error.response.status == 401) { // Unauthorized
+                  window.location.href = "/unauthorized";
+                }
+            })
             .then(async (response) => {
                 console.log(response);
                 // Assuming the physician object has a field named 'patients' containing an array of patient objects
@@ -24,7 +28,7 @@ const PhysicianHome = () => {
                 const patientIDList = physician.assignedPatientIds || []; // Extracting patient list from physician object
                 try {
                     const patientRequests = patientIDList.map(patientID => {
-                        return axios.get(`http://localhost:3001/patients/${patientID}`);
+                        return api.get(`/patients/${patientID}`);
                         // replace with what ian and jmak make
                     });
         

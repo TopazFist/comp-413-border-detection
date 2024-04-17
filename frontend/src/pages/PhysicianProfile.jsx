@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
 const defaultTheme = createTheme();
 
+import { api } from "../components/api"
 
 const PhysicianProfile = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const PhysicianProfile = () => {
   useEffect(() => {
     const fetchPhysician = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/physicians/${id}`);
+            const response = await api.get(`/physicians/${id}`);
             setPhysician(response.data);
             setEditedPhysician(response.data);
         } catch (error) {
@@ -57,8 +58,9 @@ const PhysicianProfile = () => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     try {
-      await axios.patch(`http://localhost:3001/physicians/${id}`, editedPhysician);
-      const response = await axios.get(`http://localhost:3001/physicians/${id}`);
+        await api.patch(`/physicians/${id}`, editedPhysician);
+        // Fetch the updated physician information after successful update
+        const response = await api.get(`/physicians/${id}`);
             setPhysician(response.data); // Update the physician state with the updated information
       // Redirect to the login page after successful registration
       console.log('Update successful:', response.data);

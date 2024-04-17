@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../components/api"
 import { Link, useParams } from "react-router-dom";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,12 +14,14 @@ const NurseHome = () => {
     // Extract nurse ID from route parameters
     const { id } = useParams();
     const [patients, setPatients] = useState([]);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
-        axios
-            .get(`http://localhost:3001/nurses/${id}`)
+        api
+            .get(`/nurses/${id}`).catch((error) => {
+                if (error.response && error.response.status == 401) { // Unauthorized
+                  window.location.href = "/unauthorized";
+                }
+            })
             .then(async (response) => {
                 // Assumes the nurse object has a field called "patients" that contains an array of patient objects
                 const nurse = response.data;
@@ -28,22 +30,19 @@ const NurseHome = () => {
                 const patientIDList = nurse.assignedPatientIds || [];
                 try {
                     const patientRequests = patientIDList.map(patientID => {
-                        return axios.get(`http://localhost:3001/patients/${patientID}`);
+                        return api.get(`/patients/${patientID}`);
                     });
         
                     const patientResponses = await Promise.all(patientRequests);
         
                     const patientList = patientResponses.map(response => response.data);
                     setPatients(patientList);
-                    setLoading(false);
                 } catch (error) {
                     console.log("Error fetching patients:", error);
-                    setLoading(false);
                 }
             })
             .catch((error) => {
                 console.log(error);
-                setLoading(false);
             });
     }, [id]);
 
@@ -70,7 +69,7 @@ const NurseHome = () => {
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                onClick={() => (window.location.href = `/patients/${patient._id}`)}
+                                onClick={() => (window.location.href = `/nurses/patients/${patient._id}/view`)}
                                 className="cursor-pointer hover:bg-zinc-200"
                             >
                                 <TableCell component="th" scope="row" align="center">

@@ -51,7 +51,7 @@ const ImageUpload = () => {
             </div>
             <input ref={inputRef} type="file" hidden onChange={handleImageSelect} />
             <button onClick={handleImageUpload}>Upload Image</button>
-            <p><Link to={`/patients/${id}/view`}>Go Back</Link></p>
+            <p><Link to={`/physicians/patients/${id}`}>Go Back</Link></p>
         </section>
     );
 }

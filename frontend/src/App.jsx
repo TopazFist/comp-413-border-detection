@@ -44,7 +44,7 @@ const App = () => {
                                 <Route path='/patients/:id/upload' element={<ImageUpload />} />
                                 <Route path='/patients/:id/profile' element={<PatientProfile />} />
                                 <Route path='/physicians/:id' element={<PhysicianHome />} />
-                                <Route path='/patients/:id/view' element={<ViewPatient />} />
+                                <Route path='/physicians/patients/:id' element={<ViewPatient />} />
                                 <Route path='/nurses/:id' element={<NurseHome />} />
                                 <Route path="/nurses/patients/:id/view" element={<NurseViewPatient />} />
                                 <Route path='/unauthorized' element={<Unauthorized />} />

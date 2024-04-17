@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import FormData from "form-data";
 import "../styles/imageUpload.css";
-import { api } from "../components/api"
+import { fileApi } from "../components/api"
 
 const ImageUpload = () => {
     const [file, setFile] = useState(null);
@@ -19,6 +19,7 @@ const ImageUpload = () => {
         if (selectedFile) {
             setFile(selectedFile);
             setFileName(selectedFile.name);
+            console.log(selectedFile);
         }
     };
 
@@ -26,10 +27,10 @@ const ImageUpload = () => {
         if (file) {
             const formData = new FormData();
             formData.append("file", file);
-            console.log(file);
+            console.log(formData.get("file"));
 
             try {
-                const response = await api.post(`/upload/${id}`, formData);
+                const response = await fileApi.post(`/upload/${id}`, formData);
                 console.log("Upload successful: ", response);
 
                 setFile(null);

@@ -94,10 +94,11 @@ const getPatientImages = async (req,res) => {
 const uploadImage = (req, res) => {
     console.log('creating image...');
     const { id } = req.params;
-    if (req.session.uid != id) {
-        console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
-        return res.status(401).json({ message: 'Not Authorized'});
-    }
+    // console.log(req.files);
+    // if (req.session.uid != id) {
+    //     console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+    //     return res.status(401).json({ message: 'Not Authorized'});
+    // }
     if (!req.file) {
         console.log("No file received");
         return res.send({
@@ -158,10 +159,10 @@ const modifyNotes = async (req, res) => {
         const { id } = req.params;
         const { physicianNotes } = req.body;
 
-        if (req.session.uid != id) {
-            console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
-            return res.status(401).json({ message: 'Not Authorized'});
-        }
+        // if (req.session.uid != id) {
+        //     console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        //     return res.status(401).json({ message: 'Not Authorized'});
+        // }
     
         try {
             // Find the patient image by ID

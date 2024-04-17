@@ -1,6 +1,7 @@
 import {PatientImage, upload} from '../models/PatientImageModel.js';
 import { spawn } from "node:child_process";
 import mongoose from 'mongoose';
+import { Patient } from '../models/patientModel.js';
 
 const pythonProcess = spawn('python3', ['./classification/model.py']);
 pythonProcess.stdout.on('data', (data) => {
@@ -71,7 +72,9 @@ const getPatientImages = async (req,res) => {
     console.log("i'm reaching this function");
     const {id} = req.params
 
-    if (req.session.uid != id) {
+    const patient = await Patient.findById(id)
+
+    if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
         console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
         return res.status(401).json({ message: 'Not Authorized'});
     }
@@ -94,7 +97,9 @@ const getPatientImages = async (req,res) => {
 const uploadImage = (req, res) => {
     console.log('creating image...');
     const { id } = req.params;
-    if (req.session.uid != id) {
+    const patient = Patient.findById(id)
+
+    if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
         console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
         return res.status(401).json({ message: 'Not Authorized'});
     }
@@ -127,8 +132,10 @@ const togglePublic = async (req, res) => {
         const { id } = req.params;
         const { isPublic } = req.body;
 
-        if (req.session.uid != id) {
-            console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        const patient = await Patient.findById(id)
+
+        if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
+                console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
             return res.status(401).json({ message: 'Not Authorized'});
         }
       
@@ -158,8 +165,10 @@ const modifyNotes = async (req, res) => {
         const { id } = req.params;
         const { physicianNotes } = req.body;
 
-        if (req.session.uid != id) {
-            console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
+        const patient = await Patient.findById(id)
+
+        if (req.session.uid != id && (patient && req.session.uid != patient.physicianID)) {
+                console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
             return res.status(401).json({ message: 'Not Authorized'});
         }
     

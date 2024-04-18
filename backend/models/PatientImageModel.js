@@ -8,7 +8,7 @@ const UPLOAD_DIR = "image-uploads/"
 const patientImageSchema = new mongoose.Schema({
   patientId: { type: String, ref: 'Patient', required: true },
   physicianNotes: { type: String, required: false, default:"N/A" },
-  isPublic: { type: Boolean, required: false, default: false },
+  isPublic: { type: Boolean, required: false, default: true },
   s3image: { type: String, required: true },
   isBenign: { type: Boolean, required: false },
   benignProbability: { type: String, required: false },

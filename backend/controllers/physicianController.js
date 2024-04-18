@@ -33,9 +33,6 @@ const updateAssignedPatients = async (req, res) => {
       if (!physician) {
         return res.status(404).json({ message: 'Physician not found' });
       }
-      console.log("App efwfewfwef to database");
-      console.log(newPatientId);
-      console.log(physicianId);
       
   
       physician.assignedPatientIds.push(newPatientId);

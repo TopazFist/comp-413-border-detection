@@ -74,8 +74,6 @@ const createPatientUser = async (req, res, next) => {
     }
 
 
-    
-
     const mockRequest = {
       body: {
         firstName: firstName,

@@ -1,7 +1,6 @@
-import {PatientImage, upload} from '../models/PatientImageModel.js';
+import {PatientImage, upload} from "../models/PatientImageModel.js";
 import { spawn } from "node:child_process";
-import mongoose from 'mongoose';
-import { Patient } from '../models/patientModel.js';
+import { Patient } from "../models/patientModel.js";
 
 const pythonProcess = spawn('python3', ['./classification/model.py']);
 pythonProcess.stdout.on('data', (data) => {
@@ -69,7 +68,6 @@ pythonProcess2.on('close', (code, signal) => {
 
 //get new patient
 const getPatientImages = async (req,res) => {
-    console.log("i'm reaching this function");
     const {id} = req.params
 
     const patient = await Patient.findById(id)
@@ -80,8 +78,21 @@ const getPatientImages = async (req,res) => {
     // }
 
     try {
-        // Find patient images where patientId matches the id parameter
-        const patientImages = await PatientImage.find({ patientId: id });
+        let patientImages;
+
+        // Determine the user's state from the session
+        const userState = req.session.state;
+
+        if (userState == "patient" | userState == "physician") {
+            // Retrieve all patient images where patientId matches the id parameter
+            patientImages = await PatientImage.find({ patientId: id });
+        } else if (userState == "nurse") {
+            // Retrieve only public images for the specified patient ID
+            patientImages = await PatientImage.find({ patientId: id, isPublic: true });
+        } else {
+            // Unauthorized if the user does not have a recognized state
+            return res.status(401).json({ message: 'Not authorized' });
+        }
         
         // Return the list of patient images
         console.log(patientImages);

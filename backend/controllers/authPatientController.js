@@ -1,6 +1,6 @@
 import { PatientAuth } from "../models/patientAuthModel.js";
 import { createPatient } from "./patientController.js"
-import { getPhysician, updatePhysician } from './physicianController.js'
+import { updateAssignedPatients } from './physicianController.js'
 
 const getPatientUser = async (req, res, next) => {
   const { username } = req.params;
@@ -74,12 +74,7 @@ const createPatientUser = async (req, res, next) => {
     }
 
 
-    const mockGetResponse = createMockResponse();
-    const mockGetRequest = {
-      params: { id: physicianID.toString() },
-    };
-    await getPhysician(mockGetRequest, mockGetResponse);
-    const getData = mockGetResponse.send();
+    
 
     const mockRequest = {
       body: {
@@ -103,12 +98,14 @@ const createPatientUser = async (req, res, next) => {
     const patientId = patientData._id.toString();
 
     const patient = await PatientAuth.create({ username, password, patientId });
+
+
     const mockUpdateRequest = {
-      params: { id: physicianID.toString() },
-      body: { assignedPatientIds: patientId },
+      params: { physicianId: physicianID },
+      body: { newPatientId: patientId},
     };
 
-    await updatePhysician(mockUpdateRequest, mockUpdateResponse);
+    await updateAssignedPatients(mockUpdateRequest, mockUpdateResponse);
     const updatedPhysician = mockUpdateResponse.send();
     res.status(200).json(patient);
 

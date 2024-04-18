@@ -24,6 +24,56 @@ const getPhysician = async (req,res) => {
     res.status(200).json(physician)
 }
 
+const updateAssignedPatients = async (req, res) => {
+    const { physicianId} = req.params; // Assuming physicianId is in params
+    const { newPatientId: newPatientId } = req.body; // Assuming patientId is in body
+  
+    try {
+      const physician = await Physician.findById(physicianId);
+      if (!physician) {
+        return res.status(404).json({ message: 'Physician not found' });
+      }
+      console.log("App efwfewfwef to database");
+      console.log(newPatientId);
+      console.log(physicianId);
+      
+  
+      physician.assignedPatientIds.push(newPatientId);
+  
+      await physician.save();
+  
+      res.status(200).json({ message: 'Patient assigned to physician successfully' });
+    } catch (error) {
+      // Handle any errors
+      res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  };
+  
+  const removePatientFromPhysician = async (req, res) => {
+    const { physicianId } = req.params; // Assuming physicianId is in params
+    const { patientId: patientToRemove } = req.body; // Assuming patientId is in body
+  
+    try {
+      // Update the physician document in the database
+      const updatedPhysician = await Physician.findOneAndUpdate(
+        { _id: physicianId },
+        { $pull: { assignedPatientIds: patientToRemove } },
+        { new: true }
+      );
+  
+      // Check if the physician exists
+      if (!updatedPhysician) {
+        return res.status(404).json({ message: 'Physician not found' });
+      }
+  
+      // Respond with success message
+      res.status(200).json({ message: 'Patient removed from physician\'s list successfully' });
+    } catch (error) {
+      // Handle any errors
+      res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  };
+  
 
 //create new physician
 const createPhysician = async (req,res) =>{
@@ -85,6 +135,8 @@ const updatePhysician = async (req, res) => {
 export {
     createPhysician,
     getPhysician,
+    updateAssignedPatients,
+    removePatientFromPhysician,
     getPhysicians,
     deletePhysician,
     updatePhysician

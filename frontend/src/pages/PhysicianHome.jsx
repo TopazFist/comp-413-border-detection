@@ -51,13 +51,13 @@ const PhysicianHome = () => {
     const handleDelete = async (patientId) => {
         try {
             // Remove patient from the physician's assignedPatientIds
-            await axios.patch(`http://localhost:3001/physicians/${id}`, {
+            await api.patch(`/physicians/${id}`, {
                 assignedPatientIds: patients.filter(patient => patient._id !== patientId).map(patient => patient._id)
             });
-    
+
             // Delete the patient
-            await axios.delete(`http://localhost:3001/patients/${patientId}`);
-    
+            await api.delete(`/patients/${patientId}`);
+
             // Update the patient list by removing the deleted patient
             setPatients(prevPatients => prevPatients.filter(patient => patient._id !== patientId));
         } catch (error) {
@@ -65,6 +65,7 @@ const PhysicianHome = () => {
             // Handle deletion error
         }
     };
+
 
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -87,21 +88,28 @@ const PhysicianHome = () => {
                     </TableHead>
                     <TableBody>
                         {patients.map((patient, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                className="hover:bg-zinc-200"
-                            >
-                                <TableCell component="th" scope="row" align="center">
-                                    {index + 1}
-                                </TableCell>
-                                <TableCell align="center">{patient.firstName}</TableCell>
-                                <TableCell align="center">{patient.lastName}</TableCell>
-                                <TableCell align="center">{patient._id}</TableCell>
-                                <TableCell align="center">
-                                    <button onClick={() => handleDelete(patient._id)}>Delete</button>
-                                </TableCell>
-                            </TableRow>
+                           <TableRow
+                           key={index}
+                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                           className="cursor-pointer hover:bg-zinc-200"
+                       >
+                           <TableCell component="th" scope="row" align="center" onClick={() => (window.location.href = `/physicians/patients/${patient._id}`)}>
+                               {index + 1}
+                           </TableCell>
+                           <TableCell align="center" onClick={() => (window.location.href = `/physicians/patients/${patient._id}`)}>
+                               {patient.firstName}
+                           </TableCell>
+                           <TableCell align="center" onClick={() => (window.location.href = `/physicians/patients/${patient._id}`)}>
+                               {patient.lastName}
+                           </TableCell>
+                           <TableCell align="center" onClick={() => (window.location.href = `/physicians/patients/${patient._id}`)}>
+                               {patient._id}
+                           </TableCell>
+                           <TableCell align="center">
+                               <button onClick={() => handleDelete(patient._id)}>Delete</button>
+                           </TableCell>
+                       </TableRow>
+                       
                         ))}
                     </TableBody>
                 </Table>

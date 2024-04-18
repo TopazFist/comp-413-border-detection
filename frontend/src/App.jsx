@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import NurseRegister from './pages/CreateNurse'; 
 import NurseLogin from './pages/loginNurse';
 import NurseViewPatient from "./pages/NurseViewPatient";
+import AddPatientFromNurse from "./pages/AddPatientFromNurse";
 import Unauthorized from "./pages/Unauthorized";
 import Logout from "./pages/Logout";
 
@@ -34,26 +35,34 @@ const App = () => {
                                 <Route path="/" element={<Navigate to="/welcome" />} /> {/* Redirect to welcome page */}
 
                                 <Route path="/welcome" element={<WelcomePage />} />
-                                <Route path="/patients/login" element={<Login />} />
-                                <Route path='/patients/register' element={<Register />} />
-                                <Route path='/physicians/login' element={<PhysicianLogin />} />
-                                <Route path='/physicians/register' element={<CreatePhysician />} />
-                                <Route path='/physicians/:id/patients/create' element={<CreatePatientFromPhysician />} />
-                                <Route path='/nurses/register' element={<NurseRegister />} />
-                                <Route path='/nurses/login' element={<NurseLogin />} />
-                                <Route path='/physicians/:id/profile' element={<PhysicianProfile />} />
-                                <Route path='/patients/:id' element={<PatientHome />} />
-                                <Route path='/patients/:id/upload' element={<ImageUpload />} />
-                                <Route path='/patients/:id/profile' element={<PatientProfile />} />
-                                <Route path='/physicians/:id' element={<PhysicianHome />} />
-                                <Route path='/physicians/patients/:id' element={<ViewPatient />} />
-                                <Route path='/nurses/:id' element={<NurseHome />} />
-                                <Route path="/nurses/patients/:id/view" element={<NurseViewPatient />} />
                                 <Route path='/unauthorized' element={<Unauthorized />} />
                                 <Route path="/logout" element={<Logout />} />
+
+                                <Route path="/patients/login" element={<Login />} />
+                                <Route path='/physicians/login' element={<PhysicianLogin />} />
+                                <Route path='/nurses/login' element={<NurseLogin />} />
+
+                                <Route path='/patients/register' element={<Register />} />
+                                <Route path='/physicians/register' element={<CreatePhysician />} />
+                                <Route path='/nurses/register' element={<NurseRegister />} />
+
+                                <Route path='/patients/:id' element={<PatientHome />} />
+                                <Route path='/physicians/:id' element={<PhysicianHome />} />
+                                <Route path='/nurses/:id' element={<NurseHome />} />
+
+                                <Route path='/patients/:id/profile' element={<PatientProfile />} />
+                                <Route path='/physicians/:id/profile' element={<PhysicianProfile />} />
+
+                                <Route path='/physicians/patients/:id' element={<ViewPatient />} />
+                                <Route path="/nurses/patients/:id" element={<NurseViewPatient />} />
+
+                                <Route path='/physicians/:id/patients/create' element={<CreatePatientFromPhysician />} />
+                                <Route path="/nurses/:id/patients/add" element={<AddPatientFromNurse />} />
+
+                                <Route path='/patients/:id/upload' element={<ImageUpload />} />
                         </Routes>
                 </Box>
         )
 }
-// NOTE: last route is just to test if it displays, fix after
+
 export default App

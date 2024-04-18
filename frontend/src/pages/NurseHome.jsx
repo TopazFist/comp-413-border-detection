@@ -49,7 +49,7 @@ const NurseHome = () => {
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className="text-3xl my-8 text-center">My Patients</h1>
-            <Link to={`/nurses/${id}/patients/create`}>
+            <Link to={`/nurses/${id}/patients/add`}>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Patient
                 </button>
@@ -69,7 +69,7 @@ const NurseHome = () => {
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                onClick={() => (window.location.href = `/nurses/patients/${patient._id}/view`)}
+                                onClick={() => (window.location.href = `/nurses/patients/${patient._id}`)}
                                 className="cursor-pointer hover:bg-zinc-200"
                             >
                                 <TableCell component="th" scope="row" align="center">

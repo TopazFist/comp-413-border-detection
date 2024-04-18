@@ -18,15 +18,17 @@ const getPatient = async (req,res) => {
     }
 
     const patient = await Patient.findById(id)
+    if (!patient) {
+        return res.status(404).json({error: "No such patient"})
+    }
 
-    if (req.session.uid != patient.physicianID && req.session.uid != id) {
+    const userId = req.session.uid;
+    const userState = req.session.state;
+    if (userId != patient.physicianID && userId != id && userState != "nurse") {
         console.log("Unauthorized access for user. Session: " + JSON.stringify(req.session));
         return res.status(401).json({ message: 'Not Authorized'});
     }
-
-    if (!patient){
-        return res.status(404).json({error: "No such patient"})
-    }
+    
     res.status(200).json(patient)
 }
 

@@ -46,6 +46,24 @@ const NurseHome = () => {
             });
     }, [id]);
 
+    // Remove a patient
+    const handleDelete = async (patientId, event) => {
+        // Prevent event from navigating to patient's home page
+        event.stopPropagation();
+
+        try {
+            // Remove patient from the nurse's assignedPatientIds
+            await api.patch(`/nurses/${id}`, {
+                assignedPatientIds: patients.filter(patient => patient._id !== patientId).map(patient => patient._id)
+            });
+
+            // Update patient list by removing specified patient
+            setPatients(prevPatients => prevPatients.filter(patient => patient._id !== patientId));
+        } catch (error) {
+            console.error("Error deleting patient:", error);
+        }
+    };
+
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className="text-3xl my-8 text-center">My Patients</h1>
@@ -78,6 +96,9 @@ const NurseHome = () => {
                                 <TableCell align="center">{patient.firstName}</TableCell>
                                 <TableCell align="center">{patient.lastName}</TableCell>
                                 <TableCell align="center">{patient._id}</TableCell>
+                                <TableCell align="center">
+                                    <button onClick={(event) => handleDelete(patient._id, event)}>Delete</button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

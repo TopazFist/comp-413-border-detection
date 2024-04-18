@@ -80,9 +80,9 @@ const PhysicianHome = () => {
                     <TableHead>
                     <TableRow>
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>#</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;(g)</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;</TableCell>
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>Actions</TableCell> {/* New TableCell for actions */}
                     </TableRow>
                     </TableHead>

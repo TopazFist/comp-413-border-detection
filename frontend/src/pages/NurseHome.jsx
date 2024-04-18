@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const NurseHome = () => {
     // Extract nurse ID from route parameters
@@ -77,9 +78,10 @@ const NurseHome = () => {
                     <TableHead>
                     <TableRow>
                         <TableCell align="center" style={{ fontWeight: 'bold' }}>#</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;(g)</TableCell>
-                        <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;(g)</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>First Name&nbsp;</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Last Name&nbsp;</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>ID&nbsp;</TableCell>
+                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Delete&nbsp;</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
@@ -97,7 +99,9 @@ const NurseHome = () => {
                                 <TableCell align="center">{patient.lastName}</TableCell>
                                 <TableCell align="center">{patient._id}</TableCell>
                                 <TableCell align="center">
-                                    <button onClick={(event) => handleDelete(patient._id, event)}>Delete</button>
+                                    <button onClick={(event) => handleDelete(patient._id, event)}>
+                                        <DeleteIcon></DeleteIcon>
+                                    </button>
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -31,8 +31,11 @@ def process_image(file_path, destination_path, llm_mode):
         llm_mode (bool): Flag indicating whether to use llm_mode.
     """
     original_im = image(file_path)
+    print("have original image")
     resulting_image = get_border(original_im, llm_mode)
+    print("obtained image")
     save_image(resulting_image, destination_path, os.path.basename(file_path), llm_mode=llm_mode)
+    print("saved image")
 
 def main():
     
@@ -44,10 +47,10 @@ def main():
     image_directory = "ISIC-images/New_Images"
     filenames = os.listdir(image_directory)
     file_paths = [os.path.join(image_directory, filename) for filename in filenames]
-
+    file_paths = file_paths[:1]
     max_threads = 8
 
-    result_directory = "ISIC-images/Result_Images_Square"
+    result_directory = "ISIC-images/Result_Images_Overlay"
     # Adjust max_treads according to the number of cpus
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
         futures = [executor.submit(process_image, file_path, result_directory , True) for file_path in file_paths]
@@ -67,14 +70,16 @@ def save_image(image_array, directory, filename, llm_mode):
     if not os.path.exists(directory):
         os.makedirs(directory)
     
-    if not llm_mode:
-        this_thing = Image.fromarray((image_array * 255).astype('uint8'))
-    else:
-        this_thing = Image.fromarray((image_array).astype('uint8'))
+    # # if not llm_mode:
+    # this_thing = Image.fromarray((image_array * 255).astype('uint8'))
+    # # else:
+    # #     this_thing = Image.fromarray((image_array).astype('uint8'))
 
-    # Convert the image array to PIL image
-    # Save the image as JPG
-    this_thing.save(os.path.join(directory, "_" + filename))
+    # # Convert the image array to PIL image
+    # # Save the image as JPG
+    # this_thing.save(os.path.join(directory, "_" + filename))
+    image_array.savefig(os.path.join(directory, "_" + filename))
+
     print("Image saved successfully.")
 
 def visual_results(out):

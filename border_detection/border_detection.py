@@ -269,7 +269,7 @@ def fill_holes(mask):
                     mask[y][x] = 1
     return mask
 
-def overlay_mask_on_image(mask, original_image):
+def overlay_mask_on_image(mask, original_image, alpha = 0.5):
     """
     Overlays the given mask on the original image.
 
@@ -280,12 +280,20 @@ def overlay_mask_on_image(mask, original_image):
     Returns:
         numpy.ndarray: Image with mask overlay.
     """
-    x_range, y_range = crop_to_square(mask)
-    cropped_image = original_image[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
-    cropped_mask = mask[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
-    masked_image = np.zeros_like(cropped_image)
-    masked_image[cropped_mask == 1] = cropped_image[cropped_mask == 1]
-    return masked_image
+    # fig, ax = plt.subplots()
+    fig = plt.figure(figsize=(original_image.shape[1] / 100, original_image.shape[0] / 100), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.imshow(original_image)
+    ax.imshow(mask, cmap='Reds', alpha=alpha)
+    ax.axis(False)
+    
+    return fig
+    # x_range, y_range = crop_to_square(mask)
+    # cropped_image = original_image[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
+    # cropped_mask = mask[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
+    # masked_image = np.zeros_like(cropped_image)
+    # masked_image[cropped_mask == 1] = cropped_image[cropped_mask == 1]
+    # return masked_image
 
 def crop_to_square(mask):
     """

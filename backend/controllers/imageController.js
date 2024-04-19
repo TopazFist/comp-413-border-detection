@@ -10,7 +10,9 @@ pythonProcess.stdout.on('data', (data) => {
         PatientImage.create({
             patientId: data.id,
             s3image: data.path,
-            benignProbability: data.malignant_prob
+            benignProbability: 1.0 - data.malignant_prob,
+            isBenign: data.malignant_prob < 0.5,
+            heatmapPath: data.heatmap_path
         });
     } else {
         console.error(data);

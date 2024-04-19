@@ -6,6 +6,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { SourceImage } from "../components/SourceImage";
 import './PatientHome.css';
 
 const ViewPatient = () => {
@@ -53,10 +54,10 @@ const ViewPatient = () => {
   return (
     <Box sx={{ my: 10, mx: 10 }}>
       <h1 className="text-3xl font-bold mb-6">Patient images: {id}</h1>
-      <ImageList cols={3} sx={{ width: 1 }}>
+      <ImageList cols={1} sx={{ width: 1 }}>
         <ImageListItem key="upload" className="upload-item" onClick={handleUploadClick}>
-          <div className="upload-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <div className="upload-icon" style={{alignItems: "center"}}>
+            <svg xmlns="http://www.w3.org/2000/svg" style={{alignItems: "center", marginLeft: "auto", marginRight: "auto"}} viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 9V5a1 1 0 112 0v4h4a1 1 0 110 2h-4v4a1 1 0 11-2 0v-4H5a1 1 0 110-2h4z"
@@ -70,26 +71,7 @@ const ViewPatient = () => {
         {patientImages.map((patientImage) => (
           <React.Fragment key={patientImage._id}>
             <ImageListItem className="image-item">
-              <img
-                className="image"
-                src={"http://localhost:3001/" + patientImage.s3image}
-                alt={patientImage.s3image}
-              />
-              <div className="benign-status">
-                <p className={`benign-text ${patientImage.isBenign ? 'benign-true' : 'benign-false'}`}>
-                  Benign: {patientImage.isBenign ? 'True' : 'False'}
-                </p>
-                <p className="probability-text">
-                  Probability: {Math.round(patientImage.benignProbability * 100)}%
-                </p>
-              </div>
-              <label className="notes-label">
-                <input
-                  type="text"
-                  value={patientImage.physicianNotes}
-                  onChange={(e) => handlePhysicianNotesChange(e, patientImage._id)}
-                />
-              </label>
+              <SourceImage patientImage={patientImage} />
             </ImageListItem>
             <ImageListItem className="image-item">
               {getModifiedBorderDetectionPath(patientImage.borderDetectionPath) ? (

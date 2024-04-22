@@ -8,46 +8,6 @@ from point_selector import choose_pixel, tolerance_picker, histogram_calculator
 import os
 from PIL import Image
 import time
-# Jaccard Score for images:  0.6924498996771449
-# Dice Score for images:  0.8075157317449335
-# Dice Score:  0.8075157317449335
-# Jaccard Score:  0.6924498996771449
-# Total:  2078.881084918976
-# 3.25, 2.25
-# iterations = 15
-
-# changed radius to 3 from 1
-
-# Jaccard Score for images:  0.6513251161289532
-# Dice Score for images:  0.7779810714595543
-# Dice Score:  0.7779810714595543
-# Jaccard Score:  0.6513251161289532
-# Total:  774.1369850635529
-
-
-# change to 3.1, 2.4
-
-# Jaccard Score for images:  0.6513251161289532
-# Dice Score for images:  0.7779810714595543
-# Dice Score:  0.7779810714595543
-# Jaccard Score:  0.6513251161289532
-# Total:  1053.4851129055023
-
-# change to 3, 2.7
-# iterations = 10
-
-# very bad lol
-
-
-# Jaccard Score for images:  0.3801109775743473
-# Dice Score for images:  0.5174313909766751
-# Dice Score:  0.5174313909766751
-# Jaccard Score:  0.3801109775743473
-# Total:  2748.2404568195343
-
-
-
-
 
 def downsample(image):
     """

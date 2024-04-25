@@ -52,7 +52,15 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 5px;
+  resize: vertical;
+  width: 100%;
 }
+
+.notes-label textarea {
+  width: 100%;
+  resize: vertical;
+}
+
 
 .physician-notes {
   font-weight: bold;

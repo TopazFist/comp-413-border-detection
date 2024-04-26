@@ -1,11 +1,9 @@
-from PIL import Image
-import matplotlib.pyplot as plt
-import numpy as np
-import random
 import os
-from border_detection import get_border
 import concurrent.futures
-import time
+import numpy as np
+import matplotlib.pyplot as plt
+from border_detection import get_border
+from PIL import Image
 
 def image(image_path):
     """
@@ -35,26 +33,32 @@ def process_image(file_path, destination_path, llm_mode):
     save_image(resulting_image, destination_path, os.path.basename(file_path), llm_mode=llm_mode)
 
 def main():
-    
     """
     Main function to process images in parallel.
     """
-    result = []
-
+    # Directory containing the input images
     image_directory = "ISIC-images/New_Images"
+
+    # List all filenames in the image directory and create full paths
     filenames = os.listdir(image_directory)
     file_paths = [os.path.join(image_directory, filename) for filename in filenames]
+    
+    # Limit the number of images to process to 1
     file_paths = file_paths[:1]
+
+    # Maximum number of threads to use for parallel processing
     max_threads = 8
 
+    # Define directory to store result
     result_directory = "ISIC-images/Result_Images_Overlay"
     
     # Adjust max_treads according to the number of cpus
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
+        # Process images with border detection enabled
         futures = [executor.submit(process_image, file_path, result_directory , True) for file_path in file_paths]
         concurrent.futures.wait(futures)
 
-def save_image(image_array, directory, filename, llm_mode):
+def save_image(image_array, directory, filename):
     """
     Saves the given image array as a JPG image in the specified directory.
 
@@ -68,14 +72,6 @@ def save_image(image_array, directory, filename, llm_mode):
     if not os.path.exists(directory):
         os.makedirs(directory)
     
-    # # if not llm_mode:
-    # this_thing = Image.fromarray((image_array * 255).astype('uint8'))
-    # # else:
-    # #     this_thing = Image.fromarray((image_array).astype('uint8'))
-
-    # # Convert the image array to PIL image
-    # # Save the image as JPG
-    # this_thing.save(os.path.join(directory, "_" + filename))
     image_array.savefig(os.path.join(directory, "_" + filename))
 
     print("Image saved successfully.")
@@ -87,11 +83,15 @@ def visual_results(out):
     Args:
         out (list): List of tuples containing original images and their masks.
     """
-    alpha = 0.2  # Adjust transparency here
+    # Adjust transparency here
+    alpha = 0.2
 
     for im, mask in out:
+        # Display original image
         plt.figure()
         plt.imshow(im)
+
+        # Overlay mask on original image with transparency
         plt.imshow(mask, cmap='Reds', alpha=alpha)
         plt.axis(False)
         plt.show()

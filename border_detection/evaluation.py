@@ -1,37 +1,66 @@
-# takes 3 folders = one folder with images to create masks, one saved folder, one folder for ground truth, 
 import os
-from run import process_image
 import concurrent.futures
-import numpy as np
 import cv2
 import random
 import statistics
 import time
+import numpy as np
+from run import process_image
 
 def jaccard(image1, image2):
+    """
+    Calculates the Jaccard index (intersection over union) between two binary images.
+
+    Args:
+        image1 (numpy.ndarray): First binary image (True/False).
+        image2 (numpy.ndarray): Second binary image (True/False).
+
+    Returns:
+        float: Jaccard index value between 0 and 1.
+    """
+    # Compute the intersection and union of the two images
     intersection = np.logical_and(image1, image2)
     union = np.logical_or(image1, image2)
 
+    # Calculate the Jaccard index
     jaccard_index = np.sum(intersection) / np.sum(union)
     
     return jaccard_index
 
 def dice(image1, image2):
+    """
+    Calculates the Dice coefficient (F1 score) between two binary images.
+
+    Args:
+        image1 (numpy.ndarray): First binary image (True/False).
+        image2 (numpy.ndarray): Second binary image (True/False).
+
+    Returns:
+        float: Dice coefficient value between 0 and 1.
+    """
+    # Compute the intersection of the two images
     intersection = np.sum(image1 & image2)
+
+    # Calculate the Dice coefficient
     dice_coefficient = (2.0 * intersection) / (np.sum(image1) + np.sum(image2))
     return dice_coefficient
 
 def main():
+    """
+    Main function to perform testing and evaluation.
+    """
     start_time = time.time()
 
     ground_truth_folder = "ISIC-images/ISBI2016_ISIC_Part2_Test_GroundTruth"
     testing_inputs = "ISIC-images/ISBI2016_ISIC_Part2_Test_Data"
     algorithm_output = "ISIC-testing-output"
 
+    # Get a list of filenames in the testing inputs folder
     filenames = os.listdir(testing_inputs)
+    # Create full paths for the testing input files
     file_paths = [os.path.join(testing_inputs, filename) for filename in filenames]
+    # Select a random sample of 40 files
     file_paths = random.sample(file_paths, 40)
-
 
     max_threads = 7
     batch_size = 10
@@ -39,6 +68,7 @@ def main():
     num_full_batches = len(file_paths) // batch_size
     last_batch_size = len(file_paths) % batch_size
 
+    # Split the file paths into batches for concurrent processing
     file_path_batches = [file_paths[i*batch_size:(i+1)*batch_size] for i in range(num_full_batches)]
     if last_batch_size > 0:
         file_path_batches.append(file_paths[num_full_batches*batch_size:])
@@ -51,7 +81,7 @@ def main():
                 futures.append(future)
         concurrent.futures.wait(futures)
         
-
+    # Get a list of output file paths
     filenames_testing_output_files = os.listdir(algorithm_output)
     output_filepaths = [os.path.join(algorithm_output, filename) for filename in filenames_testing_output_files]
 
@@ -61,8 +91,8 @@ def main():
     dice_scores = []
     jaccard_scores = []
 
+    # Evaluate each output file
     for output_file_path in output_filepaths:
-
         image_name = output_file_path.split("/")[-1][1:]
         image_with_extension = image_name.split(".")
         image_with_extension[1] = "png"
@@ -100,4 +130,3 @@ def main():
     
 if __name__ == '__main__':
     main()
-#jaccard + Dice

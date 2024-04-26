@@ -39,97 +39,43 @@ Assuming your ports do not have any unique setup, the website should be accessed
 ## Repository Structure
 ```
 ├── README.md
-├── backend
-│   ├── border-detection
+├── backend/ # All code for the backend API
+│   ├── border-detection/ # All code for the border detection algorithm
 │   │   ├── border_detection.py
 │   │   ├── point_selector.py
-│   │   └── run.py
-│   ├── classification
-│   │   ├── model.pth
+│   │   └── run.py # The process run by the backend for border detection processing
+│   ├── classification/
+│   │   ├── model.pth # Parameters for the trained model
 │   │   ├── model.py # The process run by the backend
-│   │   └── test_model.py
-│   ├── config.js
-│   ├── controllers
-│   │   ├── authNurseController.js
-│   │   ├── authPatientController.js
-│   │   ├── authPhysicianController.js
-│   │   ├── imageController.js
-│   │   ├── nurseController.js
-│   │   ├── patientController.js
-│   │   └── physicianController.js
-│   ├── index.js
-│   ├── models
-│   │   ├── ImageProcessing.js
-│   │   ├── PatientImageModel.js
-│   │   ├── nurseAuthModel.js
-│   │   ├── nurseModel.js
-│   │   ├── patientAuthModel.js
-│   │   ├── patientModel.js
-│   │   ├── physicianAuthModel.js
-│   │   └── physicianModel.js
-│   ├── package-lock.json
-│   ├── package.json
-│   └── routes
-│       ├── auth.js
-│       ├── images.js
-│       ├── nurses.js
-│       ├── patients.js
-│       ├── physicians.js
-│       └── upload.js
-├── border_detection
-│   ├── README.md
-│   ├── border_detection.py
-│   ├── evaluation.py
-│   ├── point_selector.py
-│   ├── run.py
-│   ├── test_border_detection.py
-├── frontend
-│   ├── README.md
-│   ├── index.html
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── postcss.config.js
-│   ├── src
-│   │   ├── App.jsx
-│   │   ├── components
-│   │   │   ├── SourceImage.jsx
-│   │   │   ├── api.jsx
-│   │   │   ├── dermascope_logo.svg
-│   │   │   ├── full_logo.svg
-│   │   │   └── navbar.jsx
-│   │   ├── index.css
-│   │   ├── main.jsx
-│   │   ├── pages
-│   │   │   ├── AddPatientFromNurse.jsx
-│   │   │   ├── CreateNurse.jsx
-│   │   │   ├── CreatePatientFromPhysician.jsx
-│   │   │   ├── CreatePhysician.jsx
-│   │   │   ├── ImageUpload.jsx
-│   │   │   ├── Login.css
-│   │   │   ├── Login.jsx
-│   │   │   ├── Logout.jsx
-│   │   │   ├── NurseHome.jsx
-│   │   │   ├── NurseViewPatient.jsx
-│   │   │   ├── PatientHome.css
-│   │   │   ├── PatientHome.jsx
-│   │   │   ├── PatientProfile.jsx
-│   │   │   ├── PhysicianHome.jsx
-│   │   │   ├── PhysicianProfile.jsx
-│   │   │   ├── Register.css
-│   │   │   ├── Register.jsx
-│   │   │   ├── Unauthorized.jsx
-│   │   │   ├── ViewPatient.jsx
-│   │   │   ├── Welcome.css
-│   │   │   ├── Welcome.jsx
-│   │   │   ├── loginNurse.jsx
-│   │   │   └── loginPhysician.jsx
-│   │   └── styles/ # All CSS files for the frontend
-│   │       ├── imageUpload.css
-│   │       └── styles.css
-├── index.html
+│   │   └── test_model.py # Tests for the model process
+│   ├── controllers/ # Code that is called by the router and interacts with DB models
+│   ├── index.js # The main script run that starts express JS
+│   ├── models/ # Database models that interact with MongoDB
+│   ├── package-lock.json # Backend package information
+│   ├── package.json # Backend package information
+│   └── routes/ # Code that routes appropriate URLs to controller functions
+├── border_detection/ # Border detection benchmarking and testing
+├── frontend/ # All code for the frontend scripts
+│   ├── index.html # The react landing page, running App.js and all other scripts
+│   ├── package-lock.json # All frontend package information
+│   ├── package.json # All frontend package information
+│   ├── src/
+│   │   ├── App.jsx # Loads pages, navbar, and everything needed for the client
+│   │   ├── components/ # Components rendered by pages and App.jsx
+│   │   ├── index.css # Tailwind css Styling
+│   │   ├── main.jsx # The main react javascript program that loads App.jsx
+│   │   ├── pages/ # All pages for all possible user states
+│   │   └── styles/ # All non-tailwind or MaterialUI styling for the frontend
 ├── model_training/
-│   └── Classification.ipynb
-├── package-lock.json
-├── package.json
-└── requirements.txt
+│   └── Classification.ipynb # Notebook used to train the fine-tuned model#
+└── requirements.txt # Python required packages
 ```
+
+## Frontend Information
+
+## Backend Information
+
+## Border Detection Information
+[a relative link](border_detection/README.md)
+
+## Classification Model Information

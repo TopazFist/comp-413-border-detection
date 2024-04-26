@@ -1,18 +1,14 @@
-import { useState, useEffect } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import full_logo from './full_logo.svg';
-import {api} from '../components/api';
+// React component for the Navbar that provides navigation links and menu options based
+// on the user's login state, as well as displays the user's login status.
+
+import { useState, useEffect } from "react";
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, MenuItem } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import full_logo from "./full_logo.svg";
+import { api } from "../components/api";
 
 function Navbar() {
+  // State variables for user information and navigation links
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [username, setUsername] = useState("");
   const [loginState, setLoginState] = useState("");
@@ -21,29 +17,31 @@ function Navbar() {
   const [links, setLinks] = useState([]);
   const [iconLink, setIconLink] = useState("/");
 
+  // Effect to fetch user information and set navigation links based on login state
   useEffect(() => {
     api.get("/auth").then((response) => {
-      if(response.data.username){
+      if (response.data.username) {
         setUsername(response.data.username);
       }
-      if(response.data.state){
+      if (response.data.state) {
         setLoginState(response.data.state);
       }
-      if(response.data.uid){
+      if (response.data.uid) {
         setUid(response.data.uid);
       }
     }).then(() => {
-      if ( loginState == "patient") {
+      // Determine the user's role and set appropriate navigation links
+      if (loginState == "patient") {
         setPages(['Patient Home', "Physician Login", "Profile","Logout"]);
         setLinks(['/patients/' + uid + "/", '/physicians/login','/patients/' + uid + "/profile/", '/logout']);
         setIconLink('/patients/' + uid + "/");
       }
-      else if ( loginState == "physician") {
+      else if (loginState == "physician") {
         setPages(['Physician Home', "Patient Login", "Profile", "Logout"]);
         setLinks(['/physicians/' + uid + "/", '/patients/login','/physicians/' + uid + "/profile/", '/logout']);
         setIconLink('/physicians/' + uid + "/");
       }
-      else if ( loginState == "nurse") {
+      else if (loginState == "nurse") {
         setPages(["Nurse Home", "Patient Login", "Logout"]);
         setLinks(["/nurses/" + uid + "/", '/patients/login', '/logout']);
         setIconLink('/nurses/' + uid + "/");
@@ -56,25 +54,29 @@ function Navbar() {
     });
   }, [loginState, username, uid])
 
+  // Open the navigation menu
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
 
+  // Close the navigation menu
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  let login_status = ""
+  // Generate login status message based on user's login state and username
+  let login_status = "";
   if (loginState) {
     login_status += loginState + ": ";
   }
   if (username) {
-    login_status += username
+    login_status += username;
   }
   else {
-    login_status = (<a href="/"> Welcome! Please log in. </a>)
+    login_status = (<a href="/"> Welcome! Please log in. </a>);
   }
 
+  // Render the Navbar component
   return (
     <AppBar>
       <Container maxWidth="xl">
@@ -143,4 +145,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;

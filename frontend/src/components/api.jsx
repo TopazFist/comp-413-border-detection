@@ -1,21 +1,30 @@
-import axios from 'axios';
+// Provides Axios instances for making API requests.
 
+import axios from "axios";
+
+// Axios instance for regular JSON API requests
 const apiInstance = axios.create({
-    baseURL: 'http://localhost:3001', // Backend URL
+    // Backend URL
+    baseURL: 'http://localhost:3001',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    withCredentials: true, // Send cookies with requests
+    // Send cookies with requests
+    withCredentials: true,
 });
 
+// Axios instance for file uploads using multipart/form-data
 const fileApi = axios.create({
-    baseURL: 'http://localhost:3001', // Backend URL
+    // Backend URL
+    baseURL: 'http://localhost:3001',
     headers: {
-        'Content-Type': 'multipart/form-data', // Use multipart/form-data for file uploads
+        // Use multipart/form-data for file uploads
+        'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
     },
-    withCredentials: true, // Send cookies with requests
+    // Send cookies with requests
+    withCredentials: true,
 });
 
-export { apiInstance as api , fileApi};
+export { apiInstance as api , fileApi };

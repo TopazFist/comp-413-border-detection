@@ -116,8 +116,3 @@ def test():
             image = np.array(image)
 
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# c, d = choose_pixel("ISIC-images/ISIC_5648033.JPG")
-# # print(c,d)
-# histogram_creater("ISIC-images/ISIC_5648033.JPG")
-# print(tolerance_picker("ISIC-images/ISIC_5648033.JPG"))

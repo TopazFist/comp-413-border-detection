@@ -16,11 +16,12 @@ This repository contains scripts for detecting skin lesions in images and evalua
 
 ## Introduction
 
-This repository contains three main scripts:
+This repository contains four main scripts:
 
 1. `border_detection.py`: Contains functions for detecting borders in images and generating binary masks.
 2. `run.py`: Runs image processing on a batch of images in parallel.
 3. `evaluation.py`: Evaluates the segmentation results using Jaccard similarity and Dice similarity.
+4. `point_selector.py`: Contains functions for creating and analyzing histograms of images.
 
 ## Requirements
 
@@ -86,6 +87,16 @@ This script is used to evaluate segmentation results using Jaccard similarity an
 - `jaccard(image1, image2)`: Calculates the Jaccard similarity between two binary images.
 - `dice(image1, image2)`: Calculates the Dice similarity between two binary images.
 - `main()`: Main function to evaluate segmentation results.
+
+### 4. `point_selector.py`
+
+This script contains functions for creating and analyzing histograms of images.
+
+- `histogram_creater(image)`: Creates and plots the histogram of the input image.
+- `histogram_calculator(image)`: Calculates the histogram of the input image.
+- `choose_pixel(image, histg)`: Chooses a pixel from the image based on a combination of color and distance.
+- `tolerance_picker(image, img_y, img_x, histg)`: Picks the tolerance for border detection based on the histogram of the input image.
+- `test()`: Function to test the histogram functions.
 
 ## Evaluation Metrics
 

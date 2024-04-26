@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 
 const SourceImage = (props) => {
-    const { patientImage } = props;
+    const { patientImage, handlePhysicianNotesChange } = props;
     const [heatmap, setHeatmap] = useState(false);
 
     return (

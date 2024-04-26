@@ -71,7 +71,7 @@ const ViewPatient = () => {
         {patientImages.map((patientImage) => (
           <React.Fragment key={patientImage._id}>
             <ImageListItem className="image-item">
-              <SourceImage patientImage={patientImage} />
+              <SourceImage patientImage={patientImage} handlePhysicianNotesChange={handlePhysicianNotesChange} />
             </ImageListItem>
             <ImageListItem className="image-item">
               {getModifiedBorderDetectionPath(patientImage.borderDetectionPath) ? (

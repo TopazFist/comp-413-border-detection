@@ -53,6 +53,9 @@ app.get('/', (request, response) => {
     return response.status(234).send("hi!");
 });
 
+
+
+
 // Debugging middleware to log incoming requests
 app.use((req, res, next) => {
     console.log(`Received ${req.method} request at ${req.path}`);
@@ -86,3 +89,5 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Internal server error' });
 });
+
+export { app };

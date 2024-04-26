@@ -1,0 +1,8 @@
+{
+    "recursive": true,
+    "require": ["@babel/register"],
+    "spec": "backend-tests/**/*.test.js",
+    "reporter": "spec",
+    "timeout": 5000,
+    "exit": true
+}

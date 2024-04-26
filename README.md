@@ -79,11 +79,5 @@ Assuming your ports do not have any unique setup, the website should be accessed
 └── requirements.txt # Python required packages
 ```
 
-## Frontend Information
-
-## Backend Information
-
 ## Border Detection Information
-[a relative link](border_detection/README.md)
-
-## Classification Model Information
+[Border Detection ReadMe](border_detection/README.md)

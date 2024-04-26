@@ -1,10 +1,11 @@
+// Handles routes related to uploading patient images.
+
 import express from "express";
+import { uploadImage, uploadMiddleware } from "../controllers/imageController.js";
 
-const router = express.Router()
+const router = express.Router();
 
-import { uploadImage, uploadMiddleware } from '../controllers/imageController.js'
-
-// gets all patients
-router.post('/:id', uploadMiddleware, uploadImage)
+// Route to upload an image for a specific patient
+router.post('/:id', uploadMiddleware, uploadImage);
 
 export const uploadRoutes = router;

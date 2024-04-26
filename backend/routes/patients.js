@@ -1,25 +1,23 @@
+// Handles routes related to patient role.
+
 import express from "express";
+import { createPatient, getPatient, getPatients, deletePatient, updatePatient } from "../controllers/patientController.js";
 
-const router = express.Router()
+const router = express.Router();
 
-import {
-    createPatient,
-    getPatient,
-    getPatients,
-    deletePatient,
-    updatePatient
-} from '../controllers/patientController.js'
+// Route to create a new patient
+router.post('/', createPatient);
 
-// gets all patients
-router.get('/', getPatients)
+// Route to get all patients
+router.get('/', getPatients);
 
-router.get('/:id',getPatient)
+// Route to get a single patient by ID
+router.get('/:id', getPatient);
 
-router.post('/', createPatient)
+// Route to delete a patient by ID
+router.delete('/:id', deletePatient);
 
-router.delete('/:id', deletePatient)
+// Route to update a patient's information
+router.patch('/:id' ,updatePatient);
 
-router.patch('/:id',updatePatient)
-
-// module.exports = router
-export const patientRoutes = router
+export const patientRoutes = router;

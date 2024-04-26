@@ -1,19 +1,17 @@
+// Handles routes related to patient images.
+
 import express from "express";
+import { getPatientImages, togglePublic, modifyNotes } from "../controllers/imageController.js";
 
-const router = express.Router()
+const router = express.Router();
 
-import {
-        getPatientImages,
-        togglePublic,
-        modifyNotes
-} from '../controllers/imageController.js'
+// Route to get all patient images
+router.get('/:id', getPatientImages);
 
-// gets all patients images
-router.get('/:id', getPatientImages)
+// Route to toggle the public status of a patient image
+router.put('/:id/public', togglePublic);
 
-router.put('/:id/public', togglePublic)
+// Route to modify the notes of a patient image
+router.put('/:id/notes', modifyNotes);
 
-router.put('/:id/notes', modifyNotes)
-
-// module.exports = router
-export const imageRoutes = router
+export const imageRoutes = router;

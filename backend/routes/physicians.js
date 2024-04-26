@@ -1,25 +1,23 @@
+// Handles routes related to physician role.
+
 import express from "express";
+import { createPhysician, getPhysician, getPhysicians, deletePhysician, updatePhysician } from "../controllers/physicianController.js";
 
-const router = express.Router()
+const router = express.Router();
 
-import {
-    createPhysician,
-    getPhysician,
-    getPhysicians,
-    deletePhysician,
-    updatePhysician
-} from '../controllers/physicianController.js'
+// Route to create a new physician
+router.post('/', createPhysician);
 
-// gets all Physicians
-router.get('/', getPhysicians)
+// Route to get all physicians
+router.get('/', getPhysicians);
 
-router.get('/:id', getPhysician)
+// Route to get a single physician by ID
+router.get('/:id', getPhysician);
 
-router.post('/', createPhysician)
+// Route to delete a physician by ID
+router.delete('/:id', deletePhysician);
 
-router.delete('/:id', deletePhysician)
+// Route to update a physician's information
+router.patch('/:id', updatePhysician);
 
-router.patch('/:id',updatePhysician)
-
-// module.exports = router
-export const physicianRoutes = router
+export const physicianRoutes = router;

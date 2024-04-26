@@ -1,4 +1,12 @@
-# comp-413-border-detection
+# DermaScope
+
+DermaScope is a web-based software platform that leverages advanced machine-learning algorithms to accurately and automatically detect and outline skin lesions, as well as classify them as benign or malignant. Through automated skin lesion border detection and classification, we aim to enhance dermatologists’ abilities to make informed decisions and assist them in creating a detailed diagnosis for the patient.
+
+The key benefits of DermaScope’s product include:
+- Enhanced diagnostic accuracy by utilizing cutting-edge AI to interpret lesions consistently and more quickly.
+- Increased efficiency by streamlining the diagnostic process, saving time for both physicians and patients.
+- Accessible and affordable diagnoses that reduce patients’ financial burden and make essential treatments available to a broader segment of the population.
+- Data security and compliance that adhere to HIPAA regulations, ensuring patient data is secure and access is strictly controlled.
 
 ## Getting Started
 Install the Python packages using the requirements.txt in the repo's root directory

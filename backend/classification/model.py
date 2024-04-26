@@ -24,23 +24,24 @@ model = models.resnet18()
 model.fc = torch.nn.Linear(model.fc.in_features, 2)
 # Load trained weights into model
 model.load_state_dict(model_state_dict)
-# Remove last two layers to obtain feature map
-mod = nn.Sequential(*list(model.children())[:-2])
+
+# Remove the pooling and fully connected layers
+conv_model = nn.Sequential(*list(model.children())[:-2])
 
 # Get weights of fully connected layer
 params = list(model.fc.parameters())
 weight = np.squeeze(params[0].cpu().data.numpy())
 
-# Set model and its feature extraction part to evaluation mode
+# Set model and shortened model into evaluation mode, disabling dropout layers or anything else used in training
 model.eval()
-mod.eval()
+conv_model.eval()
 
-def _load_image(imgpath):
+def _load_image(imgpath: os.PathLike) -> torch.Tensor:
     """
     Load and preprocess an image.
 
     Args:
-        imgpath (str): Path to the image file.
+        imgpath (os.PathLike): Path to the image file.
 
     Returns:
         torch.Tensor: Preprocessed image tensor.
@@ -48,47 +49,48 @@ def _load_image(imgpath):
     # Load image
     image = Image.open(imgpath).convert('RGB')
 
-    # Crop image to a square
+    # Crop image to the center square
     min_dim = min(image.width, image.height)
     image = image.crop(((image.width - min_dim)//2, (image.height - min_dim)//2, min_dim + (image.width - min_dim)//2, min_dim + (image.height - min_dim)//2))
 
-    # Apply transformation pipeline
+    # Apply resizing and tensor conversion
     image = transform(image)
     return image
 
-def _return_CAM(feature_conv, weight):
+def _return_CAM(conv_features: np.ndarray, fc_weights: np.ndarray):
     """
     Generate Class Activation Maps (CAM) for the given feature map and weight.
 
     Args:
-        feature_conv (numpy.ndarray): Feature map.
-        weight (numpy.ndarray): Weight of the fully connected layer.
+        conv_features: (numpy.ndarray): Output of the convolutional layers for an image.
+        fc_weights (numpy.ndarray): Weights of the fully connected layer.
 
     Returns:
-        list: List of CAMs.
+        list: List of class activation maps, showing regional impact on the model's results.
     """
-    # Define size for upsampling
-    size_upsample = (256, 256)
 
     # Get dimensions of feature map
-    nc, h, w = feature_conv.shape
+    n_channels, h, w = conv_features.shape
 
-    # Store CAMs
+    # Define storage for CAMs
     output = []
+
+    # Calculate the CAM for each category
     for idx in [0,1]:
-        beforeDot =  feature_conv.reshape((nc, h*w))
-        cam = np.matmul(weight[idx], beforeDot)
+        reshaped_features =  conv_features.reshape((n_channels, h*w))
+        cam = np.matmul(fc_weights[idx], reshaped_features)
         cam = cam.reshape(h, w)
 
         # Normalize CAM
         cam = cam - np.min(cam)
-        cam_img = cam / np.max(cam)
+        cam = cam / np.max(cam)
 
         # Convert normalized CAM to uint8
-        cam_img = np.uint8(255 * cam_img)
+        cam = np.uint8(255 * cam)
 
         # Resize CAM to match the input image size
-        output.append(cv2.resize(cam_img, size_upsample))
+        # Use default cv2 linear interpolation on the result for smoothness
+        output.append(cv2.resize(cam, (224, 224)))
     return output
 
 def generate_heatmap(imgpath: os.PathLike, outpath: os.PathLike, malignant: bool = False):
@@ -96,24 +98,24 @@ def generate_heatmap(imgpath: os.PathLike, outpath: os.PathLike, malignant: bool
     Generate and save a heatmap overlaid on the original image.
 
     Args:
-        imgpath (str): Path to the input image file.
-        outpath (str): Path to save the heatmap.
+        imgpath (os.PathLike): Path to the input image file.
+        outpath (os.PathLike): Path to save the heatmap.
         malignant (bool): Flag indicating if the image is malignant (default is False).
     """
     # Load and preprocess image
     image = _load_image(imgpath)
 
-    # Extract features from image
-    features_blobs = mod(image.unsqueeze(0))
-    features_blobs1 = features_blobs.cpu().detach().numpy()
+    # Extract features after the convolutional layer
+    conv_features = conv_model(image.unsqueeze(0))
+    conv_features = conv_features.cpu().detach().numpy()
 
     # Generate Class Activation Maps (CAM)
-    CAMs = _return_CAM(features_blobs1, weight)[int(malignant)]
+    CAMs = _return_CAM(conv_features[0], weight)[int(malignant)]
 
     # Display image and overlay CAM
     fig, ax = plt.subplots( nrows=1, ncols=1 )
     ax.imshow(image.transpose(2,0).transpose(0,1))
-    ax.imshow(skimage.transform.resize(CAMs, (224,224)), alpha=0.4, cmap='jet')
+    ax.imshow(CAMs, alpha=0.3, cmap='jet')
     
     # Adjust figure settings
     ax.axis('off')  # Turn off axis
@@ -127,7 +129,7 @@ def malignant_prob(imgpath: os.PathLike):
     Predict the probability of malignancy for an input image.
 
     Args:
-        imgpath (str): Path to the input image file.
+        imgpath (os.PathLike): Path to the input image file.
 
     Returns:
         float: Probability of malignancy.
@@ -141,9 +143,15 @@ def malignant_prob(imgpath: os.PathLike):
     # Compute probability of malignancy
     return pred.softmax(dim=1).detach().numpy()[0][1]
 
-# Continuously process images
-while True:
-    # Get user input for path to image
+def _get_id_from_path(path: str):
+    """
+    Gets the patient ID from the image path
+    """
+    return path.split("/")[1]
+
+### MAIN LOOP ###
+def process_image():
+    # Wait for Express js to input a path through stdin
     path = input()
     if os.path.exists(path):
         # Compute probability of malignancy for input image
@@ -159,11 +167,15 @@ while True:
         # Define file path for heatmap
         heatmap_filepath = heatmap_dir + ".".join(path.split("/")[-1].split(".")[:-1]) + ".jpg"
 
-        # Print processed information in JSON format
-        print(json.dumps({"id": path.split("/")[1], "path": path, "malignant_prob": float(malignant_prob(path)), "heatmap_path": heatmap_filepath}))
+        # Print processed information in JSON format in stdout for Express JS to process
+        print(json.dumps({"id": _get_id_from_path(path), "path": path, "malignant_prob": float(malignant_prob(path)), "heatmap_path": heatmap_filepath}))
         
         # Generate and save heatmap
         generate_heatmap(path, heatmap_filepath, prob > 0.5)
     else:
         print("Path does not exist.")
-    
+
+if __name__ == "__main__":
+    while True:
+        process_image()
+        

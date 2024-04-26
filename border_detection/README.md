@@ -26,6 +26,7 @@ This repository contains four main scripts:
 ## Requirements
 
 - Python 3.x
+- Pytest
 - NumPy
 - OpenCV (cv2)
 - Matplotlib

@@ -6,8 +6,6 @@ import numpy as np
 import cv2
 import random
 import statistics
-
-
 import time
 
 def jaccard(image1, image2):

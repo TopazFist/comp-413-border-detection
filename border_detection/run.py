@@ -31,11 +31,8 @@ def process_image(file_path, destination_path, llm_mode):
         llm_mode (bool): Flag indicating whether to use llm_mode.
     """
     original_im = image(file_path)
-    print("have original image")
     resulting_image = get_border(original_im, llm_mode)
-    print("obtained image")
     save_image(resulting_image, destination_path, os.path.basename(file_path), llm_mode=llm_mode)
-    print("saved image")
 
 def main():
     
@@ -51,6 +48,7 @@ def main():
     max_threads = 8
 
     result_directory = "ISIC-images/Result_Images_Overlay"
+    
     # Adjust max_treads according to the number of cpus
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_threads) as executor:
         futures = [executor.submit(process_image, file_path, result_directory , True) for file_path in file_paths]

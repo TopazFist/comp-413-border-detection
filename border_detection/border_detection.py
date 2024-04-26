@@ -49,32 +49,40 @@ def get_border(original_im, llm_mode):
         numpy.ndarray: Image with the border.
     """
     grey_im = cv2.cvtColor(original_im, cv2.COLOR_BGR2GRAY)
-    # downsample /2
+    # this_thing = Image.fromarray(grey_im)
+    # this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "1.JPG"))
+
     im = downsample(grey_im)
-    # # downsample /4
-    # im_2 = downsample(im_1)
-    # # downsample /8
-    # im = downsample(im_2)
+    # this_thing = Image.fromarray(im)
+    # this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "2.JPG"))
 
     histogram = histogram_calculator(im)
     y, x = choose_pixel(im, histogram)
     tolerance = tolerance_picker(im, y, x, histogram)
     t_1 = tolerance / 3.25
     mask = flood(im, (y, x), tolerance=t_1).astype(int).astype(np.uint8)
-    mask = fill_holes(mask)
-    # upsample /4
-    upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
+    # this_thing = Image.fromarray((mask * 255).astype('uint8'))
+    # this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "3.JPG"))
 
-    # upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
+    mask = fill_holes(mask)
+    # this_thing = Image.fromarray((mask * 255).astype('uint8'))
+    # this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "4.JPG"))
+
+    upsampled_mask = upsample(mask, (original_im.shape[0], original_im.shape[1]))
+    # this_thing = Image.fromarray((upsampled_mask * 255).astype('uint8'))
+    # this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "5.JPG"))
+
     temp = np.copy(upsampled_mask)
     t_2 = tolerance / 2.25
 
-    # expand mask on mid sampled image
     upsampled_and_expanded_mask = expand_mask(temp, grey_im, 1, t_2)
-    upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
+    this_thing = Image.fromarray((upsampled_and_expanded_mask * 255).astype('uint8'))
+    this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "6.JPG"))
 
-    # upsample 1
-    # upsampled_and_expanded_mask = upsample(upsampled_and_expanded_mask, (original_im.shape[0], original_im.shape[1]))
+    upsampled_and_expanded_mask = fill_holes(upsampled_and_expanded_mask)
+    this_thing = Image.fromarray((upsampled_and_expanded_mask * 255).astype('uint8'))
+    this_thing.save(os.path.join("ISIC-images/Result_Images_Overlay", "_" + "7.JPG"))
+
     elapsed_time = time.time() - start_time
     print(elapsed_time)
     if llm_mode:
@@ -240,7 +248,6 @@ def overlay_mask_on_image(mask, original_image, alpha = 0.5):
     Returns:
         numpy.ndarray: Image with mask overlay.
     """
-    # fig, ax = plt.subplots()
     fig = plt.figure(figsize=(original_image.shape[1] / 100, original_image.shape[0] / 100), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1])
     ax.imshow(original_image)
@@ -248,12 +255,7 @@ def overlay_mask_on_image(mask, original_image, alpha = 0.5):
     ax.axis(False)
     
     return fig
-    # x_range, y_range = crop_to_square(mask)
-    # cropped_image = original_image[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
-    # cropped_mask = mask[y_range[0]:y_range[1] + 1, x_range[0]:x_range[1] + 1]
-    # masked_image = np.zeros_like(cropped_image)
-    # masked_image[cropped_mask == 1] = cropped_image[cropped_mask == 1]
-    # return masked_image
+
 
 def crop_to_square(mask):
     """

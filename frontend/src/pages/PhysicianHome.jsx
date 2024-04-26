@@ -1,41 +1,48 @@
-import { useEffect, useState } from 'react';
-import { api } from "../components/api"
-import { Link, useParams } from 'react-router-dom';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
+import { useEffect, useState } from "react";
+import { api } from "../components/api";
+import { Link, useParams } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
+import "./PatientHome.css";
 
+/**
+ * Component for physician home page.
+ */
 const PhysicianHome = () => {
-    const { id } = useParams(); // Extracting physician ID from route parameters
+    // Extract physician ID from route parameters
+    const { id } = useParams();
     const [patients, setPatients] = useState([]);
 
+    /**
+   * Retrieve physician's patients from the server.
+   */
     useEffect(() => {
         api
+            // Retrieve physician data including assigned patients
             .get(`/physicians/${id}`).catch((error) => {
-                if (error.response && error.response.status == 401) { // Unauthorized
+                // Unauthorized
+                if (error.response && error.response.status == 401) {
                   window.location.href = "/unauthorized";
                 }
             })
             .then(async (response) => {
-                console.log(response);
-                // Assuming the physician object has a field named 'patients' containing an array of patient objects
+                // Assume the physician object has a field named 'patients' containing an array of patient objects
                 const physician = response.data;
-                const patientIDList = physician.assignedPatientIds || []; // Extracting patient list from physician object
+
+                // Extracting patient list from physician object
+                const patientIDList = physician.assignedPatientIds || [];
+
                 try {
+                    // Retrieve data of each assigned patient
                     const patientRequests = patientIDList.map(patientID => {
                         return api.get(`/patients/${patientID}`);
-                        // replace with what ian and jmak make
                     });
-        
+
                     const patientResponses = await Promise.all(patientRequests);
         
+                    // Extract patient details from the responses
                     const patientList = patientResponses.map(response => response.data);
-                    console.log("Patients:", patientList);
+                    
+                    // Set the list of patients in state
                     setPatients(patientList);
                 } catch (error) {
                     console.log("Error fetching patients:", error);
@@ -45,9 +52,13 @@ const PhysicianHome = () => {
                 console.log(error);
                 setPatients([{_id: "id", firstName: "first", lastName: "last"}]);
             });
-    }, [id]);
+    }, [id]); // Trigger effect when physician ID changes
 
-    // Function to handle deletion of a patient
+    /**
+     * Delete a patient entirely.
+     * 
+     * @param {string} patientId - The ID of the patient to be removed.
+     */
     const handleDelete = async (patientId) => {
         try {
             // Remove patient from the physician's assignedPatientIds
@@ -62,11 +73,10 @@ const PhysicianHome = () => {
             setPatients(prevPatients => prevPatients.filter(patient => patient._id !== patientId));
         } catch (error) {
             console.error('Error deleting patient:', error);
-            // Handle deletion error
         }
     };
 
-
+    // Render physician's assigned patients in a table
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className="text-3xl my-8 text-center">My Patients</h1>

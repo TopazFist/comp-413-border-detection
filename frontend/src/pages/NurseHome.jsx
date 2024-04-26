@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
-import { api } from "../components/api"
+import { api } from "../components/api";
 import { Link, useParams } from "react-router-dom";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
+/**
+ * Component for nurse home page.
+ */
 const NurseHome = () => {
     // Extract nurse ID from route parameters
     const { id } = useParams();
     const [patients, setPatients] = useState([]);
 
+    /**
+     * Retrieve nurse's patients from the server.
+     */
     useEffect(() => {
         api
+            // Retrieve nurse data including assigned patients
             .get(`/nurses/${id}`).catch((error) => {
-                if (error.response && error.response.status == 401) { // Unauthorized
+                // Unauthorized
+                if (error.response && error.response.status == 401) {
                   window.location.href = "/unauthorized";
                 }
             })
@@ -30,13 +31,17 @@ const NurseHome = () => {
                 // Extract patient list from nurse object
                 const patientIDList = nurse.assignedPatientIds || [];
                 try {
+                    // Retrieve data of each assigned patient
                     const patientRequests = patientIDList.map(patientID => {
                         return api.get(`/patients/${patientID}`);
                     });
         
                     const patientResponses = await Promise.all(patientRequests);
-        
+
+                    // Extract patient details from the responses
                     const patientList = patientResponses.map(response => response.data);
+
+                    // Set the list of patients in state
                     setPatients(patientList);
                 } catch (error) {
                     console.log("Error fetching patients:", error);
@@ -45,9 +50,14 @@ const NurseHome = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, [id]);
+    }, [id]); // Trigger effect when nurse ID changes
 
-    // Remove a patient
+    /**
+     * Remove a patient from the nurse's assigned patients list.
+     * 
+     * @param {string} patientId - The ID of the patient to be removed.
+     * @param {Object} event - The event object triggered by the delete action.
+     */
     const handleDelete = async (patientId, event) => {
         // Prevent event from navigating to patient's home page
         event.stopPropagation();
@@ -65,6 +75,7 @@ const NurseHome = () => {
         }
     };
 
+    // Render nurse's assigned patients in a table
     return (
         <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className="text-3xl my-8 text-center">My Patients</h1>

@@ -4,14 +4,24 @@ import { api } from "../components/api";
 import "./Register.css";
 import { Avatar, Box, Button, Container, Grid, TextField, Typography, ThemeProvider, createTheme } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
+// Create a default theme
 const defaultTheme = createTheme();
 
+/**
+ * Component that adds a patient to a nurse's list of assigned patients.
+ */
 const AddPatientFromNurse = () => {
     // Extract nurse ID from route parameters
     const { id: nurseId } = useParams();
     const [patientId, setPatientId] = useState('');
     const [err, setError] = useState([]);
 
+    /**
+     * Handles the "Add Patient" form submission.
+     * 
+     * @param {Object} event - The form submission event.
+     */
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -20,13 +30,15 @@ const AddPatientFromNurse = () => {
             const nurseResponse = await api.get(`http://localhost:3001/nurses/${nurseId}`);
             const nurse = nurseResponse.data;
 
-            // Update nurse's assignedPatientIds
+            // Check if the patient is a new patient
             if (!nurse.assignedPatientIds.includes(patientId)) {
+                // Update nurse's assignedPatientIds
                 const updatedAssignedPatientIds = [...nurse.assignedPatientIds, patientId];
                 await api.patch(`http://localhost:3001/nurses/${nurseId}`, {
                     assignedPatientIds: updatedAssignedPatientIds
                 });
 
+                // Redirect to the nurse home page
                 console.log("Patient added to nurse:", patientId);
                 window.location.href = `/nurses/${nurseId}`;
             } else {

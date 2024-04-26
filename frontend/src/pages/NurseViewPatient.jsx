@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../components/api";
 import { useParams, useNavigate } from "react-router-dom";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Box from "@mui/material/Box";
+import { ImageList, ImageListItem, Box } from "@mui/material";
 import "./PatientHome.css";
 
+/**
+ * Component that displays a patient's images.
+ */
 const NurseViewPatient = () => {
     // Extract patient ID from route parameters
     const { id } = useParams();
     const [patientImages, setPatientImages] = useState([]);
     const navigate = useNavigate();
 
+    /**
+     * Retrieve patient's images from the server.
+     */
     useEffect(() => {
         const fetchPatientImages = async () => {
             try {
@@ -25,10 +29,14 @@ const NurseViewPatient = () => {
         fetchPatientImages();
     }, [id]);
 
+    /**
+     * Handles click event for uploading images for the patient.
+     */
     const handleUploadClick = () => {
         navigate(`/patients/${id}/upload`);
     };
 
+    // Render patient's images in a grid
     return (
         <Box sx={{ my: 10, mx: 10 }}>
         <h1 className="text-3xl font-bold mb-6">Patient images: {id}</h1>

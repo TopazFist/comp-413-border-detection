@@ -1,25 +1,27 @@
-import { useState } from 'react';
-import { api } from "../components/api"
-// import { Link } from 'react-router-dom';
-import './Register.css'; // Import the CSS file
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider} from '@mui/material/styles';
+import { useState } from "react";
+import { api } from "../components/api";
+import "./Register.css";
+import { Avatar, Button, CssBaseline, Link, TextField, Grid, Box, Typography, Container, createTheme, ThemeProvider } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
+// Create a default theme
 const defaultTheme = createTheme();
+
+/**
+ * Component that registers a physician with the system.
+ */
 const PhysicianRegister = () => {
   const [err, setError] = useState([]);
+
+  /**
+   * Handles the "Register Physician" form submission.
+   * 
+   * @param {Object} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+
     try {
       // Send registration data to the backend server
       const response = await api.post('/auth/physician', {
@@ -28,7 +30,7 @@ const PhysicianRegister = () => {
         hospitalId: data.get("hospitalID"),
         username: data.get("username"),
         password: data.get("password")
-    });
+      });
 
       // Redirect to the login page after successful registration
       console.log('Registration successful:', response.data);

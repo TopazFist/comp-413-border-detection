@@ -1,22 +1,27 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Welcome.css'; // Import CSS file for styling
+import { React, useEffect } from "react";
 import { api } from "../components/api";
+import { Link } from "react-router-dom";
+import "./Welcome.css";
 
+/**
+ * Component that renders the welcome page and redirects users based on their role.
+ */
 const WelcomePage = () => {
+  /**
+   * Check user authentication state.
+   */
   useEffect(() => {
     api.get("/auth").then((response) => {
       if (response.data.state == "patient") {
-        console.log("redirected due to patient already logged in");
+        // Redirect patient to their home page if already logged in
         window.location.href = "/patients/" + response.data.uid + "/";
       }
       if (response.data.state == "physician") {
-        console.log("redirected due to physician already logged in");
+        // Redirect physician to their home page if already logged in
         window.location.href = "/physicians/" + response.data.uid + "/";
       }
       if (response.data.state == "nurse") {
-        console.log("redirected due to nurse already logged in");
+        // Redirect nurse to their home page if already logged in
         window.location.href = "/nurse/" + response.data.uid + "/";
       }
     });

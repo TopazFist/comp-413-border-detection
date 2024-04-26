@@ -1,21 +1,26 @@
-/* PatientHomePhysician.jsx */
-import React, { useEffect, useState } from 'react';
-import { api } from "../components/api"
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useEffect, useState } from "react";
+import { api } from "../components/api";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { ImageList, ImageListItem, Box } from "@mui/material";
 import { SourceImage } from "../components/SourceImage";
-import './PatientHome.css';
+import "./PatientHome.css";
 
+/**
+ * Component for viewing patient images.
+ */
 const ViewPatient = () => {
+  // Extract patient ID from route parameters
   const { id } = useParams();
   const [patientImages, setPatientImages] = useState([]);
+
+  // Hooks for navigation and location
   const navigate = useNavigate();
   const location = useLocation();
   const fromPhysicianHome = location.pathname.includes("view");
 
+  /**
+   * Retrieve patient images.
+   */
   useEffect(() => {
     const fetchPatientImages = async () => {
       try {
@@ -28,26 +33,53 @@ const ViewPatient = () => {
     fetchPatientImages();
   }, [id]);
 
+  /**
+   * Handle click event for uploading images.
+   */
   const handleUploadClick = () => {
     navigate(`/patients/${id}/upload`);
   };
 
+  /**
+   * Handle change event for physician notes associated with an image.
+   * 
+   * @param {Object} e - The event object.
+   * @param {string} imageId - The ID of the image whose physician notes are being updated.
+   */
   const handlePhysicianNotesChange = async (e, imageId) => {
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
+        // Update the physician notes for the specified image
         image.physicianNotes = e.target.value;
+
+        // Send a request to update physician notes on the server
         api.put(`/images/${imageId}/notes`, { physicianNotes: e.target.value });
       }
       return image;
     });
+
+    // Update the patient images state with the updated physician notes
     setPatientImages(updatedImages);
   };
 
+  /**
+   * Constructs a modified border detection path.
+   * 
+   * @param {string} path - The original path of the border detection image.
+   * 
+   * @returns {string|null} - The modified path of the border detection image, or null if no input path is given.
+   */
   const getModifiedBorderDetectionPath = (path) => {
-    if (!path) return null;
+    // Check if the path exists.
+    if (!path) {
+      return null;
+    }
+
+    // Remove the filename from the path and append a suffix
     const pathParts = path.split('/');
     const fileName = pathParts.pop();
     pathParts.push(`_${fileName}`);
+
     return pathParts.join('/');
   };
 

@@ -1,22 +1,22 @@
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { api } from "../components/api";
-import { useState } from 'react';
+import { useState } from "react";
+import { Avatar, Button, CssBaseline, Link, TextField, Grid, Box, Typography, Container, createTheme, ThemeProvider } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
+// Create a default theme
 const defaultTheme = createTheme();
 
+/**
+ * Component for nurse login.
+ */
 const NurseLogin = () => {
   const [error, setError] = useState([]);
 
+  /**
+   * Handles the nurse login form submission.
+   * 
+   * @param {Object} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -27,6 +27,7 @@ const NurseLogin = () => {
         password: data.get('password'),
       });
 
+      // Redirect to the nurse home page after successful login
       window.location.href = `/nurses/${response.data.nurseId}`;
     } catch (error) {
       console.error('Login error:', error);

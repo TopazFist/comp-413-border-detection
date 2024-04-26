@@ -1,25 +1,29 @@
-// PatientHomeNonPhysician.jsx
-import { useEffect, useState } from 'react';
-import { api } from "../components/api"
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import Box from '@mui/material/Box';
-// import DeleteIcon from '@mui/icons-material/Delete';
-import './PatientHome.css'; // Import CSS file for styling
+import { useEffect, useState } from "react";
+import { api } from "../components/api";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { ImageList, ImageListItem, Box } from "@mui/material";
+import "./PatientHome.css";
 
+/**
+ * Component for patient home page.
+ */
 const PatientHome = () => {
-  const { id } = useParams(); // Extracting patient ID from route parameters
+  // Extract patient ID from route parameters
+  const { id } = useParams();
   const [patientImages, setPatientImages] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const fromPhysicianHome = location.pathname.includes("view");
 
+  /**
+   * Retrieve patient's images from the server.
+   */
   useEffect(() => {
     const fetchPatientImages = async () => {
       try {
         const response = await api.get(`/images/${id}`).catch((error) => {
-          if (error.response && error.response.status == 401) { // Unauthorized
+          // Unauthorized
+          if (error.response && error.response.status == 401) {
             window.location.href = "/unauthorized";
           }
         });
@@ -32,11 +36,21 @@ const PatientHome = () => {
     fetchPatientImages();
   }, [id]);
 
+  /**
+   * Handles click event for uploading images for the patient.
+   */
   const handleUploadClick = () => {
     navigate(`/patients/${id}/upload`);
   };
 
+  /**
+   * Handles checkbox change event to toggle image visibility.
+   * 
+   * @param {Event} e - The change event object.
+   * @param {string} imageId - The ID of the image being toggled.
+   */
   const handleCheckboxChange = async (e, imageId) => {
+    // Update the privacy status of the selected image
     const updatedImages = patientImages.map((image) => {
       if (image._id === imageId) {
         image.isPublic = e.target.checked;
@@ -44,9 +58,12 @@ const PatientHome = () => {
       }
       return image;
     });
+    
+    // Update state with updated images
     setPatientImages(updatedImages);
   };
 
+  // Render patient's images in a grid
   return (
     <Box sx={{ my: 10, mx: 10 }}>
       <h1 className="text-3xl font-bold mb-6">Patient images: {id} </h1>
